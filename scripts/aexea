@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 
-DOCKER_DIRS = os.environ.get('DOCKER_DIRS')
+DOCKER_DIRS = os.environ.get('DOCKER_DIRS').split(',')
 
 
 if __name__ == '__main__':

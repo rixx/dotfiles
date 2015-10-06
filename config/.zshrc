@@ -40,7 +40,16 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
 ZSH_THEME="ttb"
 
-plugins=(battery colored-man cp extract git git-extras git-flow history history-substring-search python rsync)
+plugins=(battery bgnotify colored-man command-not-found cp dirhistory docker docker-compose extract git history history-substring-search pass python rsync ssh-agent sudo systemctl)
+## plugins
+# bgnotify: notification when long-running commands end
+# command-not-found: requires pkgfile
+# cp: cpv uses rsync instead of cp
+# dirhistory: Alt-left and Alt-right navigate the last directories
+# extract: x file extracts most known archive types
+# sudo: <ESC><ESC> toggles sudo
+# systemctl: alias all systemctl commands to sc-<command>, inserting sudo where needed
+##
 
 source $ZSH/oh-my-zsh.sh
 
@@ -48,6 +57,7 @@ source $ZSH/oh-my-zsh.sh
 # Aliases #
 ###########
 alias vi="vim"
+alias dc="docker-compose"
 alias packer="packer --preview"
 alias ll="ls -Ahl --color"
 
