@@ -8,6 +8,7 @@ HISTSIZE=10000
 EDITOR=vim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
+DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/morgana"
 PAGER=/usr/bin/vimpager
 
 ###############

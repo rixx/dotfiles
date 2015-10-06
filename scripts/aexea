@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+import sys
+
+
+DOCKER_DIRS = os.environ.get('DOCKER_DIRS')
+
+
+if __name__ == '__main__':
+    if sys.argv[-1] == 'start':
+        for directory in DOCKER_DIRS:
+            subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
+    elif sys.argv[-1] == 'stop':
+        for directory in DOCKER_DIRS:
+            subprocess.check_output('cd {} && docker-compose stop'.format(directory), shell=True)
+        
