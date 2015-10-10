@@ -1,0 +1,188 @@
+# Reference: http://i3wm.org/docs/userguide.html
+
+# Windows key is $mod
+set $mod Mod4
+
+# font for window titles. Use xfontsel to find fontstrings, or just use pango:
+#font pango:Terminus 14px
+#font pango:Anonymous Pro for Powerline 14px
+#font pango:Source Code Pro, FontAwesome, 10
+font pango:Monofur, FontAwesome, 14
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec urxvtc
+
+# kill focused window
+bindsym $mod+Shift+Q kill
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
+
+# start applications
+bindsym $mod+Shift+F exec firefox
+bindsym $mod+Shift+T exec thunderbird
+bindsym $mod+l exec lock
+
+# focus window with cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window with cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+bindsym $mod+x [urgent=latest] focus
+
+# change container layout (stacked, tabbed, default)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout default
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# function keys
+bindsym XF86AudioMute exec /usr/bin/amixer -q sset Master toggle
+bindsym XF86AudioLowerVolume exec /usr/bin/amixer -q sset Master 5%-
+bindsym XF86AudioRaiseVolume exec /usr/bin/amixer -q sset Master 5%+
+bindsym XF86AudioMicMute exec /usr/bin/amixer -q sset Capture toggle
+bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
+bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10
+bindsym Print exec /usr/bin/scrot -m /tmp/$(date +%s).png
+bindsym XF86Display exec /usr/bin/wxcam
+#bindsym XF86Tools
+#bindsym XF86Search
+#bindsym XF86LaunchA
+bindsym XF86Explorer exec /usr/bin/pcmanfm
+
+# focus the child container
+#bindcode $mod+d focus child
+
+# switch to workspace;
+bindsym $mod+1 workspace 1: term 
+bindsym $mod+2 workspace 2: web  
+bindsym $mod+3 workspace 3: dev  
+bindsym $mod+4 workspace 4: mail 
+bindsym $mod+5 workspace 5: im  
+bindsym $mod+6 workspace 6: rand  
+bindsym $mod+0 exec feh -.F /home/rixx/Media/pic/wallpapers/pinguin.jpg
+
+# default output location with the docking station
+workspace "1: term " output eDP1
+workspace "2: web  " output DP2-1
+workspace "3: dev  " output eDP1
+workspace "4: mail " output DP2-1
+workspace "5: im  " output DP2-1
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1: term 
+bindsym $mod+Shift+2 move container to workspace 2: web  
+bindsym $mod+Shift+3 move container to workspace 3: dev  
+bindsym $mod+Shift+4 move container to workspace 4: mail 
+bindsym $mod+Shift+5 move container to workspace 5: im  
+bindsym $mod+Shift+6 move container to workspace 6: rand  
+
+# reload the configuration file
+bindsym $mod+Shift+C reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+R restart
+
+# exit i3 (logs you out of your X session)
+#bindsym $mod+Shift+E exit
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym h resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym 113 resize shrink width 10 px or 10 ppt
+        bindsym 116 resize grow height 10 px or 10 ppt
+        bindsym 111 resize shrink height 10 px or 10 ppt
+        bindsym 114 resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    status_command /usr/bin/py3status -c ~/.i3/status.conf
+    font pango:Monofur, FontAwesome, 13
+
+	position top
+	workspace_buttons yes
+    strip_workspace_numbers yes
+    tray_output eDP1
+
+   colors {
+ 	background #111111
+    statusline #93a1a1
+	focused_workspace #111111 #222222 #93a1a1
+	inactive_workspace #111111 #111111 #93a1a1
+	}
+}
+
+#Colors
+client.focused    #005500 #111111 #93a1a1 #93a1a1
+client.unfocused  #002200 #111111 #93a1a1 #009900
+client.background #111111
+
+
+#Borderstyle <normal|1pixel|none>
+new_window 1pixel
+
+focus_follows_mouse no
+
+#move to correct workspace
+assign [class="Firefox"] 2: web  
+assign [class="Thunderbird"] 4: mail 
+assign [class="Skype"] 5: im  
+assign [class="Hipchat"] 5: im  
+
+# Create Log out, Reboot, Poweroff bindings
+mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff" {
+        bindsym r exec reboot
+        bindsym e exit
+        bindsym p exec poweroff
+        bindsym s exec systemctl suspend
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff"
+
+# $mod+current_workspace switches back to last workspace
+workspace_auto_back_and_forth yes
+
+exec_always ~/.screenlayout/docking.sh
