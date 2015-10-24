@@ -11,6 +11,9 @@ PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/loc
 DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/morgana"
 PAGER=/usr/bin/vimpager
 
+WORKON_HOME=~/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
+
 ###############
 # zsh options #
 ###############
