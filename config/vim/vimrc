@@ -1,28 +1,221 @@
 """""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
 """""""""""""""""""""""""""""""""""""""""""""
-" Use Vim settings, rather than Vi settings (much better!).
+
+" Use Vim settings (yay), rather than Vi settings (yuck)
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+"" set history size
+set history=1000		
+set tabpagemax=50
+set undolevels=10000
+set undoreload=10000
+set undodir=~/.vim/undo
+set undofile
+set backupdir=~/.vim/backup
+
+"" save: 
+"  - for 100 files
+"  - buffer info will be saved, 
+"  - registers over 100Kbyte will be skipped,
+"  - 1000 lines per register will be remembered,
+"  - don't save highlighted searches,
+"  - don't save marks for /temp
+"  - save in ~/.vim/viminfo
+set viminfo='100,%,s100,<1000,h,r/temp,n~/.vim/viminfo
+
+"" read file again if it changes while open and unmodified in vim
+set autoread
+
+"" set the map leader to '+'
+let mapleader = "+"
+let g:mapleader = "+"
+
+"" fast saving
+nmap <leader>w :w!<cr>
+nmap <leader>q :wq!<cr>
+
+" stay in visual after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" really really save
+cmap w!! w !sudo tee %
+
+"" don't keep a backup file in version control directories
+if has("vms")
+    set nobackup
+else
+    set backup
+endif
+
+" don't change working directories to files
+set noautochdir
+
+"" toggle insert (paste) mode by pressing INS
+set pastetoggle=<INS>
+
+"" hide abandoned buffers
+set hidden
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+set complete-=i
+set whichwrap+=<,>,h,l
+
+"" ignore case when searching, but be smart about it
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+set showmatch
+set matchtime=2
+
+"" set utf8 as standard encoding and unix as file type
+set encoding=utf8
+set fileformats=unix,dos,mac
+set shell=/bin/zsh
+
+"" spell check with ,ss
+set spelllang=en
+map <leader>ss :setlocal spell!<cr>
+
+"" regex
+set magic
+
+"" intendation
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smarttab
+set expandtab
+
+"" do wrap, but don't break lines
+set textwidth=0
+set wrap
+set wrapmargin=0
+
+" don't see 07 as an octal number to be increased to 10
+set nrformats-=octal
+
+" Remember and restore curser position
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+
+" Except for commit messages; start on top here every time
+autocmd BufReadPost COMMIT_EDITMSG
+  \ exe "normal! gg"
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""  visual stuff                                          ""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set background=dark
+syntax enable
+
+"" show line number of current line and relative line numbers otherwise
+set number
+set relativenumber
+
+"" width of the column at the side of the window indicating folds
+set foldcolumn=3
+set nofoldenable
+set foldmethod=marker
+
+"" show cursor lines (horizontal and vertical)
+set cursorline
+set cursorcolumn
+
+"" display incomplete commands
+set showcmd
+
+"" set 7 lines and 5 columns between the cursor and the end of screen
+set scrolloff=7
+set sidescrolloff=5
+
+"" show as much as possible of the last line
+set display+=lastline
+
+"" turn on the WiLd menu
+set wildmenu
+set wildmode=list:longest,full
+set wildignore=*.o,*~,*.pyc
+
+"" show current position, bit shorter than normally
+set ruler
+set rulerformat=%15(%c%V\ %p%%%)
+
+"" mouse integration if mouse
+if has('mouse')
+  set mouse=a
+  set mousehide
+endif
+
+"" how to display whitespace characters when set list
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+
+"" always show status line
+set laststatus=2
+
+"" enable reading config off modified file
+set modeline
+
+" don't move cursor to beginning of line
+set nostartofline
+
+" <Ctrl-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+
+" assume .md files are markdown, not modula-2
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.md set colorcolumn=120
+autocmd BufNewFile,BufReadPost *.md set tw=120
+autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
+
+autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Python specific configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType python setlocal tabstop=4
+autocmd FileType python setlocal expandtab
+autocmd FileType python setlocal shiftwidth=4
+autocmd FileType python setlocal softtabstop=4
+autocmd FileType python setlocal shiftround
+autocmd FileType python setlocal nospell
+autocmd FileType python match DiffChange '\%>79v.\+'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""
+""  Plugin Settings                        ""
+"""""""""""""""""""""""""""""""""""""""""""""
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+if !filereadable(vundle_readme)
+    echo "Installing Vundle.."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let iCanHazVundle=0
+endif
+
+set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
 
-" original repos on github
-" Bundle 'tpope/vim-fugitive'
-" vim-scripts repos
-" Bundle 'L9'
-" non github repos
+" Bundle 'tpope/vim-fugitive' (GitHub)
+" Bundle 'L9' (vim-scripts)
 " Bundle 'git://git.wincent.com/command-t.git'
 "
-" Brief help
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
 " :BundleSearch(!) foo - search(or refresh cache first) for foo
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
-
 
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jiangmiao/auto-pairs'
@@ -34,212 +227,43 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 
+" vundle
+if iCanHazVundle == 0
+    echo "Installing Bundles, please ignore key map error messages"
+    echo ""
+    :BundleInstall
+endif
 
-filetype plugin indent on  " also required for vundle and an all-over good idea
-
-" Plugin configuration
-let g:solarized_termtrans=1
-colorscheme solarized
-
+" NERDTree
 " open NERDTree if no files were specified (http://vimawesome.com/plugin/the-nerd-tree)
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
+let NERDTreeQuitOnOpen=1
 
 " let NERDTree be toggled by E
 map <S-e> :NERDTreeToggle<CR>
 
 " recommended syntastic options
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_python_flake8_args = "--ignore=E501,W0611,W0401"
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-
-"" set history size
-set history=1000		
-set tabpagemax=50
-set sessionoptions-=options
-
-"" set to auto read when a file is changed from the outside
-set autoread
-
-"" set the map leader to '+'
-let mapleader = "+"
-let g:mapleader = "+"
-
-"" fast saving
-nmap <leader>w :w!<cr>
-nmap <leader>q :wq!<cr>
-
-"" don't keep a backup file in version control directories
-if has("vms")
-    set nobackup
-else
-    set backup
-endif
-
-"" display incomplete commands
-set showcmd
-
-"" set 7 lines between the cursor and the end of screen
-set scrolloff=7
-set sidescrolloff=5
-set display+=lastline
-
-"" turn on the WiLd menu
-set wildmenu
-set wildmode=list:longest,full
-set wildignore=*.o,*~,*.pyc
-
-"" show current position
-set ruler
-
-"" TODO
-set pastetoggle=<INS>
-
-"" hide abandoned buffers
-set hid
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-set complete-=i
-set whichwrap+=<,>,h,l
-
-"" ignore case when searching, but be smart about it
-set ignorecase
-set smartcase
-
-"" highlight search results, behave like in a browser
-set hlsearch
-set incsearch
-
-"" regex
-set magic
-
-"" highlight matching brackets and blink shortly
-set showmatch
-set mat=2
-
-"" intendation
-set autoindent
-set smartindent
-set wrap
-
-set relativenumber
-set nofoldenable
-
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-" Remember info about open buffers on close
-set viminfo='100,%,s100,<1000,h,r/temp
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""  visual stuff                                          ""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set background=dark
-syntax enable
-set number
-set foldcolumn=3
-
-"" cursor config
-set cursorline
-set cursorcolumn
-
-"" mouse integration
-if has('mouse')
-  set mouse=a
-  set mousehide
-endif
-
-"" set utf8 as standard encoding and unix as file type
-set encoding=utf8
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-set ffs=unix,dos,mac
-
-set shell=/bin/zsh
-
-"" spell check with ,ss
-set spelllang=en
-map <leader>ss :setlocal spell!<cr>
-
-"" always show status line
-set laststatus=2
-
-"" enable reading config off modified file
-set modeline
-
-
-" <Ctrl-l> redraws the screen and removes any search highlighting.
-nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set smarttab
-set expandtab
-
-set nrformats-=octal
-
-set backupdir=~/.vim/backup
-
-" assume .md files are markdown, not modula-2
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-
-
+" Gundo
 nnoremap <F5> :GundoToggle<CR>
-set undodir=~/.vim/undo
-set undofile
-"maximum number of changes that can be undone
-set undolevels=1000000
-"maximum number lines to save for undo on a buffer reload
-set undoreload=10000000
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Python specific configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType python setlocal tabstop=4
-autocmd FileType python setlocal expandtab
-autocmd FileType python setlocal shiftwidth=4
-autocmd FileType python setlocal softtabstop=4
-autocmd FileType python setlocal shiftround
-autocmd FileType python setlocal nospell
+" solarized
+let g:solarized_termcolors=256
+colorscheme solarized 
+set background=dark
 
-autocmd FileType python match DiffChange '\%>79v.\+'
-
-"" Key bindings
-""" Execute or compile:
-"autocmd FileType python map <F5> :w<CR>:silent !echo "\n\x1b[7mpython %\x1b[0m"<CR>:!time python "%"<CR>
-"autocmd FileType python imap <F5> <ESC><F5>
-autocmd FileType python map <C-F5> :w<CR>:!time pycompile *<CR>
-autocmd FileType python imap <C-F5> <ESC><C-F5>
-""" Execute doctest
-autocmd FileType python map <F6> :w<CR>:silent !python -m doctest "%" \| less<CR>:redraw!<CR>
-autocmd FileType python imap <F6> <ESC><F6>
-autocmd FileType python map <C-F6> :w<CR>:silent !python -m doctest -v "%" \| less<CR>:redraw!<CR>
-autocmd FileType python imap <C-F6> <ESC><C-F6>
-""" Execute pylint
-autocmd FileType python map <F7> :w<CR>:silent !pylint "%" \| less -R<CR>:redraw!<CR>
-autocmd FileType python imap <F7> <ESC><F7>
-autocmd FileType python map <C-F7> :w<CR>:silent !pylint *.py \| less -R<CR>:redraw!<CR>
-autocmd FileType python imap <C-F7> <ESC><C-F7>
-""" Execute pep8
-autocmd FileType python map <F8> :w<CR>:silent !pep8 -v --statistics --benchmark "%" \| less<CR>:redraw!<CR>
-autocmd FileType python imap <F8> <ESC><F8>
-autocmd FileType python map <C-F8> :w<CR>:silent !pep8 -v --statistics --benchmark . \| less<CR>:redraw!<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" plugin python-mode configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 let pymode_lint_onfly = 1
 let pymode_lint_checker = "pylint,pyflakes,pep8,mccabe"
 let pymode_lint_hold = 0
