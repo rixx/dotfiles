@@ -78,6 +78,7 @@ prompt_git() {
       prompt_segment yellow black
     elif [[ $dirty == $(echo $ZSH_THEME_GIT_PROMPT_CLEAN) ]]; then
       prompt_segment green black
+      #prompt_segment black white
     else
       prompt_segment magenta black
     fi
@@ -87,7 +88,7 @@ prompt_git() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment cyan black '%~'
+  prompt_segment blue black '%~'
 }
 
 # Status:
@@ -108,13 +109,14 @@ prompt_status() {
 prompt_git_dir(){
   dirty=$(parse_git_dirty)
   if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
-    prompt_segment cyan black "/`git rev-parse --show-prefix`"
+    prompt_segment blue black "/`git rev-parse --show-prefix`"
   fi
 }
 
 # show current path, if in a git repository only the path to the .git directory
 prompt_my_dir(){
-  prompt_segment cyan black
+  #prompt_segment cyan black
+  prompt_segment blue black
   if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
     local CWD
     CWD=`git rev-parse --show-toplevel`
@@ -131,7 +133,7 @@ prompt_prompt_line(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black "!!"
   else
-    prompt_segment black grey ">>"
+    prompt_segment blue black "➜"
   fi
   prompt_end
   echo -n " "
@@ -160,7 +162,7 @@ prompt_battery(){
 # show current time
 prompt_date(){
   #prompt_segment white black "%D{%H:%M:%S %d.%m.%Y}"
-  prompt_segment cyan black "%*"
+  prompt_segment blue black "%*"
 }
 
 # show the return value of last command if not zero
@@ -173,7 +175,7 @@ prompt_return_code(){
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} \u272e"
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} \u271a"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} \u2738"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} \u279c"
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%} \u279c"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} \u2716"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[white]%} \u267b"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} \u21cc"

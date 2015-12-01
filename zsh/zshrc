@@ -55,6 +55,8 @@ plugins=(battery bgnotify colored-man command-not-found cp dirhistory docker doc
 ##
 
 source $ZSH/oh-my-zsh.sh
+LS_COLORS="ex=01;31"
+export LS_COLORS
 
 ###########
 # Aliases #
