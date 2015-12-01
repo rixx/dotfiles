@@ -29,19 +29,48 @@ set viminfo='100,%,s100,<1000,h,r/temp,n~/.vim/viminfo
 set autoread
 
 "" set the map leader to '+'
-let mapleader = "+"
-let g:mapleader = "+"
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
-"" fast saving
-nmap <leader>w :w!<cr>
-nmap <leader>q :wq!<cr>
+"" Leader shortcuts
+" map: mapping in all modes (normal, visual, select, operator)
+" nmap: mapping in normal mode
+" vmap: mapping in visual and select mode
+" .noremap: don't follow another remapping, execute the given command
+" see :help map-modes
+ 
+" really really save
+cmap w!! w !sudo tee %
+
+nnoremap <leader>w :w!<cr>
+map q: :q
+nnoremap <leader>q :wq!<cr>
+nnoremap <leader>qq :q!<cr>
+noremap <leader>ss :setlocal spell!<cr>
+
+" copy and paste to system clipboard
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 " stay in visual after indent
 vnoremap < <gv
 vnoremap > >gv
 
-" really really save
-cmap w!! w !sudo tee %
+" enter visual mode with <leader><leader>
+nmap <Leader><Leader> V
+
+" paste multiple lines with pppp
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" enter to go to line or end of file, backspace to go to beginning
+nnoremap <CR> G
+nnoremap <BS> gg
 
 "" don't keep a backup file in version control directories
 if has("vms")
@@ -79,7 +108,6 @@ set shell=/bin/zsh
 
 "" spell check with ,ss
 set spelllang=en
-map <leader>ss :setlocal spell!<cr>
 
 "" regex
 set magic
