@@ -246,6 +246,8 @@ call vundle#rc()
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'bling/vim-airline'
+Plugin 'chriskempson/base16-vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -261,6 +263,14 @@ if iCanHazVundle == 0
     echo ""
     :BundleInstall
 endif
+
+" airline
+" display buffers instead of tabs when only one tab is open
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_detect_modified=1
+let g:airline_detect_paste=1
+let g:airline_powerline_fonts = 1
 
 " NERDTree
 " open NERDTree if no files were specified (http://vimawesome.com/plugin/the-nerd-tree)
@@ -287,9 +297,11 @@ let g:syntastic_check_on_wq = 0
 nnoremap <F5> :GundoToggle<CR>
 
 " solarized
-let g:solarized_termcolors=256
-colorscheme solarized 
+"let g:solarized_termcolors=256
+"colorscheme solarized 
 set background=dark
+"let base16colorspace=256
+colorscheme base16-monokai
 
 "" plugin python-mode configuration
 let pymode_lint_onfly = 1
