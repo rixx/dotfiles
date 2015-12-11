@@ -44,8 +44,9 @@ cmap w!! w !sudo tee %
 
 nnoremap <leader>w :w!<cr>
 map q: :q
+nnoremap <leader>wq :wq!<cr>
 nnoremap <leader>q :wq!<cr>
-nnoremap <leader>qq :q!<cr>
+nnoremap <leader>x :q!<cr>
 noremap <leader>ss :setlocal spell!<cr>
 
 " copy and paste to system clipboard
@@ -288,9 +289,9 @@ map <S-e> :NERDTreeToggle<CR>
 "set statusline+=%*
 "let g:syntastic_python_flake8_args = "--ignore=E501,W0611,W0401"
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 " Gundo

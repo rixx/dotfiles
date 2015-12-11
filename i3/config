@@ -18,7 +18,7 @@ bindsym $mod+Return exec urxvtc
 # kill focused window
 bindsym $mod+Shift+Q kill
 
-# start dmenu (a program launcher)
+# start dmenu (a program launcher). dmenu2 for way better font support.
 bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
 
 # start applications
@@ -94,7 +94,6 @@ workspace "2: web  " output DP2-1
 workspace "3: dev  " output eDP1
 workspace "4: mail " output DP2-1
 workspace "5: im  " output DP2-1
-
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1: term 
 bindsym $mod+Shift+2 move container to workspace 2: web  

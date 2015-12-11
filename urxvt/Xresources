@@ -286,30 +286,31 @@ URxvt*secondaryScroll: false
 ! URxvt*perl-ext-common: string
 ! needs: urxvt-perls
 ! usage of tabbed: Shift-down for new, Shift-left/right: go to, Ctrl-left/right: move to
-URxvt.perl-ext-common: default,matcher,url-select,clipboard,tabbed
-URxvt.url-launcher: /usr/bin/firefox
+! ,tabbed,clipboard,url-select
+URxvt.perl-ext-common: default,matcher
+URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
 URxvt.keysym.C-Delete: perl:matcher:last
 URxvt.keysym.M-Delete: perl:matcher:list
 URxvt.matcher.rend.0: Uline Bold fg5
 
-URxvt.tabbed.tabbar-fg: 2
-URxvt.tabbed.tabbar-bg: 0
-URxvt.tabbed.tab-fg: 3
-URxvt.tabbed.tab-bg: 0
+/* URxvt.tabbed.tabbar-fg: 2 */
+/* URxvt.tabbed.tabbar-bg: 0 */
+/* URxvt.tabbed.tab-fg: 3 */
+/* URxvt.tabbed.tab-bg: 0 */
 
 ! clipboard: C-Shift-v/c
-URxvt.iso14755: False
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
-URxvt.clipboard.copycmd:  xsel -ib
-URxvt.clipboard.pastecmd: xsel -ob
+/* URxvt.iso14755: False */
+/* URxvt.keysym.Shift-Control-C: perl:clipboard:copy */
+/* URxvt.keysym.Shift-Control-V: perl:clipboard:paste */
+/* URxvt.clipboard.copycmd:  xsel -ib */
+/* URxvt.clipboard.pastecmd: xsel -ob */
 
 ! Usage: Alt-u to enter selection mode
 ! j and k to scroll, enter to select and open in browser, y to yank url, esc to quit
-URxvt.keysym.M-u: perl:url-select:select_next
-URxvt.url-select.launcher: /usr/bin/xdg-open
-URxvt.url-select.underline: true
+/* URxvt.keysym.M-u: perl:url-select:select_next */
+/* URxvt.url-select.launcher: /usr/bin/xdg-open */
+/* URxvt.url-select.underline: true */
 
 ! Comma-separated list(s) of perl extension scripts (default: "default") to use in this terminal instance; option -pe.
 ! URxvt*perl-ext: string
