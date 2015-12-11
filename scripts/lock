@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+tmpbg="/tmp/lock_$(whoami).png"
+scrot $tmpbg
+
+#/usr/bin/gm convert /tmp/scrot$(whoami).png -blur 0x8 -quality 60 /tmp/blur$(whoami).png
+
+/usr/bin/gm convert $tmpbg -scale 10% -scale 1000% $tmpbg
+
+#/usr/bin/gm convert $tmpbg -fill white -undercolor '#00000080' -gravity South -pointsize 40 -font Monofur -annotate +500+100 ' '$(whoami)' ' $tmpbg
+#dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
+
+i3lock -feu -i $tmpbg
+rm $tmpbg
