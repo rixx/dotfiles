@@ -8,6 +8,7 @@ HISTSIZE=10000
 EDITOR=vim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
+PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/morgana,~/Projects/aexea/nummer5"
 PAGER=/usr/bin/vimpager
 
@@ -43,7 +44,7 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
 ZSH_THEME="ttb"
 
-plugins=(battery bgnotify colored-man command-not-found cp dirhistory docker docker-compose extract git history history-substring-search pass python rsync ssh-agent sudo systemctl)
+plugins=(battery bgnotify colored-man command-not-found cp dirhistory docker docker-compose extract git gitignore history history-substring-search pass python rsync ssh-agent sudo systemctl)
 ## plugins
 # bgnotify: notification when long-running commands end
 # command-not-found: requires pkgfile
@@ -77,3 +78,10 @@ alias pserver="python -m http.server"
 
 alias less=$PAGER
 alias zless=$PAGER 
+
+git-root () {
+	if [[ $(git rev-parse --is-inside-work-tree 2>&1) = "true" ]]
+	then
+		cd $(git rev-parse --show-toplevel)
+	fi
+}
