@@ -116,7 +116,8 @@
 !URxvt.font: xft:Source Code Pro for Powerline:size=12
 !URxvt.font: xft:Liberation mono for powerline:size=11
 !URxvt.font: xft:Droid Sans Mono Slashed for Powerline:size=11
-URxvt.font: xft:DejaVu Sans Mono for Powerline:size=11
+!URxvt.font: xft:DejaVu Sans Mono for Powerline:size=11
+URxvt.font: xft:Roboto Mono for Powerline:size=11
 URxvt.letterSpace: 0
 
 ! URxvt*boldFont: fontlist
