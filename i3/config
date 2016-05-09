@@ -7,7 +7,9 @@ set $mod Mod4
 #font pango:Terminus 14px
 #font pango:Anonymous Pro for Powerline 14px
 #font pango:Source Code Pro, FontAwesome, 10
-font pango:Monofur, FontAwesome, 14
+#font pango:Monofur, FontAwesome, Noto Color Emoji, 14
+font pango:Roboto Mono, FontAwesome, Noto Color Emoji, 11
+
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -19,7 +21,8 @@ bindsym $mod+Return exec urxvtc
 bindsym $mod+Shift+Q kill
 
 # start dmenu (a program launcher). dmenu2 for way better font support.
-bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
+bindsym $mod+d exec dmenu_run -fn "Roboto Mono:size=11"
+#bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
 
 # start applications
 bindsym $mod+Shift+F exec firefox
@@ -69,13 +72,15 @@ bindsym XF86AudioRaiseVolume exec /usr/bin/amixer -q sset Master 5%+
 bindsym XF86AudioMicMute exec /usr/bin/amixer -q sset Capture toggle
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10
-bindsym Print exec /usr/bin/scrot -m /tmp/$(date +%s).png
+bindsym XF86WakeUp exec /usr/bin/scrot -s ~/$(date +%s).png
+bindsym Print exec /usr/bin/scrot -s ~/$(date +%s).png
 bindsym XF86Display exec /usr/bin/wxcam
 #bindsym XF86Tools
 #bindsym XF86Search
 #bindsym XF86LaunchA
 bindsym XF86Explorer exec /usr/bin/pcmanfm
 
+bindsym $mod+p exec /usr/bin/scrot -s /tmp/$(date +%s).png
 # focus the child container
 #bindcode $mod+d focus child
 
@@ -135,7 +140,8 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command /usr/bin/py3status -c ~/.i3/status.conf
-    font pango:Monofur, FontAwesome, 13
+    #font pango:Monofur, FontAwesome, 13
+    font pango:Roboto Mono, FontAwesome, 11
 
 	position top
 	workspace_buttons yes
