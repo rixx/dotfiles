@@ -8,10 +8,24 @@ DOCKER_DIRS = os.environ.get('DOCKER_DIRS').split(',')
 
 
 if __name__ == '__main__':
+
     if sys.argv[-1] == 'start':
         for directory in DOCKER_DIRS:
             subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
+
     elif sys.argv[-1] == 'stop':
         for directory in DOCKER_DIRS:
             subprocess.check_output('cd {} && docker-compose stop'.format(directory), shell=True)
         
+    elif sys.argv[-1] == 'update':
+        for directory in DOCKER_DIRS:
+            print('***** Updating {} *****'.format(directory.split('/')[-1]))
+
+            if os.path.isfile(os.path.join(directory, 'update.sh')):
+                subprocess.check_output('cd {} && ./update.sh'.format(directory), shell=True)
+                subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
+                subprocess.check_output('cd {} && docker-compose run web migrate'.format(directory), shell=True)
+            else:
+                subprocess.check_output('cd {} && git pull --rebase'.format(directory), shell=True)
+                subprocess.check_output('cd {} && docker-compose build'.format(directory), shell=True)
+                subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
