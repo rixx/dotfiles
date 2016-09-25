@@ -20,12 +20,19 @@ if __name__ == '__main__':
     elif sys.argv[-1] == 'update':
         for directory in DOCKER_DIRS:
             print('***** Updating {} *****'.format(directory.split('/')[-1]))
+            subprocess.check_output('cd {} && git pull --rebase'.format(directory), shell=True)
 
             if os.path.isfile(os.path.join(directory, 'update.sh')):
                 subprocess.check_output('cd {} && ./update.sh'.format(directory), shell=True)
                 subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
-                subprocess.check_output('cd {} && docker-compose run web migrate'.format(directory), shell=True)
+                try:
+                    subprocess.check_output('cd {} && docker-compose run web migrate'.format(directory), shell=True)
+                except:
+                    pass
             else:
-                subprocess.check_output('cd {} && git pull --rebase'.format(directory), shell=True)
                 subprocess.check_output('cd {} && docker-compose build'.format(directory), shell=True)
                 subprocess.check_output('cd {} && docker-compose up -d'.format(directory), shell=True)
+                try:
+                    subprocess.check_output('cd {} && docker-compose run web migrate'.format(directory), shell=True)
+                except:
+                    pass

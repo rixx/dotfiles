@@ -26,7 +26,8 @@ bindsym $mod+d exec dmenu_run -fn "Roboto Mono:size=11"
 
 # start applications
 bindsym $mod+Shift+F exec firefox
-bindsym $mod+Shift+T exec thunderbird
+bindsym $mod+Shift+T exec claws-mail
+bindsym $mod+Shift+C exec electron ~/Projects/private/electron-cal
 bindsym $mod+l exec lock
 
 # focus window with cursor keys:
@@ -66,10 +67,10 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # function keys
-bindsym XF86AudioMute exec /usr/bin/amixer -q sset Master toggle
-bindsym XF86AudioLowerVolume exec /usr/bin/amixer -q sset Master 5%-
-bindsym XF86AudioRaiseVolume exec /usr/bin/amixer -q sset Master 5%+
-bindsym XF86AudioMicMute exec /usr/bin/amixer -q sset Capture toggle
+bindsym XF86AudioMute exec /usr/bin/amixer -D pulse -q sset Master toggle
+bindsym XF86AudioLowerVolume exec /usr/bin/amixer -D pulse -q sset Master 5%-
+bindsym XF86AudioRaiseVolume exec /usr/bin/amixer -D pulse -q sset Master 5%+
+bindsym XF86AudioMicMute exec /usr/bin/amixer -D pulse -q sset Capture toggle
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10
 bindsym XF86WakeUp exec /usr/bin/scrot -s ~/$(date +%s).png
@@ -108,7 +109,7 @@ bindsym $mod+Shift+5 move container to workspace 5: im
 bindsym $mod+Shift+6 move container to workspace 6: rand  
 
 # reload the configuration file
-bindsym $mod+Shift+C reload
+bindsym $mod+Shift+D reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
