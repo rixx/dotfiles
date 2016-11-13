@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# Remove '_run_' containers, dangling images, and dangling volumes.
+
+docker rm $(docker ps -a | grep "_run_" | awk '{print($1)}')
+docker rmi --force $(docker images --filter "dangling=true" -q)
+docker volume rm $(docker volume ls --filter "dangling=true" -q)
