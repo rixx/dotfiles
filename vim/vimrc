@@ -28,7 +28,7 @@ set viminfo='100,%,s100,<1000,h,r/temp,n~/.vim/viminfo
 "" read file again if it changes while open and unmodified in vim
 set autoread
 
-"" set the map leader to '+'
+"" set the map leader to ' '
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 
@@ -209,18 +209,6 @@ autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
 
 autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Python specific configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType python setlocal tabstop=4
-autocmd FileType python setlocal expandtab
-autocmd FileType python setlocal shiftwidth=4
-autocmd FileType python setlocal softtabstop=4
-autocmd FileType python setlocal shiftround
-autocmd FileType python setlocal nospell
-autocmd FileType python match DiffChange '\%>79v.\+'
-
-
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
@@ -250,6 +238,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 Plugin 'chriskempson/base16-vim'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'klen/python-mode'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'sjl/gundo.vim'
@@ -305,9 +294,15 @@ set background=dark
 colorscheme base16-monokai
 
 "" plugin python-mode configuration
-let pymode_lint_onfly = 1
-let pymode_lint_checker = "pylint,pyflakes,pep8,mccabe"
-let pymode_lint_hold = 0
-let pymode_lint_jump = 0
+" <leader> b for breakpoints
+" <leader> r for execution
+" don't use rope
+let g:pymode_options_max_line_length = 119
+let g:pymode_python = 'python3'
+let g:pymode_lint_onfly = 1
+let g:pymode_lint_checkers = ['pyflakes', 'pylint', 'pep8', 'mccabe']
+let g:pymode_lint_ignore = "E501"
+let g:pymode_rope = 0
+let g:pymode_syntax_print_as_function = 1
 
 " vim:set ft=vim et sw=2:
