@@ -15,6 +15,8 @@ PAGER=/usr/bin/vimpager
 WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
+setterm -foreground black -background white -store
+
 ###############
 # zsh options #
 ###############
@@ -42,7 +44,11 @@ REPORTTIME=10
 ###########################
 ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
-ZSH_THEME="ttb"
+if [[ $(ps --no-headers --format tty $$) =~ "pts*"  ]] then;
+    ZSH_THEME="ttb";
+else
+    ZSH_THEME="philips";
+fi;
 
 plugins=(battery bgnotify colored-man-pages command-not-found cp dirhistory docker docker-compose extract git gitignore history history-substring-search pass python rsync ssh-agent systemctl)
 ## plugins
