@@ -15,7 +15,6 @@ PAGER=/usr/bin/vimpager
 WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
-setterm -foreground black -background white -store
 
 ###############
 # zsh options #
@@ -47,6 +46,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
 if [[ $(ps --no-headers --format tty $$) =~ "pts*"  ]] then;
     ZSH_THEME="ttb";
 else
+    setterm -foreground black -background white -store
     ZSH_THEME="philips";
 fi;
 
