@@ -140,6 +140,8 @@ autocmd BufReadPost *
 autocmd BufReadPost COMMIT_EDITMSG
   \ exe "normal! gg"
 
+" And adjust mutt messages, too
+au BufRead /tmp/mutt-* set tw=72
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""  visual stuff                                          ""
@@ -178,7 +180,7 @@ set wildignore=*.o,*~,*.pyc
 
 "" show current position, bit shorter than normally
 set ruler
-set rulerformat=%15(%c%V\ %p%%%)
+" set rulerformat=%15(%c%V\ %p%%%)
 
 "" mouse integration if mouse
 if has('mouse')
@@ -239,6 +241,7 @@ Plugin 'bling/vim-airline'
 Plugin 'chriskempson/base16-vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'klen/python-mode'
+Plugin 'posva/vim-vue'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'sjl/gundo.vim'
@@ -246,6 +249,7 @@ Plugin 'tpope/vim-afterimage'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-sleuth'
 
 " vundle
 if iCanHazVundle == 0
@@ -287,11 +291,14 @@ let g:syntastic_check_on_wq = 0
 nnoremap <F5> :GundoToggle<CR>
 
 " solarized
-"let g:solarized_termcolors=256
-"colorscheme solarized 
 set background=dark
-"let base16colorspace=256
-colorscheme base16-monokai
+" let base16colorspace=256
+"colorscheme base16-monokai
+colorscheme base16-grayscale-dark
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
 
 "" plugin python-mode configuration
 " <leader> b for breakpoints

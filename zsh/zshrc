@@ -3,7 +3,7 @@
 # Variables #
 #############
 HISTFILE=~/.histfile
-HISTSIZE=10000
+HISTSIZE=1000000
 
 EDITOR=vim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
@@ -13,6 +13,7 @@ DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aex
 PAGER=/usr/bin/vimpager
 
 WORKON_HOME=~/.virtualenvs
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source /usr/bin/virtualenvwrapper.sh
 
 
@@ -50,7 +51,7 @@ else
     ZSH_THEME="philips";
 fi;
 
-plugins=(battery bgnotify colored-man-pages command-not-found cp dirhistory docker docker-compose extract git gitignore history history-substring-search pass python rsync ssh-agent systemctl)
+plugins=(battery bgnotify colored-man-pages cp dirhistory docker docker-compose extract git gitignore history history-substring-search httpie k pass python rsync ssh-agent systemctl)
 ## plugins
 # bgnotify: notification when long-running commands end
 # command-not-found: requires pkgfile
@@ -92,3 +93,8 @@ git-root () {
 		cd $(git rev-parse --show-toplevel)
 	fi
 }
+alias git-pullall="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
+
+alias https='http --default-scheme=https'
+alias k='k -h'
+alias l='k -h'
