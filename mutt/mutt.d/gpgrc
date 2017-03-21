@@ -1,0 +1,44 @@
+# Crypt and PGP options
+# manual version 1.7.2 (2016-11-26)
+# We do not need to assign *_command anymore, thankfully
+
+set crypt_autoencrypt = no           # Automatically encrypt all mail
+set crypt_autopgp = yes              # Allow automatic pgp functions
+set crypt_autosign = yes             # Automatically sign all mail
+set crypt_autosmime = yes            # Allow automatic smime functions
+set crypt_confirmhook = yes          # Ask for confirmation before signing
+set crypt_opportunistic_encrypt = no # Would decide for me whether to encrypt
+set crypt_replyencrypt = yes         # Encrypt replies to encrypted mails
+set crypt_replysign = yes            # Sign replies to signed mails
+set crypt_replysignencrypted = yes   # Sign replies to encrypted mails
+set crypt_timestamp = yes            # Show timestamp to make spoofing harder
+set crypt_use_gpgme = yes            # Use GPGME if available. Does not support inline PGP
+set crypt_verify_sig = yes           # Always try to verify signatures
+
+set pgp_auto_decode = yes            # Please try to decode messages
+set pgp_autoinline = no              # No no no inline PGP
+set pgp_check_exit = yes             # Check exit codes, abort if != 0
+set pgp_encrypt_self = yes           # I want to read the message afterwards, too (also set in ~/.gpgrc)
+set pgp_entry_format = "%4n │ %2t%4f │ %4l/0x%k │ %u"
+                                     # %a algorighm
+                                     # %c capabilities
+                                     # %f flags
+                                     # %l key length
+                                     # %n number
+                                     # %k key id
+                                     # %[<s>] date of the key using an strftime(3) expression
+                                     # %t trust/validity
+                                     # %u user id
+set pgp_ignore_subkeys = yes         # Use parent key capabilities. Everything else sucks.
+set pgp_long_ids = no                # mutt uses full fingerprint internally
+set pgp_mime_auto = no               # Prompt for inline if /MIME fails
+set pgp_replyinline = no             # No no no inline PGP
+set pgp_retainable_sigs = no         # Obscure mailing list stripping feature
+set pgp_show_unusable = no           # Don't show revoked, expired, otherwise disabled keys
+set pgp_sign_as = "0xE1F56CE6693F9C45"
+set pgp_sort_keys = address          # Choose address | keyid | date | trust
+set pgp_strict_enc = yes             # Safe default
+set pgp_use_gpg_agent = yes          # All hail gpg agent
+
+set postpone_encrypt = yes           # Encrypt postponed messages that are marked for encryption
+set postpone_encrypt_as = "0xE1F56CE6693F9C45"

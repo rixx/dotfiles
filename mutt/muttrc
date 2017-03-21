@@ -1,0 +1,21 @@
+# IMAP: offlineimap, folders
+set folder = "~/.mail"               # This is what + or = expand to
+set spoolfile = "+cutebit/INBOX"
+set postponed = "+cutebit/Drafts"
+set trash = "+cutebit/Trash"
+set header_cache = "~/.cache/muttheaders"
+
+source ~/.mutt/mutt.d/aliasrc
+source ~/.mutt/mutt.d/attachrc
+source ~/.mutt/mutt.d/behaverc
+source ~/.mutt/mutt.d/colorsrc
+source ~/.mutt/mutt.d/composerc
+source ~/.mutt/mutt.d/displayrc
+source ~/.mutt/mutt.d/keysrc
+source ~/.mutt/mutt.d/gpgrc
+source ~/.mutt/mutt.d/sendrc
+
+source ~/.mutt/aliases
+mailboxes `find ~/.mail/cutebit/ -type d -name cur -printf '%h '`
+
+set record = "+cutebit/Sent"         # Save sent mails automatically. Needs to be set at the end.

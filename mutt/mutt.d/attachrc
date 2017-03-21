@@ -1,0 +1,29 @@
+set mailcap_path 	= ~/.mailcap
+#auto_view text/html
+#auto_view text/vcard
+#alternative_order text/plain text/html
+                                     # this helps with multipart messages
+folder-hook . `rm -f /tmp/mutt/*`    # Can't hurt, written for special logic in mailcap
+set attach_format="%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "
+                                     # %C 	charset
+                                     # %c 	requires charset conversion (“n” or “c”)
+                                     # %D 	deleted flag
+                                     # %d 	description
+                                     # %e 	MIME content-transfer-encoding
+                                     # %f 	filename
+                                     # %I 	disposition (“I” for inline, “A” for attachment)
+                                     # %m 	major MIME type
+                                     # %M 	MIME subtype
+                                     # %n 	attachment number
+                                     # %Q 	“Q”, if MIME part qualifies for attachment counting
+                                     # %s 	size
+                                     # %t 	tagged flag
+                                     # %T 	graphic tree characters
+                                     # %u 	unlink (=to delete) flag
+                                     # %X 	number of qualifying MIME parts in this part and its children
+                                     # %>X 	right justify the rest of the string and pad with character “X”
+                                     # %|X 	pad to the end of the line with character “X”
+                                     # %*X 	soft-fill with character “X” as pad
+set attach_sep = "\n"                # Insert between attachments
+set attach_split = yes               # Operate on attachments separately
+set honor_disposition = no           # Display everything in text that you can

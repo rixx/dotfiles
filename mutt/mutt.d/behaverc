@@ -1,0 +1,14 @@
+# behaviour
+
+set auto_tag = yes                   # Apply actions to all tagged mails, regardless of <tag-prefix>
+set beep = no                        # Seriously
+set beep_new = no                    # Seriously
+set confirmappend = no               # Do not ask before deleting/moving to existing mailbox
+set confirmcreate = yes              # But do ask before creating a mailbox
+set date_format = "%y-%m-%d %T"      # Used in lots of places, hence not in the Display section
+set history_file = "~/.mutt/history" # Don't spam ~
+set mail_check_stats = yes           # For the sidebar
+set mail_check_stats_interval = 5    # In seconds
+set mark_old = no                    # Do not mark unread mails als Old if closing on New messages
+set resolve = yes                    # Go to next message when finished with one
+set sleep_time = 0                   # Don't sleep. Ever. You're a computer!

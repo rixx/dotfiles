@@ -1,0 +1,51 @@
+# Display settings
+set compose_format = "━━━━%>━┫ size: ~%l B ┣━━━━┫ attch: %a ┣━━━━┫ <3 ┣━━━━"
+set hide_thread_subject = yes        # No need to show the subject all over again. Will be shown if it changes.
+set menu_scroll = yes                # Scrolling is nicer than paging
+set narrow_tree = no                 # Set if threads do not fit onscreen any longer
+set pager_index_lines = 10
+set pager_context = 3
+set pager_stop = yes                 # Do not progress to next mail
+set reverse_alias = yes              # Show an alias's name if possible
+set sidebar_divider_char = ' ┃ '     # Woohoo utf8
+set sidebar_folder_indent = yes      # Woohoo whitespace
+set sidebar_format = '%B%* %?%N?%N?' # Woohoo little info
+set sidebar_next_new_wrap = yes      # Woohoo clever wrapping: continue to next folder with new mail from top
+set sidebar_short_path = yes         # Woohoo context
+set sidebar_visible = yes            # Woohoo sidebars
+set sidebar_sort_method = "path"
+set sidebar_width = 30               # Default
+set smart_wrap = yes                 # Wrap at word boundary
+set sort  =threads                   # Threads! Pull threads with new messages up. Much better than reverse-threads + last-date-received
+set sort_aux = reverse-last-date-received
+set status_format = "━━━━%>━┫ msgs:%?M?%M/?%m%?n? new:%n?%?o? del:%d?%?F? flag:%F?%?t? tag:%t?%?p? %l? ┣━━━━┫ You rock! ┣━━━━┫%P┣━━━━"
+set status_on_top = yes              # Status bar is more visible on top and does not change places
+set strict_threads = yes             # References only, same subject does not mean same thread
+
+set to_chars = "?→⇉↔←"
+                                     # 1: not addressed to me ( )
+                                     # 2: addressed only to me (+)
+                                     # 3: addressed to me and others (T)
+                                     # 4: CC'd to me (C)
+                                     # 5: by me (F)
+                                     # 6: mailing list (L)
+set flag_chars = "✔◬✘✘↺▹▸▷▶- "
+                                     # 1: tagged (*)
+                                     # 2: important (!)
+                                     # 3: to be deleted (D)
+                                     # 4: attachments to be deleted (d)
+                                     # 5: already replied to (r)
+                                     # 6: old (O)
+                                     # 7: new (N)
+                                     # 8: old thread (o)
+                                     # 9: new thread (n)
+                                     # 10: read, %S (-)
+                                     # 11: read, %/ ( )
+
+
+## From field gets 30% of remaining space, Subject gets 70%.
+## Remaining space is the total width minus the other fields (20), minus the sidebar (24)
+set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-20-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-20-24) / 100))`; set index_format="%4C │ %Z │ %-$my_col_subject.${my_col_subject}s │ %-$my_col_from.${my_col_from}'
+set my_index_format_post='  %?M?<%M> │ %d"'
+folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post_mine"  # Use to: field
+folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"     # Use author or recipient, as appropriate

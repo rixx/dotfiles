@@ -1,0 +1,33 @@
+# Key bindings
+
+## VIM like settings
+bind pager j next-line
+bind pager k previous-line
+bind pager gg top
+bind pager G bottom
+
+bind index,pager \CL sync-mailbox      # originally: $
+bind index,pager gt  next-thread
+bind index,pager gT  previous-thread
+bind index,pager n next-new-then-unread
+
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind attach,browser,index g first-entry
+bind attach,browser,index G last-entry
+bind attach <return>    view-mailcap
+
+## Sidebar settings, vim-like but uppercase
+bind index,pager K sidebar-prev
+bind index,pager J sidebar-next
+bind index,pager \CN sidebar-next-new
+bind index,pager i sidebar-next-new
+bind index,pager o sidebar-open
+bind index,pager B sidebar-toggle-visible
+bind index,pager O sort-mailbox
+
+## Cool things
+bind index,pager r reply
+bind index,pager R group-reply
+macro index,pager 0 "<save-message>=cutebit/Junk<enter>" "Move to Junk"
+macro index,pager gi "<change-folder>=cutebit/INBOX<enter><enter>" "Go to inbox"

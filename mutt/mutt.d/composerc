@@ -1,0 +1,19 @@
+# Edit settings
+
+set attribution = "On %d, %n wrote:" # Uses date_format for %d
+# set compose_format = “-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-”
+                                     # %a 	total number of attachments
+                                     # %h 	local hostname
+                                     # %l 	approximate size (in bytes) of the current message
+                                     # %v 	Mutt version string
+set edit_headers = yes               # Put headers in editor when composing
+set editor = `echo \$EDITOR`         # Obviously
+set fast_reply = yes                 # Don't ask for Subject/recipient when replying, or Subject when forwarding
+set forward_edit = yes               # Always allow to edit before forwarding
+set forward_format = "[%a: %s]"      # See index_format for variables
+set include = yes                    # include body
+set indent_string = '>'              # Spaces are overrated
+set reflow_space_quotes = no         # Remove spaces between quote levels >>>
+set reflow_text = yes                # All hail format=flowed
+set reflow_wrap = 78                 # If GOD would have wanted a larger number, HE'd have given us larger screens
+set wrap = 120                       # Wrap incoming text at 180 chars
