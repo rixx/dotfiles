@@ -5,6 +5,8 @@ set postponed = "+cutebit/Drafts"
 set trash = "+cutebit/Trash"
 set header_cache = "~/.cache/muttheaders"
 
+alternative_order text/plain text/html
+
 source ~/.mutt/mutt.d/aliasrc
 source ~/.mutt/mutt.d/attachrc
 source ~/.mutt/mutt.d/behaverc
