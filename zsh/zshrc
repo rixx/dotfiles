@@ -1,3 +1,7 @@
+# Theme
+BASE16_SHELL=$HOME/.config/base16-shell/
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+
 # Not oh-my-zsh
 #############
 # Variables #
@@ -64,9 +68,6 @@ plugins=(battery bgnotify colored-man-pages cp dirhistory docker docker-compose 
 source $ZSH/oh-my-zsh.sh
 # LS_COLORS="ex=01;31"
 # export LS_COLORS
-
-BASE16_SHELL=$HOME/.config/base16-shell/
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
 ###########
 # Aliases #
