@@ -20,7 +20,7 @@ set sort  =threads                   # Threads! Pull threads with new messages u
 set sort_aux = reverse-last-date-received
 set status_format = "━━━━%>━┫ msgs:%?M?%M/?%m%?n? new:%n?%?o? del:%d?%?F? flag:%F?%?t? tag:%t?%?p? %l? ┣━━━━┫ You rock! ┣━━━━┫%P┣━━━━"
 set status_on_top = yes              # Status bar is more visible on top and does not change places
-set strict_threads = yes             # References only, same subject does not mean same thread
+set strict_threads = no              # References only, same subject does not mean same thread
 
 set to_chars = "?→⇉↔←"
                                      # 1: not addressed to me ( )
