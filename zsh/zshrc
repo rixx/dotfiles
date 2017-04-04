@@ -99,3 +99,4 @@ alias git-pullall="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {}
 alias https='http --default-scheme=https'
 alias k='k -h'
 alias l='k -h'
+alias ipa='ip -br -c a'
