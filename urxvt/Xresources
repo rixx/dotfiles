@@ -73,7 +73,7 @@
 !URxvt.font: xft:Inconsolata for Powerline:size=11
 !URxvt.font: xft:Ubuntu Mono derivative Powerline:size=13
 URxvt.font: xft:Monofur for Powerline:size=13,FontAwesome,Noto Color Emoji
-URxvt.letterSpace: 1
+URxvt.letterSpace: 0
 
 !URxvt.font: xft:Anonymice Powerline:size=11
 !URxvt.font: xft:DejaVu Sans Mono for Powerline:size=11
