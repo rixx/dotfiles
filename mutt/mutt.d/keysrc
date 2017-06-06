@@ -29,5 +29,6 @@ bind index,pager O sort-mailbox
 ## Cool things
 bind index,pager r reply
 bind index,pager R group-reply
+bind index,pager M resend-message
 macro index,pager 0 "<save-message>=cutebit/Junk<enter>" "Move to Junk"
 macro index,pager gi "<change-folder>=cutebit/INBOX<enter><enter>" "Go to inbox"
