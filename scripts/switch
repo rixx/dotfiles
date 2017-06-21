@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+import os
+import subprocess
+
+
+def switch():
+    if "nodeadkeys" in subprocess.check_output(["setxkbmap", "-query"]).decode():
+        os.system("setxkbmap de neo -option")
+    else:
+        os.system("setxkbmap de nodeadkeys -option")
+
+
+if __name__ == "__main__":
+    switch()
