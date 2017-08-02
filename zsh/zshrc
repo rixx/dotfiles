@@ -7,7 +7,8 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 # Variables #
 #############
 HISTFILE=~/.histfile
-HISTSIZE=1000000
+HISTSIZE=10000  # This is the amount that is searched inmem
+SAVEHIST=100000000  # This is the histfile length
 
 EDITOR=vim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
