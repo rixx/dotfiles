@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# ~/.xinitrc
+#
+
+#For power saving: turn of screen after five minutes
+xss-lock -- lock -n &
+xautolock -time 10 -locker lock &
+
+xset dpms 300 600 900 &
+xset -b &
+xset +fp /usr/share/fonts/local &
+xset +fp $HOME/.fonts
+xset fp rehash
+
+#Background color
+xsetroot -solid rgb:11/11/11
+
+#notifications
+dunst &
+
+#for urxvt
+xrdb -merge ~/.Xresources
+urxvtd -q -f -o
+
+#Compose
+#setxkbmap -option grp:ctrl_alt_toggle -layout de(nodeadkeys),de(neo)
+setxkbmap de nodeadkeys -option -option
+setxkbmap -option compose:prsc
+
+#auto-mounting
+udiskie -t &
+
+#copypasta
+autocutsel -fork &
+autocutsel -selection PRIMARY -fork &
+
+amixer sset Master 20%
+amixer sset Master mute
+amixer sset Capture nocap
+
+rm -rf /tmp/*
+
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
+export EDITOR=vim
+export DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/morgana"
+
+export PATH=$PATH:~/.bin:/home/share/.bin
+
+exec i3
