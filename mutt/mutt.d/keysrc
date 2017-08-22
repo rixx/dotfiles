@@ -1,5 +1,7 @@
 # Key bindings
 
+bind index,pager g noop
+
 ## VIM like settings
 bind pager j next-line
 bind pager k previous-line
@@ -13,7 +15,7 @@ bind index,pager n next-new-then-unread
 
 bind attach,index,pager \CD next-page
 bind attach,index,pager \CU previous-page
-bind attach,browser,index g first-entry
+# bind attach,browser,index g first-entry
 bind attach,browser,index G last-entry
 bind attach <return>    view-mailcap
 
