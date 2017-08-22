@@ -100,7 +100,7 @@ alias git-pullall="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {}
 
 alias https='http --default-scheme=https'
 alias k='k -h'
-alias l='k -h'
+alias l='exa --long --git --colour-scale'
 alias ipa='ip -br -c a'
 alias asdf='setxkbmap de neo -option'
 alias uiae='setxkbmap de nodeadkeys -option'
