@@ -15,7 +15,8 @@ JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
 PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/nummer5,~/Projects/aexea/rincewind"
-PAGER=/usr/bin/vimpager
+# PAGER=/usr/bin/vimpager
+PAGER=/usr/bin/less
 
 WORKON_HOME=~/.virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
