@@ -1,7 +1,7 @@
 # SMTP vars, sending
 
 alternates rixx@cutebit.de|rixx-.*@cutebit.de
-subscribe .*@lists.*.de|*@lists.*.com|*@lists.*.space|(mitglieder|key|vorstand|public)@shackspace.de|.*@googlegroups.com
+subscribe .*@lists.*.de|.*@lists.*.com|.*@lists.*.space|(mitglieder|key|vorstand|public)@shackspace.de|.*@googlegroups.com
 my_hdr X-Clacks-Overhead: GNU Terry Pratchett
 
 send-hook . 'source /home/rixx/.mutt/user_agent.sh|'
