@@ -106,6 +106,7 @@ alias asdf='setxkbmap de neo -option'
 alias uiae='setxkbmap de nodeadkeys -option'
 alias ap='ansible-playbook'
 alias av='ansible-vault'
+alias bim='vim'
 
 alias axex='docker-compose exec web'
 alias axrun='docker-compose run --rm web'
