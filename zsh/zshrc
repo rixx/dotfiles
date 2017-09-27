@@ -14,14 +14,11 @@ EDITOR=vim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
 PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/nummer5,~/Projects/aexea/rincewind"
-# PAGER=/usr/bin/vimpager
 PAGER=/usr/bin/less
 
 WORKON_HOME=~/.virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source /usr/bin/virtualenvwrapper.sh
-
 
 ###############
 # zsh options #
@@ -29,11 +26,10 @@ source /usr/bin/virtualenvwrapper.sh
 setopt incappendhistory
 setopt sharehistory
 setopt extendedhistory
-
-#setops: 
 setopt auto_cd 
 setopt extendedglob notify completealiases 
 setopt interactivecomments
+
 autoload -Uz compinit
 autoload -U colors
 compinit
@@ -42,8 +38,8 @@ colors
 zstyle ':completion:*' menu select
 zstyle ':completion:*:killall:*' command 'ps -u $USER -o cmd'
 
-#Display CPU stats for commands taking more than 10 seconds
-REPORTTIME=10
+#Display CPU stats for commands taking more than 30 seconds
+REPORTTIME=30
 
 ###########################
 # oh-my-zsh configuration #
@@ -57,19 +53,13 @@ else
     ZSH_THEME="philips";
 fi;
 
-plugins=(battery bgnotify colored-man-pages cp dirhistory docker docker-compose extract git gitignore history history-substring-search httpie k pass python rsync ssh-agent systemctl)
+plugins=(battery bgnotify colored-man-pages command-not-found git gitignore history rsync)
 ## plugins
 # bgnotify: notification when long-running commands end
 # command-not-found: requires pkgfile
-# cp: cpv uses rsync instead of cp
-# dirhistory: Alt-left and Alt-right navigate the last directories
-# extract: x file extracts most known archive types
-# systemctl: alias all systemctl commands to sc-<command>, inserting sudo where needed
 ##
 
 source $ZSH/oh-my-zsh.sh
-# LS_COLORS="ex=01;31"
-# export LS_COLORS
 
 ###########
 # Aliases #
@@ -83,8 +73,6 @@ alias fuck='sudo $(fc -ln -1)'
 alias please="sudo"
 
 alias pycharm="/opt/pycharm/bin/pycharm.sh"
-alias intellij="idea.sh"
-alias stick="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Brother/PE-DESIGN\ NEXT/Embedit.exe"
 alias pserver="python -m http.server"
 
 alias less=$PAGER
