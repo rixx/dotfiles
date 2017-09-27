@@ -1,0 +1,38 @@
+[general]
+accounts = cutebit
+maxsyncaccounts = 1
+metadata = ~/.offlineimap
+pythonfile = ~/.offlineimap.py
+socktimeout = 10
+ui = basic
+
+[mbnames]
+enabled = yes
+filename = ~/.mutt/mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
+[Account cutebit]
+autorefresh = 0.5
+localrepository = cutebit-local
+quick = 10
+remoterepository = cutebit-de
+#status_backend = sqlite
+
+[Repository cutebit-local]
+type = Maildir
+localfolders = ~/.mail/cutebit
+sep = .
+sync_deletes = yes
+
+[Repository cutebit-de]
+type = IMAP
+holdconnectionopen = yes
+keepalive = 60
+remotehost = mail.cutebit.de
+remoteuser = rixx
+remotepasseval = get_pass("cutebit")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+ssl = yes
