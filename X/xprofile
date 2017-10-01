@@ -23,9 +23,9 @@ xrdb -merge ~/.Xresources
 urxvtd -q -f -o
 
 #Compose
-#setxkbmap -option compose:menu
 #setxkbmap -option grp:ctrl_alt_toggle -layout de(nodeadkeys),de(neo)
 setxkbmap de nodeadkeys -option -option
+setxkbmap -option compose:prsc
 
 #auto-mounting
 udiskie -t &
