@@ -148,22 +148,25 @@ bar {
    tray_output eDP1
 
    colors {
-      background #111111
-      statusline #93a1a1
-      focused_workspace #111111 #222222 #93a1a1
-      inactive_workspace #111111 #111111 #93a1a1
+      background #212121
+      statusline #BDBDBD
+      separator #9E9E9E
+      focused_workspace #212121 #BDBDBD #212121
+      urgent_workspace #D84315 #D84315 #212121
+      inactive_workspace #212121 #212121 #BDBDBD
    }
 }
 
 #Colors
-client.focused    #005500 #111111 #93a1a1 #93a1a1
-client.unfocused  #002200 #111111 #93a1a1 #009900
-client.background #111111
+client.focused    #212121 #BDBDBD #212121 #212121 #212121
+client.urgent     #212121 #D84315 #212121 #212121 #212121
+client.unfocused  #212121 #212121 #BDBDBD #212121 #212121
+client.background #212121
 
 
 #Borderstyle <normal|1pixel|none>
 new_window 1pixel
-
+hide_edge_borders smart
 focus_follows_mouse no
 
 #move to correct workspace
