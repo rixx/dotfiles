@@ -138,7 +138,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-   status_command /usr/bin/py3status -c ~/.i3/status.conf
+   status_command /usr/bin/py3status -b -c ~/.i3/status.conf
    font pango:Monofur, FontAwesome, 13
    #font pango:Roboto Mono, FontAwesome, 11
 
