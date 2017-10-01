@@ -10,7 +10,7 @@ HISTFILE=~/.histfile
 HISTSIZE=10000  # This is the amount that is searched inmem
 SAVEHIST=100000000  # This is the histfile length
 
-EDITOR=vim
+EDITOR=nvim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
 PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
@@ -53,10 +53,11 @@ else
     ZSH_THEME="philips";
 fi;
 
-plugins=(battery bgnotify colored-man-pages command-not-found git gitignore history rsync)
+plugins=(bgnotify colored-man-pages command-not-found git gitignore history rsync pass ssh-agent)
 ## plugins
 # bgnotify: notification when long-running commands end
 # command-not-found: requires pkgfile
+# pass: all tab completion for pass!
 ##
 
 source $ZSH/oh-my-zsh.sh
@@ -102,3 +103,4 @@ alias axtest='docker-compose exec web pytest'
 alias axlama='docker-compose exec web pylama'
 alias axsort='docker-compose exec web isort -rc .'
 alias axshell='docker-compose run --rm web'
+alias v='nvim'

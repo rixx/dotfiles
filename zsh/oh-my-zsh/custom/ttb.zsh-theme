@@ -211,7 +211,7 @@ build_rprompt(){
   prompt_git_status
   prompt_return_code
   prompt_date
-  prompt_battery
+  # prompt_battery
 }
 
 # build the prompt2

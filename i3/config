@@ -27,7 +27,7 @@ bindsym $mod+p exec passmenu
 # start applications
 bindsym $mod+Shift+F exec firefox
 bindsym $mod+Shift+T exec claws-mail
-bindsym $mod+Shift+C exec electron ~/Projects/private/electron-cal
+bindsym $mod+Shift+C exec electron ~/Projects/private/electron-calendar
 bindsym $mod+l exec lock
 
 # focus window with cursor keys:
