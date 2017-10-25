@@ -78,7 +78,7 @@ bindsym XF86Display exec /usr/bin/wxcam  # <F7>
 bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 #bindsym XF86Search
 #bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
-bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
+# bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
 bindsym $mod+s exec /usr/bin/scrot -s /tmp/$(date +%s).png
 
@@ -174,6 +174,8 @@ assign [class="Firefox"] 2: web
 assign [class="Thunderbird"] 4: mail 
 assign [class="Skype"] 5: im  
 assign [class="Hipchat"] 5: im  
+
+for_window [class="Pinentry"] floating enable
 
 # Create Log out, Reboot, Poweroff bindings
 mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff" {
