@@ -75,6 +75,7 @@ alias please="sudo"
 
 alias pycharm="/opt/pycharm/bin/pycharm.sh"
 alias pserver="python -m http.server"
+alias mutt="neomutt"
 
 alias less=$PAGER
 alias zless=$PAGER 
