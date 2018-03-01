@@ -6,6 +6,8 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+filetype plugin indent on  " Load plugins according to detected filetype.
+
 "" set history size
 set history=1000		
 set tabpagemax=50
@@ -97,10 +99,19 @@ set whichwrap+=<,>,h,l
 "" ignore case when searching, but be smart about it
 set ignorecase
 set smartcase
+
+"" Highlight search results while typing and searching
 set hlsearch
 set incsearch
 set showmatch
 set matchtime=2
+
+"" Always report changed lines
+set report=0
+
+"" Faster, lazy redrawing
+set ttyfast
+set lazyredraw
 
 "" set utf8 as standard encoding and unix as file type
 set encoding=utf8
@@ -149,6 +160,9 @@ autocmd BufRead /tmp/mutt-* set tw=72
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set background=dark
 syntax enable
+
+"" only highlight the first 240 columns
+set synmaxcol=240
 
 "" show line number of current line and relative line numbers otherwise
 set number
