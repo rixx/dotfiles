@@ -14,6 +14,7 @@ set crypt_replysignencrypted = yes   # Sign replies to encrypted mails
 set crypt_timestamp = yes            # Show timestamp to make spoofing harder
 set crypt_use_gpgme = yes            # Use GPGME if available. Does not support inline PGP
 set crypt_verify_sig = yes           # Always try to verify signatures
+set smime_verify_command = no
 
 set pgp_auto_decode = yes            # Please try to decode messages
 set pgp_autoinline = no              # No no no inline PGP
