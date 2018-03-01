@@ -20,15 +20,17 @@ bindsym $mod+Return exec urxvtc
 bindsym $mod+Shift+Q kill
 
 # start dmenu (a program launcher). dmenu2 for way better font support.
-#bindsym $mod+d exec dmenu_run -fn "Roboto Mono:size=11"
-bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
+# bindsym $mod+d exec dmenu_run -fn "Monofur:size=13"
+bindsym $mod+d exec rofi -show combi -display-combi '> '
+bindsym $mod+s exec rofi -show ssh -display-ssh 'ssh > '
 bindsym $mod+p exec passmenu
 
 # start applications
 bindsym $mod+Shift+F exec firefox
 bindsym $mod+Shift+T exec claws-mail
 bindsym $mod+Shift+C exec electron ~/Projects/private/electron-calendar
-bindsym $mod+l exec lock
+# bindsym $mod+l exec lock
+bindsym $mod+l exec i3lock -feu -i ~/Media/pics/screenlock.png
 
 # focus window with cursor keys:
 bindsym $mod+Left focus left
@@ -80,7 +82,7 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 #bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
 # bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
-bindsym $mod+s exec /usr/bin/scrot -s /tmp/$(date +%s).png
+# bindsym $mod+s exec /usr/bin/scrot -s /tmp/$(date +%s).png
 
 # switch to workspace;
 bindsym $mod+1 workspace 1: term 
