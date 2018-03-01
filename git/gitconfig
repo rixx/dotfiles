@@ -1,7 +1,16 @@
 [user]
-	name = Tobias Kunze
-	email = rixx@cutebit.de
+    name = Tobias Kunze
+    email = rixx@cutebit.de
 [alias]
-	lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
-	co = checkout
-	lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
+    # Shortening aliases
+    co = checkout
+
+    # Option aliases
+    lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
+    lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
+    last = show @
+    delete-remote = push --delete origin
+    unstage = reset @ --
+
+    # Function aliases
+    go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
