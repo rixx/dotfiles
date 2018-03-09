@@ -8,7 +8,7 @@ send-hook . 'source /home/rixx/.mutt/user_agent.sh|'
 # my_hdr Fcc: ~/.mail/cutebit/Sent
 set fcc_attach = yes                 # Save attachments
 set fcc_clear = no                   # Do not store sent message in plain text
-set from = rixx@cutebit.de           # Can be overridden by my_hdr and reverse_name
+set from = r@rixx.de                 # Can be overridden by my_hdr and reverse_name
 set hdrs = yes                       # Use my_hdr variables
 set realname = 'Tobias Kunze'        # Please do not look it up in /etc/passwd
 set recall = ask-no                  # Default: ask-yes, but I normally want to write new mails, not edit drafts
