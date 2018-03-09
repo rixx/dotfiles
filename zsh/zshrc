@@ -72,6 +72,7 @@ alias ll="ls -Ahl --color"
 alias fucking="sudo"
 alias fuck='sudo $(fc -ln -1)'
 alias please="sudo"
+alias next="cat next"
 
 alias pycharm="/opt/pycharm/bin/pycharm.sh"
 alias pserver="python -m http.server"
