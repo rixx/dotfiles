@@ -133,7 +133,7 @@ prompt_prompt_line(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black "!!"
   else
-    prompt_segment blue black "➜"
+    prompt_segment blue black " "
   fi
   prompt_end
   echo -n " "

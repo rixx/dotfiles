@@ -7,6 +7,7 @@ array[4]="Really, really, really hip webmailer"
 array[5]="I never sent this, you are imagining it"
 array[6]="Never gonna give you up"
 array[7]="Wer das liest, ist doof"
+array[8]="Yahooooooooo Webmail"
 
 size=${#array[@]}
 index=$(($RANDOM % $size))
