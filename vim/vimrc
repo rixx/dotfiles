@@ -164,6 +164,10 @@ syntax enable
 "" only highlight the first 240 columns
 set synmaxcol=240
 
+"" Use instead of colorcolum=120
+highlight ColorColumn ctermbg=blue
+call matchadd('Colorcolumn', '\%120v', 100)
+
 "" show line number of current line and relative line numbers otherwise
 set number
 
@@ -214,6 +218,7 @@ set nostartofline
 
 " <Ctrl-l> redraws the screen and removes any search highlighting.
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+nnoremap , :
 
 " assume .md files are markdown, not modula-2
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -221,6 +226,13 @@ autocmd BufNewFile,BufReadPost *.md set colorcolumn=120
 autocmd BufNewFile,BufReadPost *.md set tw=120
 autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
 autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
+
+" augroup NoSimultaneousEdits
+"   autocmd!
+"   autocmd SwapExists * let v:swapchoice = 'o'
+"   autocmd SwapExists * echo 'Duplicate edit session (readonly)'
+"   autocmd SwapExists * echohl None
+" augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""

@@ -71,11 +71,13 @@ alias dc="docker-compose"
 alias ll="ls -Ahl --color"
 
 alias fucking="sudo"
-alias fuck='sudo $(fc -ln -1)'
+#alias fuck='sudo $(fc -ln -1)'
+eval $(thefuck --alias)
 alias please="sudo"
 alias next="cat next"
 alias st='cat next'
 alias pretalx='python -m pretalx'
+alias django='python manage.py'
 
 alias pserver="python -m http.server"
 alias mutt="neomutt"
