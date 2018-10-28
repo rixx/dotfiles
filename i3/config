@@ -14,7 +14,7 @@ font pango:Monofur, FontAwesome, Noto Color Emoji, 14
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec urxvtc
+bindsym $mod+Return exec terminator
 
 # kill focused window
 bindsym $mod+Shift+Q kill
@@ -29,6 +29,8 @@ bindsym $mod+p exec passmenu
 bindsym $mod+Shift+F exec firefox
 bindsym $mod+Shift+T exec claws-mail
 bindsym $mod+Shift+C exec electron ~/Projects/private/electron-calendar
+# bindsym $mod+m exec switch
+bindsym $mod+m exec urxvt -e mutt
 # bindsym $mod+l exec lock
 bindsym $mod+l exec i3lock -feu -i ~/Media/pics/screenlock.png
 
@@ -46,7 +48,6 @@ bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
 bindsym $mod+h split h
-bindsym $mod+m exec switch
 
 # split in vertical orientation
 bindsym $mod+v split v

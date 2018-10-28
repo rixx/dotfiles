@@ -1,4 +1,5 @@
-URxvt.font: xft:Monofur for Powerline:size=13,FontAwesome,Noto Color Emoji
+!URxvt.font: xft:Monofur for Powerline:size=13,FontAwesome,Noto Color Emoji
+URxvt.font: xft:MonofurForPowerline Nerd Font:size=13,FontAwesome,Noto Color Emoji
 URxvt.letterSpace: 0
 
 !URxvt.font: xft:Anonymice Powerline:size=11

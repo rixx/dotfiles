@@ -10,6 +10,7 @@ HISTFILE=~/.histfile
 HISTSIZE=10000  # This is the amount that is searched inmem
 SAVEHIST=100000000  # This is the histfile length
 
+XDG_CONFIG_HOME="$HOME/.config"
 EDITOR=nvim
 JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
@@ -72,7 +73,6 @@ alias ll="ls -Ahl --color"
 
 alias fucking="sudo"
 #alias fuck='sudo $(fc -ln -1)'
-eval $(thefuck --alias)
 alias please="sudo"
 alias next="cat next"
 alias st='cat next'
@@ -103,6 +103,7 @@ alias uiae='setxkbmap de nodeadkeys -option'
 alias ap='ansible-playbook'
 alias av='ansible-vault'
 alias bim='vim'
+alias h='habitctl'
 
 alias axex='docker-compose exec web'
 alias axrun='docker-compose run --rm web'
