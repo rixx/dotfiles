@@ -3,7 +3,7 @@ accounts = cutebit
 maxsyncaccounts = 1
 metadata = ~/.offlineimap
 pythonfile = ~/.offlineimap.py
-socktimeout = 10
+socktimeout = 20
 ui = basic
 
 [mbnames]
@@ -15,7 +15,7 @@ sep = " "
 footer = "\n"
 
 [Account cutebit]
-autorefresh = 0.5
+autorefresh = 2.5
 localrepository = cutebit-local
 quick = 10
 remoterepository = cutebit-de
