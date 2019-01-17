@@ -18,3 +18,5 @@
 	excludesfile = /home/rixx/.gitignore
 [help]
     autocorrect = 1
+[gpg]
+	program = gpg2
