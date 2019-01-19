@@ -2,31 +2,30 @@
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
-# Not oh-my-zsh
 #############
 # Variables #
 #############
-HISTFILE=~/.histfile
-HISTSIZE=10000  # This is the amount that is searched inmem
-SAVEHIST=100000000  # This is the histfile length
 
 XDG_CONFIG_HOME="$HOME/.config"
 XDG_CACHE_HOME="$HOME/.cache"
 XDG_DATA_HOME="$HOME/.local/share"
 EDITOR=nvim
-JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
-PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
-PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+#PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
+#PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
+HISTFILE=~/.local/share/zsh/histfile
+HISTSIZE=10000  # This is the amount that is searched inmem
+SAVEHIST=100000000  # This is the histfile length
+
 PAGER=/usr/bin/less
+LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
+
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+export PASSWORD_STORE_KEY="7A2D8B7875486954"
 
 WORKON_HOME=~/.virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-source /usr/bin/virtualenvwrapper.sh
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+[ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 
 ###############
 # zsh options #
@@ -46,43 +45,37 @@ colors
 zstyle ':completion:*' menu select
 zstyle ':completion:*:killall:*' command 'ps -u $USER -o cmd'
 
-#Display CPU stats for commands taking more than 30 seconds
+# Display CPU stats for commands taking more than 30 seconds
 REPORTTIME=30
 
 ###########################
 # oh-my-zsh configuration #
 ###########################
-ZSH=$HOME/.oh-my-zsh
-ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
-if [[ $(ps --no-headers --format tty $$) =~ "pts*"  ]] then;
-    ZSH_THEME="ttb";
-else
-    setterm -foreground black -background white -store
-    ZSH_THEME="philips";
-fi;
+#ZSH=$HOME/.oh-my-zsh
+#ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
+#if [[ $(ps --no-headers --format tty $$) =~ "pts*"  ]] then;
+#    ZSH_THEME="ttb";
+#else
+#    setterm -foreground black -background white -store
+#    ZSH_THEME="philips";
+#fi;
 
-plugins=(bgnotify colored-man-pages command-not-found git gitignore history rsync pass ssh-agent)
+#plugins=(bgnotify colored-man-pages command-not-found git gitignore history rsync pass ssh-agent)
 ## plugins
 # bgnotify: notification when long-running commands end
 # command-not-found: requires pkgfile
 # pass: all tab completion for pass!
 ##
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
 
 ###########
 # Aliases #
 ###########
-alias vi="vim"
 alias v='nvim'
-alias dc="docker-compose"
+alias vi="vim"
 alias ll="ls -Ahl --color"
 
-alias fucking="sudo"
-#alias fuck='sudo $(fc -ln -1)'
-alias please="sudo"
-alias next="cat next"
-alias st='cat next'
 alias pretalx='python -m pretalx'
 alias django='python manage.py'
 
@@ -110,12 +103,7 @@ alias uiae='setxkbmap de nodeadkeys -option'
 alias ap='ansible-playbook'
 alias av='ansible-vault'
 alias bim='vim'
-alias h='habitctl'
 
-alias axex='docker-compose exec web'
-alias axrun='docker-compose run --rm web'
-alias axtest='docker-compose exec web pytest'
-alias axlama='docker-compose exec web pylama'
-alias axsort='docker-compose exec web isort -rc .'
-alias axshell='docker-compose run --rm web'
-alias quidtest='docker-compose exec web pytest -p no:django'
+if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]]; then
+	exec startx
+fi
