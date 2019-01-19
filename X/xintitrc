@@ -10,7 +10,7 @@ xautolock -time 10 -locker lock &
 xset dpms 300 600 900 &
 xset -b &
 xset +fp /usr/share/fonts/local &
-xset +fp $HOME/.fonts
+xset +fp $HOME/.local/share/fonts
 xset fp rehash
 
 #Background color
