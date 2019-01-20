@@ -20,6 +20,9 @@ SAVEHIST=100000000  # This is the histfile length
 PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR" 
+
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export PASSWORD_STORE_KEY="7A2D8B7875486954"
 
