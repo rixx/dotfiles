@@ -1,14 +1,14 @@
 [general]
 accounts = cutebit
 maxsyncaccounts = 1
-metadata = ~/.offlineimap
-pythonfile = ~/.offlineimap.py
+metadata = ~/.local/share/offlineimap
+pythonfile = ~/.config/dotfiles/mutt/offlineimap.py
 socktimeout = 20
 ui = basic
 
 [mbnames]
 enabled = yes
-filename = ~/.mutt/mailboxes
+filename = ~/.local/share/mutt/mailboxes
 header = "mailboxes "
 peritem = "+%(accountname)s/%(foldername)s"
 sep = " "
@@ -23,7 +23,7 @@ remoterepository = cutebit-de
 
 [Repository cutebit-local]
 type = Maildir
-localfolders = ~/.mail/cutebit
+localfolders = ~/.local/share/mail/cutebit
 sep = .
 sync_deletes = yes
 

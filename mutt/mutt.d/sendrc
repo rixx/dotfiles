@@ -4,8 +4,7 @@ alternates .*@cutebit.de|.*@rixx.de
 subscribe .*@lists.*.de|.*@lists.*.com|.*@lists.*.space|(mitglieder|key|vorstand|public)@shackspace.de|.*@googlegroups.com
 my_hdr X-Clacks-Overhead: GNU Terry Pratchett
 
-send-hook . 'source /home/rixx/.mutt/user_agent.sh|'
-# my_hdr Fcc: ~/.mail/cutebit/Sent
+send-hook . 'source /home/rixx/.config/dotfiles/mutt/user_agent.sh|'
 set fcc_attach = yes                 # Save attachments
 set fcc_clear = no                   # Do not store sent message in plain text
 set from = r@rixx.de                 # Can be overridden by my_hdr and reverse_name

@@ -1,5 +1,5 @@
 ## Alias config
-set alias_file = ~/.mutt/aliases     # Here is the address book
+set alias_file = ~/.local/share/mutt/aliases     # Here is the address book
 set alias_format = "%4n %2f %t %-10a   %r"
                                      # %a alias name
                                      # %f flags (d for deleted)
