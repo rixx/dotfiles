@@ -1,45 +1,45 @@
-color sidebar_new red black
-#color sidebar_flagged red black
-color sidebar_divider blue default
+color sidebar_new red white
+color sidebar_ordinary black white
+color sidebar_divider color4 white
 
 # basic colors ---------------------------------------------------------
 #     name        foreground  background  pattern
-color normal      color20     color0
-color error       color1      color0
-color tilde       color20     color0
-color message     color20     color0
-color markers     color1      color0
-color attachment  color8      color0
-color search      color2      color0
-color status      color19      color4
-color indicator   color7      color19
-color tree        color19     color0                  # arrow in threads
+color normal      color20     white
+color error       color1      white
+color tilde       color20     white
+color message     color20     white
+color markers     color1      white
+color attachment  color8      white
+color search      color2      white
+color status      white      color4
+color indicator   white      color4
+color tree        color8     white                  # arrow in threads
 
-color index       color20     color0       "~A"       # all messages
-color index       color1      color0       "~F"       # flagged messages
-color index       color20     color0       "~v~(!~N)" # collapsed thread with no unread
-color index       color4      color0       "~U"       # unread messages
-color index       color4      color0       "~v~(~N)"  # collapsed thread with some unread
-color index       color1      color0       "~v~(~F)"  # collapsed thread with some flagged
-color index       color0      color1       "~D"       # deleted messages
+color index       black     white       "~A"       # all messages
+color index       color3      white       "~F"       # flagged messages
+color index       black     white       "~v~(!~N)" # collapsed thread with no unread
+color index       red      white       "~U"       # unread messages
+color index       color4      white       "~v~(~N)"  # collapsed thread with some unread
+color index       color3      white       "~v~(~F)"  # collapsed thread with some flagged
+color index       white      red       "~D"       # deleted messages
 
 # header
-color hdrdefault  color20     color8
-color header      color20     color8      "^"
-color header      color7      color8      "^(From)"
-color header      color7      color8      "^(Subject)"
+color hdrdefault  black     white
+color header      white     color4      "^"
+#color header      black      white      "^(From)"
+#color header      black      white      "^(Subject)"
 
 # body
-color normal      color7      color0
-color underline   color7      color0
-color bold        color7      color0
-color signature   color20     color0
+color normal      black      white
+color underline   black      white
+color bold        black      white
+color signature   color8     white
 
-color quoted      color3      color0
-color quoted1     color2      color0
-color quoted2     color5      color0
-color quoted3     color6      color0
-color quoted4     color4      color0
+color quoted      color4      white
+color quoted1     color2      white
+color quoted2     color5      white
+color quoted3     color6      white
+color quoted4     color4      white
 
 # pgp
 color body        color2      color0       "(Good signature)"
@@ -49,9 +49,9 @@ color body        color1      color0       "(BAD signature)"
 color body        color1      color1       "^gpg: BAD signature from.*"
 
 # body url
-color body        color4      color0       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
+color body        color4      white       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
 # body email
-color body        color4      color0       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
+color body        color4      white       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
 
 
 # vim: filetype=muttrc
