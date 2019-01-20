@@ -2,4 +2,8 @@
 from subprocess import check_output
 
 def get_pass(account):
-    return check_output("pass Mail/" + account, shell=True).splitlines()[0]
+    return check_output("PASSWORD_STORE_DIR=/home/rixx/.local/share/password-store pass Mail/" + account, shell=True).splitlines()[0]
+
+
+if __name__ == '__main__':
+    print(get_pass('cutebit'))
