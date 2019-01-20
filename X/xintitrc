@@ -16,15 +16,10 @@ xset fp rehash
 #Background color
 xsetroot -solid rgb:11/11/11
 
-#notifications
+#Notifications
 dunst &
 
-#for urxvt
-xrdb -merge ~/.Xresources
-urxvtd -q -f -o
-
 #Compose
-#setxkbmap -option grp:ctrl_alt_toggle -layout de(nodeadkeys),de(neo)
 setxkbmap de nodeadkeys -option -option
 setxkbmap -option compose:prsc
 
@@ -39,12 +34,7 @@ amixer sset Master 20%
 amixer sset Master mute
 amixer sset Capture nocap
 
-rm -rf /tmp/*
-
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk/
-export EDITOR=vim
-export DOCKER_DIRS="~/Projects/aexea/ax/dev/axmeta,~/Projects/aexea/myax,~/Projects/aexea/morgana"
-
-export PATH=$PATH:~/.bin:/home/share/.bin
+export EDITOR=nvim
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 
 exec i3
