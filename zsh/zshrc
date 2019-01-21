@@ -18,7 +18,7 @@ fi
 
 fpath=($ZSH/modules $fpath)
 
-plugins=(options completion aliases lib bgnotify colored-man git prompt ssh-agent)
+plugins=(options completion aliases lib bgnotify colored-man git prompt ssh-agent title)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"
