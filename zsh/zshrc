@@ -9,13 +9,22 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 XDG_CONFIG_HOME="$HOME/.config"
 XDG_CACHE_HOME="$HOME/.cache"
 XDG_DATA_HOME="$HOME/.local/share"
+
+ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
+
+source "$ZSH/options.zsh"
+source "$ZSH/completion.zsh"
+
+for file in "$ZSH"/functions/*.zsh; do
+    source "$file"
+done
+
+source "$ZSH/aliases.zsh"
+source "$ZSH/git.zsh"
+
 EDITOR=nvim
 #PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
 #PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-
-HISTFILE=~/.local/share/zsh/histfile
-HISTSIZE=10000  # This is the amount that is searched inmem
-SAVEHIST=100000000  # This is the histfile length
 
 PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
@@ -30,82 +39,7 @@ WORKON_HOME=~/.virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 
-###############
-# zsh options #
-###############
-setopt incappendhistory
-setopt sharehistory
-setopt extendedhistory
-setopt auto_cd 
-setopt extendedglob notify completealiases 
-setopt interactivecomments
-
-autoload -Uz compinit
-autoload -U colors
-compinit
-colors
-
-zstyle ':completion:*' menu select
-zstyle ':completion:*:killall:*' command 'ps -u $USER -o cmd'
-
-# Display CPU stats for commands taking more than 30 seconds
-REPORTTIME=30
-
-###########################
-# oh-my-zsh configuration #
-###########################
-#ZSH=$HOME/.oh-my-zsh
-#ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
-#if [[ $(ps --no-headers --format tty $$) =~ "pts*"  ]] then;
-#    ZSH_THEME="ttb";
-#else
-#    setterm -foreground black -background white -store
-#    ZSH_THEME="philips";
-#fi;
-
-#plugins=(bgnotify colored-man-pages command-not-found git gitignore history rsync pass ssh-agent)
-## plugins
-# bgnotify: notification when long-running commands end
-# command-not-found: requires pkgfile
-# pass: all tab completion for pass!
-##
-
-#source $ZSH/oh-my-zsh.sh
-
-###########
-# Aliases #
-###########
-alias v='nvim'
-alias vi="vim"
-alias ll="ls -Ahl --color"
-
-alias pretalx='python -m pretalx'
-alias django='python manage.py'
-
-alias pserver="python -m http.server"
-alias mutt="neomutt"
-
-alias less=$PAGER
-alias zless=$PAGER 
-
-git-root () {
-	if [[ $(git rev-parse --is-inside-work-tree 2>&1) = "true" ]]
-	then
-		cd $(git rev-parse --show-toplevel)
-	fi
-}
-function wttr () {
-    curl "https://wttr.in/$1"
-}
-alias git-pullall="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
-
-alias https='http --default-scheme=https'
-alias ipa='ip -br -c a'
-alias asdf='setxkbmap de neo -option'
-alias uiae='setxkbmap de nodeadkeys -option'
-alias ap='ansible-playbook'
-alias av='ansible-vault'
-alias bim='vim'
+#plugins=(bgnotify colored-man-pages git history rsync ssh-agent)
 
 if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]]; then
 	exec startx
