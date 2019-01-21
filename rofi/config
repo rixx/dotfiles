@@ -1,0 +1,4 @@
+rofi.modi: combi
+rofi.display-combi: '> '
+rofi.font: Source Code Pro for Powerline 14
+rofi.theme: /usr/share/rofi/themes/paper-float.rasi
