@@ -8,7 +8,7 @@ alias gca='git commit --verbose --all'
 alias gco='git checkout'
 alias gslog='git shortlog -ns'
 alias gd='git diff'
-alias gst='git status --short'
+alias gst='git status --short --branch'
 alias git-pullall="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 
 
@@ -41,7 +41,7 @@ function gitStatusPrompt() {
 	command git "$@"
 
 	if (elementInArray $1 $gitPreAutoStatusCommands); then
-		command git status --short
+		command git status --short --branch
 	fi
 }
 alias git=gitStatusPrompt
