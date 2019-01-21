@@ -12,15 +12,12 @@ XDG_DATA_HOME="$HOME/.local/share"
 
 ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
 
-source "$ZSH/options.zsh"
-source "$ZSH/completion.zsh"
+plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent)
 
-for file in "$ZSH"/functions/*.zsh; do
-    source "$file"
+for file in $plugins; do
+    source "$ZSH/modules/$file.zsh"
 done
 
-source "$ZSH/aliases.zsh"
-source "$ZSH/git.zsh"
 
 EDITOR=nvim
 #PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
