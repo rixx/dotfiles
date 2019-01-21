@@ -11,16 +11,26 @@ XDG_CACHE_HOME="$HOME/.cache"
 XDG_DATA_HOME="$HOME/.local/share"
 
 ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
+if [[ -z "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
+fi
 
-plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent)
+
+fpath=($ZSH/modules $fpath)
+
+plugins=(options completion aliases lib bgnotify colored-man git prompt ssh-agent)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"
 done
 
+# Figure out the SHORT hostname
+SHORT_HOST=${HOST/.*/}
+
+# Load all stock functions (from $fpath files) called below.
+autoload -U compaudit compinit
 
 EDITOR=nvim
-#PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/games:~/.bin:/home/share/.bin
 #PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 PAGER=/usr/bin/less
@@ -35,8 +45,6 @@ export PASSWORD_STORE_KEY="7A2D8B7875486954"
 WORKON_HOME=~/.virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
-
-#plugins=(bgnotify colored-man-pages git history rsync ssh-agent)
 
 if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]]; then
 	exec startx

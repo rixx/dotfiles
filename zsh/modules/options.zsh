@@ -101,6 +101,8 @@ bindkey -e
 # echo "$fg_bold[red]zsh $fg_no_bold[white]is $bg[blue]$fg_bold[green]nice"
 autoload -U colors
 colors
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+setopt prompt_subst
 
 # Retrieve version control information
 autoload -Uz vcs_info
@@ -111,5 +113,3 @@ precmd () { vcs_info }
 
 autoload -U zsh-mime-setup
 zsh-mime-setup
-
-autoload -U promptinit && promptinit
