@@ -47,26 +47,28 @@ function _add_identities() {
 # Get the filename to store/lookup the environment from
 _ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
-# test if agent-forwarding is running
-if [[ -n "$SSH_AUTH_SOCK" ]]; then
-	# Add a nifty symlink for screen/tmux if agent forwarding
-	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
-elif [[ -f "$_ssh_env_cache" ]]; then
-	# Source SSH settings, if applicable
-	. $_ssh_env_cache > /dev/null
-	if [[ $USER == "root" ]]; then
-		FILTER="ax"
+if [[ $DISPLAY ]]; then
+	# test if agent-forwarding is running
+	if [[ -n "$SSH_AUTH_SOCK" ]]; then
+		# Add a nifty symlink for screen/tmux if agent forwarding
+		[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+	elif [[ -f "$_ssh_env_cache" ]]; then
+		# Source SSH settings, if applicable
+		. $_ssh_env_cache > /dev/null
+		if [[ $USER == "root" ]]; then
+			FILTER="ax"
+		else
+			FILTER="x"
+		fi
+		ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
+			_start_agent
+		}
 	else
-		FILTER="x"
-	fi
-	ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
 		_start_agent
-	}
-else
-	_start_agent
-fi
+	fi
 
-_add_identities
+	_add_identities
+fi
 
 # tidy up after ourselves
 unset _agent_forwarding _ssh_env_cache
