@@ -1,57 +1,79 @@
-color sidebar_new red white
-color sidebar_ordinary black white
-color sidebar_divider color4 white
+color sidebar_new green default
+color sidebar_ordinary default default
+color sidebar_divider color4 default
 
 # basic colors ---------------------------------------------------------
+#     color1 - red
+#     color2 - green
+#     color3 - yellow
+#     color4 - blue
+#     color5 - magenta
+#     color6 - cyan
+#     color7 - white
+#     color8 - gray
+#     color9 - lightred
+#     color10 - lightgreen
+#     color11 - lightyellow
+#     color12 - lightblue
+#     color13 - lightmagenta
+#     color14 - lightcyan
+#     color15 - white
+#     color16 – black
+#     color17 - darkblue
+#     color18 - darkblue, different
+#     color19 - darkblue, bit brighter
+#     color20 - darkblue, bit brighter
+#     color21 - darkblue, bit brighter
+#     color21 - darkgreen
 #     name        foreground  background  pattern
-color normal      color20     white
-color error       color1      white
-color tilde       color20     white
-color message     color20     white
-color markers     color1      white
-color attachment  color8      white
-color search      color2      white
-color status      white      color4
-color indicator   white      color4
-color tree        color8     white                  # arrow in threads
+color normal      default     default
+color error       color1      default
+color tilde       default     default
+color message     default     default
+color markers     color1      default
+color attachment  color8      default
+color search      color2      default
+color status      default      color4
+color indicator   default      color4
+color tree        color8     default                  # arrow in threads
 
-color index       black     white       "~A"       # all messages
-color index       color3      white       "~F"       # flagged messages
-color index       black     white       "~v~(!~N)" # collapsed thread with no unread
-color index       red      white       "~U"       # unread messages
-color index       color4      white       "~v~(~N)"  # collapsed thread with some unread
-color index       color3      white       "~v~(~F)"  # collapsed thread with some flagged
+color index       default     default       "~A"       # all messages
+color index       yellow      default       "~F"       # flagged messages
+color index       default     default       "~v~(!~N)" # collapsed thread with no unread
+color index       green      default       "~U"       # unread messages
+color index       green      default       "~v~(~N)"  # collapsed thread with some unread
+color index       yellow      default       "~v~(~F)"  # collapsed thread with some flagged
 color index       white      red       "~D"       # deleted messages
 
 # header
-color hdrdefault  black     white
+color hdrdefault  default     default
 color header      white     color4      "^"
-#color header      black      white      "^(From)"
-#color header      black      white      "^(Subject)"
+#color header      black      default      "^(From)"
+#color header      black      default      "^(Subject)"
 
 # body
-color normal      black      white
-color underline   black      white
-color bold        black      white
-color signature   color8     white
+color normal      default      default
+color underline   default      default
+color bold        default      default
+color signature   color8     default
 
-color quoted      color4      white
-color quoted1     color2      white
-color quoted2     color5      white
-color quoted3     color6      white
-color quoted4     color4      white
+color quoted      color4      default
+color quoted1     color2      default
+color quoted2     color5      default
+color quoted3     color6      default
+color quoted4     color4      default
 
 # pgp
 color body        color2      color0       "(Good signature)"
 color body        color2      color0       "^gpg: Good signature .*"
-color body        color20     color0       "^gpg: "
+color body        default     color0       "^gpg: "
 color body        color1      color0       "(BAD signature)"
 color body        color1      color1       "^gpg: BAD signature from.*"
 
 # body url
-color body        color4      white       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
+color body        color4      default       "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
 # body email
-color body        color4      white       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
+color body        color4      default       "((@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]),)*@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\.[0-9]?[0-9]?[0-9]\\]):)?[0-9a-z_.+%$-]+@(([0-9a-z-]+\\.)*[0-9a-z-]+\\.?|#[0-9]+|\\[[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\.[0-2]?[0-9]?[0-9]\\])"
 
 
 # vim: filetype=muttrc
