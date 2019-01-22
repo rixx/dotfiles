@@ -2,7 +2,7 @@
 # Aliases #
 ###########
 alias bim='vim'
-alias v='nvim'
+alias v='vim'
 alias vi="vim"
 
 cpv() {
@@ -31,6 +31,8 @@ alias pserver="python -m http.server"
 
 alias ap='ansible-playbook'
 alias av='ansible-vault'
+
+alias ra='ranger'
 
 function wttr () {
     curl "https://wttr.in/$1"
