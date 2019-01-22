@@ -31,7 +31,11 @@ SHORT_HOST=${HOST/.*/}
 autoload -U compaudit compinit
 
 EDITOR=nvim
-#PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
+export GEM_PATH="$XDG_DATA_HOME/gem"
+export GEM_HOME="$XDG_DATA_HOME/gem"
+export GEM_SPEC_CACHE="$XDG_DATA_HOME/gem/specs"
+PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
@@ -42,7 +46,7 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export PASSWORD_STORE_KEY="7A2D8B7875486954"
 
-WORKON_HOME=~/.virtualenvs
+WORKON_HOME=$XDG_DATA_HOME/virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 
