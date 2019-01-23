@@ -1,4 +1,4 @@
-set mailcap_path 	= ~/.mailcap
+set mailcap_path 	= ~/.config/dotfiles/mutt/mailcap
 #auto_view text/html
 #auto_view text/vcard
 #alternative_order text/plain text/html
