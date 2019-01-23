@@ -32,9 +32,6 @@ autoload -U compaudit compinit
 
 EDITOR=nvim
 
-export GEM_PATH="$XDG_DATA_HOME/gem"
-export GEM_HOME="$XDG_DATA_HOME/gem"
-export GEM_SPEC_CACHE="$XDG_DATA_HOME/gem/specs"
 PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 PAGER=/usr/bin/less
