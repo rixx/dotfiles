@@ -1,7 +1,3 @@
-color sidebar_new green default
-color sidebar_ordinary default default
-color sidebar_divider color4 default
-
 # basic colors ---------------------------------------------------------
 #     color1 - red
 #     color2 - green
@@ -33,35 +29,41 @@ color message     default     default
 color markers     color1      default
 color attachment  color8      default
 color search      color2      default
-color status      default      color4
-color indicator   default      color4
-color tree        color8     default                  # arrow in threads
+color status      default     color4
+color indicator   default     color4
+color tree        color8      default                  # arrow in threads
 
 color index       default     default       "~A"       # all messages
 color index       yellow      default       "~F"       # flagged messages
 color index       default     default       "~v~(!~N)" # collapsed thread with no unread
-color index       green      default       "~U"       # unread messages
-color index       green      default       "~v~(~N)"  # collapsed thread with some unread
+color index       green       default       "~U"       # unread messages
+color index       green       default       "~v~(~N)"  # collapsed thread with some unread
 color index       yellow      default       "~v~(~F)"  # collapsed thread with some flagged
-color index       white      red       "~D"       # deleted messages
+color index       white       red       "~D"       # deleted messages
+
+# Sidebar
+color sidebar_new green       default
+color sidebar_ordinary default default
+color sidebar_divider color4  default
 
 # header
 color hdrdefault  default     default
-color header      white     color4      "^"
-#color header      black      default      "^(From)"
-#color header      black      default      "^(Subject)"
+color header      white       color4      "^"
+#color header      black       default      "^(From)"
+#color header      black       default      "^(Subject)"
 
 # body
-color normal      default      default
-color underline   default      default
-color bold        default      default
-color signature   color8     default
+color normal      default     default
+color underline   default     default
+color bold        default     default
+color signature   color8      default
 
-color quoted      color4      default
-color quoted1     color2      default
-color quoted2     color5      default
-color quoted3     color6      default
-color quoted4     color4      default
+color quoted      color12     default
+color quoted1     color10     default
+color quoted2     color14     default
+color quoted3     color13     default
+color quoted4     color11     default
+color quoted5     color9      default
 
 # pgp
 color body        color2      color0       "(Good signature)"
