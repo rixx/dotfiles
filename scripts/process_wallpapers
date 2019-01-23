@@ -1,0 +1,26 @@
+#!/bin/zsh
+# Iterate through wallpaper directory, resizing and adding the input box in the right place
+
+rectangles="rectangle 25,1050 325,970"
+
+base_folder=~/lib/pics/wallpapers
+processed_folder="$base_folder/processed"
+
+if [ ! -d $processed_folder ]; then
+	mkdir -p $processed_folder;
+fi;
+
+res=$(xdpyinfo | grep dimensions | sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/')
+for f in $base_folder/*; do;
+	if [[ $(file -b $f) =~ 'image data' ]]; then
+		# We use http://zsh.sourceforge.net/Doc/Release/Expansion.html#Modifiers
+		target="$processed_folder/${f:t}"
+		if [[ ! -a "$target" ]]; then;
+			echo $f
+			tmpfile="$processed_folder/tmp.${f:t}"
+			convert "$f" -resize "$res""^" -gravity center -extent "$res" "$tmpfile"
+			convert "$tmpfile" -draw "fill #00000066 $rectangles" "$target"
+			rm "$tmpfile"
+		fi;
+	fi;
+done;

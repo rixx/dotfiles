@@ -25,10 +25,19 @@ bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" 
 # start applications
 bindsym $mod+Shift+F exec firefox
 bindsym $mod+Shift+C exec electron ~/Projects/private/electron-calendar
-# bindsym $mod+m exec switch
-bindsym $mod+m exec urxvt -e mutt
-# bindsym $mod+l exec lock
-bindsym $mod+l exec i3lock -feu -i ~/Media/pics/screenlock.png
+bindsym $mod+l exec 	i3lock \
+	-t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
+	--timepos='x+110:h-70' \
+	--datepos='x+43:h-45' \
+	--clock --date-align 1 --datestr "Und Sie sind?" \
+	--insidecolor=00000000 --ringcolor=ffffffff --line-uses-inside \
+	--keyhlcolor=d23c3dff --bshlcolor=d23c3dff --separatorcolor=00000000 \
+	--insidevercolor=00000000 --insidewrongcolor=d23c3dff \
+	--ringvercolor=ffffffff --ringwrongcolor=ffffffff --indpos='x+280:h-70' \
+	--radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
+	--verifcolor=ffffffff --timecolor=ffffffff --datecolor=ffffffff \
+	--noinputtext='' --force-clock
+bindsym $mod+m exec rofimoji
 
 # focus window with cursor keys:
 bindsym $mod+Left focus left
