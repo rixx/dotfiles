@@ -113,3 +113,7 @@ precmd () { vcs_info }
 
 autoload -U zsh-mime-setup
 zsh-mime-setup
+
+# Use bash style word break, making C-w to go only back to the next slash
+autoload -U select-word-style
+select-word-style bash
