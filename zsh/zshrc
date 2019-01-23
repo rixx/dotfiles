@@ -48,5 +48,6 @@ VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 
 if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]]; then
+	chmod +w ~
 	exec startx
 fi
