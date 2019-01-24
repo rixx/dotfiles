@@ -13,9 +13,9 @@ set history=1000
 set tabpagemax=50
 set undolevels=10000
 set undoreload=10000
-set undodir=~/.vim/undo
+set undodir=/home/rixx/.cache/vim/undo
 set undofile
-set backupdir=~/.vim/backup
+set backupdir=/home/rixx/.cache/vim/backup
 
 " vim specific options here
 if !has('nvim')
@@ -27,7 +27,7 @@ if !has('nvim')
 "  - don't save highlighted searches,
 "  - don't save marks for /temp
 "  - save in ~/.vim/viminfo
-  set viminfo='100,%,s100,<1000,h,r/temp,n~/.vim/viminfo
+  set viminfo='100,%,s100,<1000,h,r/temp,n/home/rixx/.cache/vim/viminfo
 endif
 
 "" read file again if it changes while open and unmodified in vim
@@ -238,17 +238,17 @@ autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
 let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+let vundle_readme=expand('~/.config/nvim/bundle/vundle/README.md')
 if !filereadable(vundle_readme)
     echo "Installing Vundle.."
     echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    silent !mkdir -p ~/.config/nvim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.config/nvim/bundle/vundle
     let iCanHazVundle=0
 endif
 
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+set rtp+=~/.config/nvim/bundle/vundle
+call vundle#begin("~/.config/nvim/bundle")
 
 "
 " :BundleList          - list configured bundles
@@ -257,7 +257,7 @@ call vundle#rc()
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 Plugin 'bling/vim-airline'
-Plugin 'chriskempson/base16-vim'
+"Plugin 'chriskempson/base16-vim'
 Plugin 'jiangmiao/auto-pairs'
 "Plugin 'klen/python-mode'
 Plugin 'posva/vim-vue'
@@ -270,6 +270,8 @@ Plugin 'tpope/vim-sleuth'
 if has('nvim')
   Plugin 'roxma/nvim-completion-manager'
 endif
+
+call vundle#end()
 
 " vundle
 if iCanHazVundle == 0
@@ -294,12 +296,12 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 " solarized
-set background=dark
-colorscheme base16-grayscale-dark
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  source ~/.vimrc_background
-endif
+"set background=dark
+"let base16colorspace=256
+"colorscheme base16-grayscale-dark
+"if filereadable(expand("~/.config/nvim/vimrc_background"))
+  "source ~/.vimrc_background
+"endif
 
 "" plugin python-mode configuration
 " <leader> b for breakpoints
