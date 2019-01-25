@@ -43,12 +43,16 @@ prompt_context() {
 # Git: branch/detached head, dirty status
 prompt_git() {
   local ref dirty
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+  inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+  if [ "$inside_git_repo" ]; then
     [[ ! (-n ZSH_THEME_GIT_PROMPT_DIRTY) ]] && ZSH_THEME_GIT_PROMPT_DIRTY='±'
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null)
     if [[ ! $ref = *[a-zA-Z0-9]* ]]; then
-      ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
+      ref="$(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
+      if [[ ! $ref = *[a-zA-Z0-9]* ]]; then
+	ref="➦ $ref"
+      fi
     fi
     if [[ $dirty == $(echo $ZSH_THEME_GIT_PROMPT_DIRTY) ]]; then
       prompt_segment yellow black
