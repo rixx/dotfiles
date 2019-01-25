@@ -88,7 +88,7 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 #bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
 # bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
-# bindsym $mod+s exec /usr/bin/scrot -s /tmp/$(date +%s).png
+bindsym $mod+s exec deepin-screenshot -s ~/tmp/screenshots
 
 # switch to workspace;
 bindsym $mod+1 workspace 1: term 
