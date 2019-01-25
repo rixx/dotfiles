@@ -1,0 +1,13 @@
+{
+  "name": "caldavzap",
+  "version": "1.0.0",
+  "description": "start caldavzap standalone",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "rixx",
+  "devDependencies": {
+    "electron": "^1.3.4"
+  }
+}

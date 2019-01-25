@@ -24,7 +24,7 @@ bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" 
 
 # start applications
 bindsym $mod+Shift+F exec firefox
-bindsym $mod+Shift+C exec electron ~/Projects/private/electron-calendar
+bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 bindsym $mod+l exec 	i3lock \
 	-t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
 	--timepos='x+110:h-70' \
@@ -37,7 +37,7 @@ bindsym $mod+l exec 	i3lock \
 	--radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
 	--verifcolor=ffffffff --timecolor=ffffffff --datecolor=ffffffff \
 	--noinputtext='' --force-clock
-bindsym $mod+m exec rofimoji
+bindsym $mod+m exec "rofimoji"
 
 # focus window with cursor keys:
 bindsym $mod+Left focus left
