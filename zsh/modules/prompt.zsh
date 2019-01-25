@@ -58,7 +58,8 @@ prompt_git() {
     else
       #prompt_segment magenta black
     fi
-    echo -n "${ref/refs\/heads\// }$dirty"
+    echo -n "${ref/refs\/heads\// }$dirty$(git_prompt_status)"
+    # add up/down
   fi
 }
 
