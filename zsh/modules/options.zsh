@@ -30,7 +30,7 @@ unsetopt list_beep
 # Pack columns to varying widths for a denser option display
 setopt list_packed
 # Start completing immediately, not only on second tabbing
-setopt menu_complete
+# setopt menu_complete
 
 
 ##########################
