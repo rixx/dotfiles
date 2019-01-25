@@ -30,6 +30,8 @@ gitPreAutoStatusCommands=(
     'commit'
     'checkout'
     'mv'
+    'push'
+    'pull'
 )
 function elementInArray() {
 	local e
