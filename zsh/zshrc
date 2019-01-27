@@ -6,31 +6,33 @@ XDG_CONFIG_HOME="$HOME/.config"
 XDG_CACHE_HOME="$HOME/.cache"
 XDG_DATA_HOME="$HOME/.local/share"
 
-ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
 if [[ -z "$ZSH_CACHE_DIR" ]]; then
   ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 fi
 
-
+ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
 fpath=($ZSH/modules $fpath)
-
 plugins=(options completion aliases lib bgnotify colored-man git prompt ssh-agent title)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"
 done
 
-# Figure out the SHORT hostname
-SHORT_HOST=${HOST/.*/}
-
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 
 EDITOR=nvim
+PAGER=/usr/bin/less
+
+# Figure out the SHORT hostname
+SHORT_HOST=${HOST/.*/}
+
+########################################
+# Fix non-xdg base dir compliant paths #
+########################################
 
 PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
-PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
