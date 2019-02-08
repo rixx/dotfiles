@@ -25,6 +25,7 @@ bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" 
 # start applications
 bindsym $mod+Shift+F exec firefox
 bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
+bindsym $mod+Shift+S exec signal-desktop --start-in-tray
 bindsym $mod+l exec 	i3lock \
 	-t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
 	--timepos='x+110:h-70' \
