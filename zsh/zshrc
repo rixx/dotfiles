@@ -46,6 +46,9 @@ export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"
 export ANSIBLE_LOCAL_TEMP=~/.cache/ansible/tmp
 export ANSIBLE_SSH_CONTROL_PATH_DIR=~/.cache/ansible/cp
 
+alias mycli="mycli --myclirc=~/.config/myclirc --logfile=/home/rixx/.cache/mycli.log"
+export MYCLI_HISTFILE=~/.cache/mycli.hist
+
 WORKON_HOME=$XDG_DATA_HOME/virtualenvs
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
