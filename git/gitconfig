@@ -20,3 +20,5 @@
     autocorrect = 1
 [gpg]
 	program = gpg2
+[credential]
+	helper = cache
