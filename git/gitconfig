@@ -14,6 +14,7 @@
 
     # Function aliases
     go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
+	pushf = push --force-with-lease
 [core]
 	excludesfile = /home/rixx/.gitignore
 [help]
