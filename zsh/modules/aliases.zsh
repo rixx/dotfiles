@@ -4,6 +4,7 @@
 alias bim='vim'
 alias v='vim'
 alias vi="vim"
+alias im="vim"
 
 cpv() {
     rsync -pogbr -hhh --backup-dir=/tmp/rsync -e /dev/null --progress "$@"
