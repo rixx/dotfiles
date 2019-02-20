@@ -152,7 +152,7 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%} \u279c"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} \u2716"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[white]%} \u267b"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} \u21cc"
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[green]%} \u2b06"
+ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[white]%} \u2b06"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%} \u2b07"
 ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[yellow]%} \u2646"
 
