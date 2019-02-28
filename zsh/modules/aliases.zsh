@@ -40,6 +40,8 @@ function wttr () {
     curl "https://wttr.in/$1"
 }
 
+alias work='workon $(basename $(git rev-parse --show-toplevel))'
+
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}
     find ${ZSH_PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
