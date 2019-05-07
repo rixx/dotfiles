@@ -258,18 +258,26 @@ call vundle#begin("~/.config/nvim/bundle")
 " :BundleInstall(!)    - install(update) bundles
 " :BundleSearch(!) foo - search(or refresh cache first) for foo
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+"Plugin 'chriskempson/base16-vim'
+"Plugin 'klen/python-mode'
+"Plugin 'scrooloose/syntastic'
 
 Plugin 'bling/vim-airline'
-"Plugin 'chriskempson/base16-vim'
-Plugin 'jiangmiao/auto-pairs'
-"Plugin 'klen/python-mode'
 Plugin 'posva/vim-vue'
-"Plugin 'scrooloose/syntastic'
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-sleuth'
 Plugin 'Glench/Vim-Jinja2-Syntax'
+Plugin 'junegunn/goyo.vim'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'airblade/vim-gitgutter'
+set updatetime=100
+"highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
+"highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
+"highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
 
 if has('nvim')
   Plugin 'roxma/nvim-completion-manager'
