@@ -9,7 +9,7 @@ set nocompatible
 filetype plugin indent on  " Load plugins according to detected filetype.
 
 "" set history size
-set history=1000		
+set history=1000
 set tabpagemax=50
 set undolevels=10000
 set undoreload=10000
@@ -19,9 +19,9 @@ set backupdir=/home/rixx/.cache/vim/backup
 
 " vim specific options here
 if !has('nvim')
-"" save: 
+"" save:
 "  - for 100 files
-"  - buffer info will be saved, 
+"  - buffer info will be saved,
 "  - registers over 100Kbyte will be skipped,
 "  - 1000 lines per register will be remembered,
 "  - don't save highlighted searches,
@@ -66,6 +66,9 @@ nnoremap <silent> p p`]
 " enter to go to line or end of file, backspace to go to beginning
 nnoremap <CR> G
 nnoremap <BS> gg
+
+" Make jj be the new enter
+inoremap jj <Esc>
 
 " really really save
 cmap w!! w !sudo tee %
