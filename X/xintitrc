@@ -13,6 +13,9 @@ xset +fp /usr/share/fonts/local &
 xset +fp $HOME/.local/share/fonts
 xset fp rehash
 
+#Fix trackpoint speed
+xinput set-prop "TPPS/2 Elan TrackPoint" "libinput Accel Speed" 1
+
 #Background color
 xsetroot -solid rgb:11/11/11
 
