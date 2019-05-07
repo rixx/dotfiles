@@ -50,7 +50,6 @@ alias mycli="mycli --myclirc=~/.config/myclirc --logfile=/home/rixx/.cache/mycli
 export MYCLI_HISTFILE=~/.cache/mycli.hist
 
 WORKON_HOME=$XDG_DATA_HOME/virtualenvs
-VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 [ -s "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 
 if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]]; then

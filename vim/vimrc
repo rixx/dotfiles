@@ -280,7 +280,7 @@ set updatetime=100
 "highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
 
 if has('nvim')
-  Plugin 'roxma/nvim-completion-manager'
+  Plugin 'ncm2/ncm2'
 endif
 
 call vundle#end()
@@ -328,20 +328,30 @@ let g:pymode_rope = 0
 let g:pymode_syntax_print_as_function = 1
 
 """ vim-completion-manager
-" do not show irrelevant messages
+" Create virtualenv neovim, and install pynvim and jedi
+let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+autocmd BufEnter * call ncm2#enable_for_buffer()
+set completeopt=noinsert,menuone,noselect
+Plugin 'roxma/nvim-yarp'
+Plugin 'ncm2/ncm2-bufword'
+Plugin 'ncm2/ncm2-path'
+Plugin 'ncm2/ncm2-jedi'
+Plugin 'ncm2/ncm2-syntax'
+Plugin 'Shougo/neco-syntax'
+
+" suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+" found' messages
 set shortmess+=c
-" Pressing <enter> hides the menu *and* creates a newline
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-" Use <tab> to select the popup menu
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" Expand with C-u/Enter
-imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
-imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
 " Leave menu with c-c
 inoremap <c-c> <ESC>
-" Use a venv with the necessary packages
-let g:python_host_prog = '/home/rixx/.virtualenvs/neovim/bin/python'
-let g:python3_host_prog = '/home/rixx/.virtualenvs/neovim/bin/python'
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+" Use <TAB> to select the popup menu:
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " vim:set ft=vim et sw=2:
