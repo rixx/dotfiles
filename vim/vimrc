@@ -241,16 +241,16 @@ autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
 let iCanHazVundle=1
-let vundle_readme=expand('~/.config/nvim/bundle/vundle/README.md')
+let vundle_readme=expand('~/.config/nvim/bundle/Vundle.vim/README.md')
 if !filereadable(vundle_readme)
     echo "Installing Vundle.."
     echo ""
     silent !mkdir -p ~/.config/nvim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.config/nvim/bundle/vundle
+    silent !git clone https://github.com/VundleVim/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
     let iCanHazVundle=0
 endif
 
-set rtp+=~/.config/nvim/bundle/vundle
+set rtp+=~/.config/nvim/bundle/Vundle.vim
 call vundle#begin("~/.config/nvim/bundle")
 
 "
