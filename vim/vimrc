@@ -54,6 +54,24 @@ nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
+" Move splits in the direction shown, or create a new split
+nnoremap <silent> <C-h> :call WinMove('h')<cr>
+nnoremap <silent> <C-j> :call WinMove('j')<cr>
+nnoremap <silent> <C-k> :call WinMove('k')<cr>
+nnoremap <silent> <C-l> :call WinMove('l')<cr>
+function! WinMove(key)
+  let t:curwin = winnr()
+  exec "wincmd ".a:key
+  if (t:curwin == winnr())
+    if (match(a:key,'[jk]'))
+      wincmd v
+    else
+      wincmd s
+    endif
+    exec "wincmd ".a:key
+  endif
+endfunction
+
 " enter visual mode with <leader><leader>
 nmap <Leader><Leader> V
 
@@ -220,7 +238,7 @@ set modeline
 set nostartofline
 
 " <Ctrl-l> redraws the screen and removes any search highlighting.
-nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+nnoremap <silent> <C-o> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap , :
 
 " assume .md files are markdown, not modula-2
