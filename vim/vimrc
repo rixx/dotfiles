@@ -55,22 +55,22 @@ vmap <Leader>p "+p
 vmap <Leader>P "+P
 
 " Move splits in the direction shown, or create a new split
-nnoremap <silent> <C-h> :call WinMove('h')<cr>
-nnoremap <silent> <C-j> :call WinMove('j')<cr>
-nnoremap <silent> <C-k> :call WinMove('k')<cr>
-nnoremap <silent> <C-l> :call WinMove('l')<cr>
-function! WinMove(key)
-  let t:curwin = winnr()
-  exec "wincmd ".a:key
-  if (t:curwin == winnr())
-    if (match(a:key,'[jk]'))
-      wincmd v
-    else
-      wincmd s
-    endif
-    exec "wincmd ".a:key
-  endif
-endfunction
+" nnoremap <silent> <C-h> :call WinMove('h')<cr>
+" nnoremap <silent> <C-j> :call WinMove('j')<cr>
+" nnoremap <silent> <C-k> :call WinMove('k')<cr>
+" nnoremap <silent> <C-l> :call WinMove('l')<cr>
+" function! WinMove(key)
+"   let t:curwin = winnr()
+"   exec "wincmd ".a:key
+"   if (t:curwin == winnr())
+"     if (match(a:key,'[jk]'))
+"       wincmd v
+"     else
+"       wincmd s
+"     endif
+"     exec "wincmd ".a:key
+"   endif
+" endfunction
 
 " enter visual mode with <leader><leader>
 nmap <Leader><Leader> V
@@ -85,7 +85,7 @@ nnoremap <silent> p p`]
 nnoremap <CR> G
 nnoremap <BS> gg
 
-" Make jj be the new enter
+" Make jj be the new escape
 inoremap jj <Esc>
 
 " really really save
@@ -126,6 +126,10 @@ set hlsearch
 set incsearch
 set showmatch
 set matchtime=2
+
+"" Always split right and below
+set splitbelow
+set splitright
 
 "" Always report changed lines
 set report=0
