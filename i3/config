@@ -6,9 +6,10 @@ set $mod Mod4
 # Font for window titles. Use xfontsel to find fontstrings, or just use pango:
 #font pango:Terminus 14px
 #font pango:Anonymous Pro for Powerline 14px
-font pango:Source Code Pro for Powerline, FontAwesome, 14
 #font pango:Monofur, FontAwesome, Noto Color Emoji, 12
 #font pango:Roboto Mono, FontAwesome, Noto Color Emoji, 11
+#font pango:Source Code Pro for Powerline, FontAwesome, 14
+font pango:B612 Mono for Powerline, FontAwesome, 13
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -148,8 +149,9 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
    status_command /usr/bin/py3status -b -c ~/.config/i3/status.conf
-   font pango:Source Code Pro for Powerline, FontAwesome, 14
    #font pango:Roboto Mono, FontAwesome, 11
+   #font pango:Source Code Pro for Powerline, FontAwesome, 14
+   font pango:B612 Mono for Powerline, FontAwesome, 13
 
    position top
    workspace_buttons yes
