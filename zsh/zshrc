@@ -27,6 +27,8 @@ PAGER=/usr/bin/less
 # Figure out the SHORT hostname
 SHORT_HOST=${HOST/.*/}
 
+PATH="$HOME/.local/bin:$PATH"
+
 ########################################
 # Fix non-xdg base dir compliant paths #
 ########################################
