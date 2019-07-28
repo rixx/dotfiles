@@ -253,6 +253,9 @@ autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
 autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
 autocmd BufNewFile,BufReadPost *.vue set filetype=vue
 
+" Repeat last macro
+nnoremap Q @@
+
 " augroup NoSimultaneousEdits
 "   autocmd!
 "   autocmd SwapExists * let v:swapchoice = 'o'
