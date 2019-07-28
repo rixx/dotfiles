@@ -251,6 +251,7 @@ autocmd BufNewFile,BufReadPost *.md set colorcolumn=120
 autocmd BufNewFile,BufReadPost *.md set tw=120
 autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
 autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
+autocmd BufNewFile,BufReadPost *.vue set filetype=vue
 
 " augroup NoSimultaneousEdits
 "   autocmd!
