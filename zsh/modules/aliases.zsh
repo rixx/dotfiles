@@ -10,10 +10,11 @@ cpv() {
     rsync -pogbr -hhh --backup-dir=/tmp/rsync -e /dev/null --progress "$@"
 }
 compdef _files cpv
-alias rsync-copy="rsync -avz --progress -h"
-alias rsync-move="rsync -avz --progress -h --remove-source-files"
-alias rsync-update="rsync -avzu --progress -h"
-alias rsync-synchronize="rsync -avzu --delete --progress -h"
+alias cpr="rsync -ah --inplace --info=progress2"
+alias rsync-copy="rsync -avz --info=progress2 -h"
+alias rsync-move="rsync -avz --info=progress2 -h --remove-source-files"
+alias rsync-update="rsync -avzu --info=progress2 -h"
+alias rsync-synchronize="rsync -avzu --delete --info=progress2 -h"
 
 alias ls="ls --color"
 alias ll="ls -Ahl --color"
