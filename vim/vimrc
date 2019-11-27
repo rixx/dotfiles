@@ -88,6 +88,9 @@ nnoremap <BS> gg
 " Make jj be the new escape
 inoremap jj <Esc>
 
+" Exit terminal input mode with Escape
+tnoremap <ESC><ESC> <C-\><C-N>
+
 " really really save
 cmap w!! w !sudo tee %
 map q: :q
@@ -301,6 +304,7 @@ Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'junegunn/goyo.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'junegunn/fzf.vim'
 set updatetime=100
 "highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
 "highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
