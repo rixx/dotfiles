@@ -41,11 +41,11 @@ set flag_chars = "✔◬✘✘↺▹▸▷▶- "
                                      # 9: new thread (n)
                                      # 10: read, %S (-)
                                      # 11: read, %/ ( )
-
+set size_show_mb = yes
 
 ## From field gets 30% of remaining space, Subject gets 70%.
 ## Remaining space is the total width minus the other fields (20), minus the sidebar (24)
-set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-20-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-20-24) / 100))`; set index_format="%4C │ %Z │ %-$my_col_subject.${my_col_subject}s │ %-$my_col_from.${my_col_from}'
-set my_index_format_post='  %?M?<%M>? │ %d"'
-folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post_mine"  # Use to: field
+set my_index_format_pre='set my_col_from = `echo $((20 * ($(tput cols)-20-24) / 100))`; set my_col_subject = `echo $((60 * ($(tput cols)-20-24) / 100))`; set index_format="%4C │ %Z │ %-$my_col_subject.${my_col_subject}s │ %-$my_col_from.${my_col_from}'
+set my_index_format_post='  %?M?<%M>? │ %D"'
+folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"  # Use to: field
 folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"     # Use author or recipient, as appropriate

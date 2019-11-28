@@ -42,7 +42,8 @@ color index       yellow      default       "~v~(~F)"  # collapsed thread with s
 color index       white       red       "~D"       # deleted messages
 
 # Sidebar
-color sidebar_new green       default
+color sidebar_new lightblue       default
+color sidebar_unread    lightblue    default
 color sidebar_ordinary default default
 color sidebar_divider color4  default
 
