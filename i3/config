@@ -211,8 +211,9 @@ for_window [class="^Steam$" title=".* - event started"] floating enable sticky e
 for_window [class="^Steam$" title="^Steam - Self Updater$"] floating enable sticky enable border normal
 
 # Just hope to catch a few more
-for_window [window_role="pop-up"]                       floating enable sticky enable border normal
+for_window [window_role="About"]                       floating enable sticky enable border normal
 for_window [window_role="bubble"]                       floating enable sticky enable border normal
+for_window [window_role="pop-up"]                       floating enable sticky enable border normal
 for_window [window_role="task_dialog"]                  floating enable sticky enable border normal
 for_window [window_role="Preferences"]                  floating enable sticky enable border normal
 for_window [window_type="dialog"]                       floating enable sticky enable border normal
