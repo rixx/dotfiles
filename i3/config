@@ -195,6 +195,7 @@ assign [window_role="neomutt"] 4: mail
 assign [class="Slack"] 5: im  
 assign [class="whats-app-nativefier-d52542"] 5: im  
 assign [class="Signal"] 5: im  
+assign [class="discord"] 5: im  
 assign [class="spotify"] 6: rand  
 
 # Floating applications
