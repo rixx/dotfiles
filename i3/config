@@ -3,6 +3,13 @@
 # Windows key is $mod
 set $mod Mod4
 
+# Gaps, requires i3-gaps
+gaps inner 6
+smart_gaps on
+
+# Default layout is tabbed
+workspace_layout tabbed
+
 # Font for window titles. Use xfontsel to find fontstrings, or just use pango:
 #font pango:Terminus 14px
 #font pango:Anonymous Pro for Powerline 14px
@@ -20,11 +27,11 @@ bindsym $mod+Return exec terminator
 # kill focused window
 bindsym $mod+Shift+Q kill
 
-bindsym $mod+d exec rofi -show combi -display-combi '> '
+bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
 
 # start applications
-bindsym $mod+Shift+F exec firefox
+bindsym $mod+Shift+F exec firefox-nightly
 bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 bindsym $mod+Shift+S exec signal-desktop --start-in-tray
 bindsym $mod+l exec 	i3lock \
@@ -60,11 +67,12 @@ bindsym $mod+h split h
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen
+bindsym $mod+f fullscreen toggle
+
+# go to container with message
 bindsym $mod+x [urgent=latest] focus
 
 # change container layout (stacked, tabbed, default)
-# bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout default
 
@@ -90,7 +98,7 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 #bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
 # bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
-bindsym $mod+s exec deepin-screenshot -s ~/tmp/screenshots
+bindsym $mod+s exec deepin-screenshot -s /home/rixx/tmp/screenshots
 
 # switch to workspace;
 bindsym $mod+1 workspace 1: term 
@@ -99,7 +107,6 @@ bindsym $mod+3 workspace 3: dev
 bindsym $mod+4 workspace 4: mail 
 bindsym $mod+5 workspace 5: im  
 bindsym $mod+6 workspace 6: rand  
-bindsym $mod+0 exec feh -.F /home/rixx/Media/pic/wallpapers/pinguin.jpg
 
 # default output location with the docking station
 workspace "1: term " output eDP1
@@ -175,18 +182,43 @@ client.unfocused  #212121 #212121 #BDBDBD #212121 #212121
 client.background #212121
 
 
-#Borderstyle <normal|1pixel|none>
-new_window 1pixel
+# Border style
+new_window pixel 1
+new_float pixel 0
 hide_edge_borders smart
 focus_follows_mouse no
 
 #move to correct workspace
 assign [class="Firefox"] 2: web  
-assign [class="Thunderbird"] 4: mail 
-assign [class="Skype"] 5: im  
-assign [class="Hipchat"] 5: im  
+assign [class="Nightly"] 2: web  
+assign [window_role="neomutt"] 4: mail 
+assign [class="Slack"] 5: im  
+assign [class="whats-app-nativefier-d52542"] 5: im  
+assign [class="Signal"] 5: im  
+assign [class="spotify"] 6: rand  
 
-for_window [class="Pinentry"] floating enable
+# Floating applications
+for_window [class="Arandr"] floating enable sticky enable border normal
+for_window [class="feh"] floating enable sticky enable border normal
+for_window [class="Lxappearance"] floating enable sticky enable border normal
+for_window [class="Pavucontrol"] floating enable sticky enable border normal
+for_window [class="Pinentry"] floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Friends List$"] floating enable sticky enable border normal
+for_window [class="^Steam$" title="Steam - News"] floating enable sticky enable border normal
+for_window [class="^Steam$" title=".* - Chat"] floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Settings$"] floating enable sticky enable border normal
+for_window [class="^Steam$" title=".* - event started"] floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Steam - Self Updater$"] floating enable sticky enable border normal
+
+# Just hope to catch a few more
+for_window [window_role="pop-up"]                       floating enable sticky enable border normal
+for_window [window_role="bubble"]                       floating enable sticky enable border normal
+for_window [window_role="task_dialog"]                  floating enable sticky enable border normal
+for_window [window_role="Preferences"]                  floating enable sticky enable border normal
+for_window [window_type="dialog"]                       floating enable sticky enable border normal
+for_window [window_type="menu"]                         floating enable sticky enable border normal
+for_window [class="(?i)mplayer"]                        floating enable sticky enable border normal
+
 
 # Create Log out, Reboot, Poweroff bindings
 mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff" {
@@ -205,4 +237,4 @@ bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)ower
 # $mod+current_workspace switches back to last workspace
 workspace_auto_back_and_forth yes
 
-exec_always ~/.screenlayout/docking.sh
+# exec_always "pgrep -x neomutt || (terminator -r neomutt -T neomutt -x neomutt &)"
