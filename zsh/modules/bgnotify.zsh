@@ -12,7 +12,7 @@ function bgnotify_formatted { ## args: (exit_status, command, elapsed_seconds)
 	elapsed="$(( $3 % 60 ))s"
 	(( $3 >= 60 )) && elapsed="$((( $3 % 3600) / 60 ))m $elapsed"
 	(( $3 >= 3600 )) && elapsed="$(( $3 / 3600 ))h $elapsed"
-	[ $1 -eq 0 ] && notify-send "#win (took $elapsed)" "$2" || notify-send "#fail (took $elapsed)" "$2"
+	[ $1 -eq 0 ] && notify-send "Success: $2" "Took $elapsed" || notify-send "Failed: $2" "Took $elapsed"
 }
 
 currentWindowId () {
