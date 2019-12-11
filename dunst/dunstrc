@@ -1,5 +1,5 @@
 [global]
-    font = Monofur 14
+    font = Iosevka 14
     
     # Allow a small subset of html markup:
     #   <b>bold</b>
@@ -11,7 +11,7 @@
     # <http://developer.gnome.org/pango/stable/PangoMarkupFormat.html>.
     # If markup is not allowed, those tags will be stripped out of the
     # message.
-    markup = yes
+    markup = full
     
     # The format of the message.  Possible variables are:
     #   %a  appname
@@ -21,7 +21,7 @@
     #   %I  iconname (without its path)
     #   %p  progress value if set ([  0%] to [100%]) or nothing
     # Markup is allowed
-    format = "[%a] <b>%s</b>\n%b\n"
+    format = "<b>%s</b>\n%b\n<i>[%a]</i>"
     
     # Sort messages by urgency.
     sort = yes
@@ -63,7 +63,7 @@
     # the top and down respectevly.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "450x5-0+26"
+    geometry = "450x20-20+35"
     
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -72,12 +72,12 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing windowmanager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 0
+    transparency = 20
     
     # Don't remove messages, if the user is idle (no mouse or keyboard input)
     # for longer than idle_threshold seconds.
     # Set to 0 to disable.
-    idle_threshold = 120
+    idle_threshold = 30
     
     # Which monitor should the notifications be displayed on.
     monitor = 0
@@ -97,7 +97,7 @@
     
     # Should a notification popped up from history be sticky or timeout
     # as if it would normally do.
-    sticky_history = no
+    sticky_history = yes
     
     # Maximum amount of notifications kept in history
     history_length = 20
@@ -109,17 +109,22 @@
     # font height, it will get raised to the font height.
     # This adds empty space above and under the text.
     line_height = 0
+
+    # The height of the entire notification.  If the height is smaller
+    # than the font height and padding combined, it will be raised
+    # to the font height and padding.
+    notification_height = 0
     
     # Draw a line of "separator_height" pixel height between two
     # notifications.
     # Set to 0 to disable.
-    separator_height = 2
+    separator_height = 1
     
     # Padding between text and separator.
-    padding = 8
+    padding = 20
     
     # Horizontal padding.
-    horizontal_padding = 8
+    horizontal_padding = 30
     
     # Define a color for the separator.
     # possible values are:
@@ -127,7 +132,7 @@
     #  * foreground: use the same color as the foreground;
     #  * frame: use the same color as the frame;
     #  * anything else will be interpreted as a X color.
-    separator_color = auto
+    separator_color = frame
     
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
@@ -138,16 +143,18 @@
     dmenu = /usr/bin/dmenu -p dunst:
     
     # Browser for opening urls in context menu.
-    browser = /usr/bin/firefox -new-tab
+    # browser = /usr/bin/firefox -new-tab
+    browser = xdg-open
 
     # Align icons left/right/off
-    icon_position = off
+    icon_position = right
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+    icon_folders = /usr/share/icons/Adwaita/16x16/legacy/:/usr/share/icons/Adwaita/16x16/devices/
 
-    frame_width = 1
-    frame_color = "#aaaaaa"
+    corner_radius = 8
+    frame_width = 0
+    # frame_color = "#aaaaaa"
 
 [shortcuts]
 
@@ -173,18 +180,20 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
-    background = "#BDBDBD"
-    foreground = "#000000"
+    background = "#666666"
+    foreground = "#ffffff"
     timeout = 10
 
 [urgency_normal]
-    #background = "#285577"
-    background = "#424242"
+    # background = "#285577"
+    # background = "#424242"
+    # background = "#222222"
+    background = "#007171"
     foreground = "#ffffff"
     timeout = 10
 
 [urgency_critical]
-    background = "#BF360C"
+    background = "#990000"
     foreground = "#ffffff"
     timeout = 0
 
