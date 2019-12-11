@@ -8,7 +8,6 @@ workspace_layout tabbed
 
 # Font for window titles. Use xfontsel to find fontstrings, or just use pango:
 set $systemFont "pango:Iosevka, Fontawesome, 14"
-# font pango:Iosevka, FontAwesome, 14
 font $systemFont
 
 # Old font strings to spare future try-and-error:
@@ -228,26 +227,27 @@ assign [class="discord"] $wsChat
 assign [class="spotify"] $wsRand
 
 # Floating applications
-for_window [class="Arandr"]                                       floating enable sticky enable border normal
-for_window [class="feh"]                                          floating enable sticky enable border normal
-for_window [class="Lxappearance"]                                 floating enable sticky enable border normal
-for_window [class="Pavucontrol"]                                  floating enable sticky enable border normal
-for_window [class="Pinentry"]                                     floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Friends List$"]               floating enable sticky enable border normal
-for_window [class="^Steam$" title="Steam - News"]                 floating enable sticky enable border normal
-for_window [class="^Steam$" title=".* - Chat"]                    floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Settings$"]                   floating enable sticky enable border normal
-for_window [class="^Steam$" title=".* - event started"]           floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Steam - Self Updater$"]       floating enable sticky enable border normal
-for_window [class="Terminator" title="^Terminator Preferences$"]  floating enable sticky enable border normal
-for_window [class="(?i)mplayer"]                                  floating enable sticky enable border normal
-for_window [window_role="About"]                                  floating enable sticky enable border normal
-for_window [window_role="bubble"]                                 floating enable sticky enable border normal
-for_window [window_role="pop-up"]                                 floating enable sticky enable border normal
-for_window [window_role="task_dialog"]                            floating enable sticky enable border normal
-for_window [window_role="Preferences"]                            floating enable sticky enable border normal
-for_window [window_type="dialog"]                                 floating enable sticky enable border normal
-for_window [window_type="menu"]                                   floating enable sticky enable border normal
+for_window [class="Arandr"]                                       floating enable
+for_window [class="feh"]                                          floating enable border normal
+for_window [class="Lxappearance"]                                 floating enable
+for_window [class="Pavucontrol"]                                  floating enable
+for_window [class="Pcmanfm"]                                      floating enable
+for_window [class="Pinentry"]                                     floating enable sticky enable
+for_window [class="^Steam$" title="^Friends List$"]               floating enable
+for_window [class="^Steam$" title="Steam - News"]                 floating enable
+for_window [class="^Steam$" title=".* - Chat"]                    floating enable
+for_window [class="^Steam$" title="^Settings$"]                   floating enable
+for_window [class="^Steam$" title=".* - event started"]           floating enable
+for_window [class="^Steam$" title="^Steam - Self Updater$"]       floating enable
+for_window [class="Terminator" title="^Terminator Preferences$"]  floating enable
+for_window [class="(?i)mplayer"]                                  floating enable border normal
+for_window [window_role="About"]                                  floating enable
+for_window [window_role="bubble"]                                 floating enable
+for_window [window_role="pop-up"]                                 floating enable
+for_window [window_role="task_dialog"]                            floating enable
+for_window [window_role="Preferences"]                            floating enable
+for_window [window_type="dialog"]                                 floating enable
+for_window [window_type="menu"]                                   floating enable
 
 
 # Create Log out, Reboot, Poweroff bindings
@@ -268,3 +268,5 @@ bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)ower
 workspace_auto_back_and_forth yes
 
 # exec_always "pgrep -x neomutt || (terminator -r neomutt -T neomutt -x neomutt &)"
+exec_always "feh --bg-max --randomize ~/lib/pics/wallpapers/unprocessed/* &"
+exec_always picom

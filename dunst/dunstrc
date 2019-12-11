@@ -72,7 +72,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing windowmanager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 20
+    transparency = 15
     
     # Don't remove messages, if the user is idle (no mouse or keyboard input)
     # for longer than idle_threshold seconds.
@@ -148,6 +148,7 @@
 
     # Align icons left/right/off
     icon_position = right
+    max_icon_size = 64
 
     # Paths to default icons.
     icon_folders = /usr/share/icons/Adwaita/16x16/legacy/:/usr/share/icons/Adwaita/16x16/devices/
