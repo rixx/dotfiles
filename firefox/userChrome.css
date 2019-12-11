@@ -23,7 +23,8 @@
     opacity: 1 !important;
 }
 
-toolbar {
+
+toolbaritem:not(#urlbar-container), toolbarbutton {
   opacity: 0.7 !important;
 }
 
