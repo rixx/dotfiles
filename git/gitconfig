@@ -23,3 +23,5 @@
 	program = gpg2
 [credential]
 	helper = cache
+[push]
+	default = current

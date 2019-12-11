@@ -266,5 +266,5 @@ bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)ower
 workspace_auto_back_and_forth yes
 
 # exec_always "pgrep -x neomutt || (terminator -r neomutt -T neomutt -x neomutt &)"
-exec_always "feh --bg-max --randomize ~/lib/pics/wallpapers/unprocessed/* &"
+exec_always "feh --bg-max --randomize ~/lib/pics/wallpapers/unprocessed/* &"  # Set this command as cronjob!
 exec_always picom
