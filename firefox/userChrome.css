@@ -1,3 +1,42 @@
+#urlbar,
+#searchbar {
+    border: none !important;
+    padding: 6px 16px;
+    height: 40px;
+}
+
+#fxa-toolbar-menu-button,
+#identity-box,
+#pocket-button-box,
+#star-button-box,
+#tracking-protection-icon-container {
+    display: none !important;
+}
+
+#page-action-buttons>*,
+.urlbar-history-dropmarker {
+    opacity: 0 !important;
+}
+
+#urlbar:hover #page-action-buttons>*,
+#urlbar:hover .urlbar-history-dropmarker {
+    opacity: 1 !important;
+}
+
+toolbar {
+  opacity: 0.7 !important;
+}
+
+.sidebar-splitter {
+    border: none !important;
+}   
+    
+.customization-target {
+    padding: 6px !important;   
+}
+
+
+/* START TREESTYLE TABS */
 #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
   opacity: 0;
   pointer-events: none;
@@ -5,6 +44,63 @@
 #main-window:not([tabsintitlebar="true"]) #TabsToolbar {
     visibility: collapse !important;
 }
-#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+#sidebar-header {
   display: none;
 }
+#aHTMLTooltip { /* don't display tooltips on hover */
+  display: none !important
+}
+/* END TREESTYLE TABS */
+
+/* BEGIN CUSTOM TREESTYLE TABS. Copy these styles to the config section of TST. Included here for version control.
+ *
+#main-window[inFullscreen] #sidebar-box,
+#main-window[inFullscreen] #sidebar-splitter {  /* auto-hide sidebar when fullscreen */
+  display: none !important;
+  width: 0px !important;
+}
+
+/* Add private browsing indicator per tab */
+tab-item.private-browsing tab-label:before {
+  content: "🕶";
+}
+/* different color */
+tab-item {
+  background-color: white !important;
+  border: solid 1px #00000012; 
+}
+tab-item:hover {
+  background-color: #00000001 !important;
+}
+tab-item.active {
+  background-color: #00000001 !important
+}
+
+#tabbar {
+  counter-reset: vtabs atabs tabs;
+  /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
+}
+tab-item:not(.collapsed):not(.discarded) {
+  counter-increment: vtabs atabs tabs;
+}
+tab-item:not(.collapsed) {
+  counter-increment: vtabs tabs;
+}
+tab-item:not(.discarded) {
+  counter-increment: atabs tabs;
+}
+tab-item {
+  counter-increment: tabs;
+}
+.newtab-button {
+  --tab-count-text: counter(tabs) " tabs";
+}
+.newtab-button::after {
+  content: var(--tab-count-text);
+  pointer-events: none;
+    
+  position: absolute;
+  left: 0.5em;
+}
+
+*/
