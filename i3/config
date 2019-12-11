@@ -3,20 +3,21 @@
 # Windows key is $mod
 set $mod Mod4
 
-# Gaps, requires i3-gaps
-gaps inner 6
-smart_gaps on
-
 # Default layout is tabbed
 workspace_layout tabbed
 
 # Font for window titles. Use xfontsel to find fontstrings, or just use pango:
+set $systemFont "pango:Iosevka, Fontawesome, 14"
+# font pango:Iosevka, FontAwesome, 14
+font $systemFont
+
+# Old font strings to spare future try-and-error:
 #font pango:Terminus 14px
 #font pango:Anonymous Pro for Powerline 14px
 #font pango:Monofur, FontAwesome, Noto Color Emoji, 12
 #font pango:Roboto Mono, FontAwesome, Noto Color Emoji, 11
 #font pango:Source Code Pro for Powerline, FontAwesome, 14
-font pango:B612 Mono for Powerline, FontAwesome, 13
+#font pango:B612 Mono for Powerline, FontAwesome, 13
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -27,26 +28,31 @@ bindsym $mod+Return exec terminator
 # kill focused window
 bindsym $mod+Shift+Q kill
 
+# Use rofi as application starter and application switcher
+# Additionally: rofi-pass and rofimoji
 bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
+bindsym $mod+m exec "rofimoji"
 
-# start applications
+# Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly
 bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 bindsym $mod+Shift+S exec signal-desktop --start-in-tray
+
+# Requires i3lock-color
+# Provides a running clock in the lower left corner, and a random image from the wallpapers directory
 bindsym $mod+l exec 	i3lock \
-	-t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
-	--timepos='x+110:h-70' \
-	--datepos='x+43:h-45' \
-	--clock --date-align 1 --datestr "Und Sie sind?" \
-	--insidecolor=00000000 --ringcolor=ffffffff --line-uses-inside \
-	--keyhlcolor=d23c3dff --bshlcolor=d23c3dff --separatorcolor=00000000 \
-	--insidevercolor=00000000 --insidewrongcolor=d23c3dff \
-	--ringvercolor=ffffffff --ringwrongcolor=ffffffff --indpos='x+280:h-70' \
-	--radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
-	--verifcolor=ffffffff --timecolor=ffffffff --datecolor=ffffffff \
-	--noinputtext='' --force-clock
-bindsym $mod+m exec "rofimoji"
+        -t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
+        --timepos='x+110:h-70' \
+        --datepos='x+43:h-45' \
+        --clock --date-align 1 --datestr "Und Sie sind?" \
+        --insidecolor=00000000 --ringcolor=ffffffff --line-uses-inside \
+        --keyhlcolor=d23c3dff --bshlcolor=d23c3dff --separatorcolor=00000000 \
+        --insidevercolor=00000000 --insidewrongcolor=d23c3dff \
+        --ringvercolor=ffffffff --ringwrongcolor=ffffffff --indpos='x+280:h-70' \
+        --radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
+        --verifcolor=ffffffff --timecolor=ffffffff --datecolor=ffffffff \
+        --noinputtext='' --force-clock
 
 # focus window with cursor keys:
 bindsym $mod+Left focus left
@@ -72,7 +78,7 @@ bindsym $mod+f fullscreen toggle
 # go to container with message
 bindsym $mod+x [urgent=latest] focus
 
-# change container layout (stacked, tabbed, default)
+# change container layout (tabbed, default. stacked currently not available)
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout default
 
@@ -98,36 +104,51 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 #bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
 # bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
+# Take screenshots
 bindsym $mod+s exec deepin-screenshot -s /home/rixx/tmp/screenshots
 
-# switch to workspace;
-bindsym $mod+1 workspace 1: term 
-bindsym $mod+2 workspace 2: web  
-bindsym $mod+3 workspace 3: dev  
-bindsym $mod+4 workspace 4: mail 
-bindsym $mod+5 workspace 5: im  
-bindsym $mod+6 workspace 6: rand  
+# Define workspaces
+set $wsTerm "1: term "
+set $wsWeb "2: web  "
+set $wsDev "3: dev  "
+set $wsMail "4: mail "
+set $wsChat "5: im  "
+set $wsRand "6: rand  "
 
-# default output location with the docking station
-workspace "1: term " output eDP1
-workspace "2: web  " output DP2-1
-workspace "3: dev  " output eDP1
-workspace "4: mail " output DP2-1
-workspace "5: im  " output DP2-1
+set $ws1 "1: term "
+set $ws2 "2: web  "
+set $ws3 "3: dev  "
+set $ws4 "4: mail "
+set $ws5 "5: im  "
+set $ws6 "6: rand  "
+
+# switch to workspace;
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1: term 
-bindsym $mod+Shift+2 move container to workspace 2: web  
-bindsym $mod+Shift+3 move container to workspace 3: dev  
-bindsym $mod+Shift+4 move container to workspace 4: mail 
-bindsym $mod+Shift+5 move container to workspace 5: im  
-bindsym $mod+Shift+6 move container to workspace 6: rand  
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
 
 # reload the configuration file
 bindsym $mod+Shift+D reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
 
 # exit i3 (logs you out of your X session)
 # bindsym $mod+Shift+E exit
@@ -140,25 +161,33 @@ mode "resize" {
         bindsym h resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
-        bindsym 113 resize shrink width 10 px or 10 ppt
-        bindsym 116 resize grow height 10 px or 10 ppt
-        bindsym 111 resize shrink height 10 px or 10 ppt
-        bindsym 114 resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Up resize grow height 10 px or 10 ppt
+        bindsym Down resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
+popup_during_fullscreen smart
+
+# Gaps, requires i3-gaps
+for_window [class=".*"] border pixel 0
+gaps inner 10
+gaps outer 0
+new_window pixel 0
+new_float pixel 0
+# border_radius 8
+smart_gaps on
+
 # Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# has, if available)
 bar {
    status_command /usr/bin/py3status -b -c ~/.config/i3/status.conf
-   #font pango:Roboto Mono, FontAwesome, 11
-   #font pango:Source Code Pro for Powerline, FontAwesome, 14
-   font pango:B612 Mono for Powerline, FontAwesome, 13
+   font $systemFont
 
    position top
    workspace_buttons yes
@@ -189,37 +218,36 @@ hide_edge_borders smart
 focus_follows_mouse no
 
 #move to correct workspace
-assign [class="Firefox"] 2: web  
-assign [class="Nightly"] 2: web  
-assign [window_role="neomutt"] 4: mail 
-assign [class="Slack"] 5: im  
-assign [class="whats-app-nativefier-d52542"] 5: im  
-assign [class="Signal"] 5: im  
-assign [class="discord"] 5: im  
-assign [class="spotify"] 6: rand  
+assign [class="Firefox"] $wsWeb
+assign [class="Nightly"] $wsWeb
+assign [window_role="neomutt"] $wsMail
+assign [class="Slack"] $wsChat
+assign [class="whats-app-nativefier-d52542"] $wsChat
+assign [class="Signal"] $wsChat
+assign [class="discord"] $wsChat
+assign [class="spotify"] $wsRand
 
 # Floating applications
-for_window [class="Arandr"] floating enable sticky enable border normal
-for_window [class="feh"] floating enable sticky enable border normal
-for_window [class="Lxappearance"] floating enable sticky enable border normal
-for_window [class="Pavucontrol"] floating enable sticky enable border normal
-for_window [class="Pinentry"] floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Friends List$"] floating enable sticky enable border normal
-for_window [class="^Steam$" title="Steam - News"] floating enable sticky enable border normal
-for_window [class="^Steam$" title=".* - Chat"] floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Settings$"] floating enable sticky enable border normal
-for_window [class="^Steam$" title=".* - event started"] floating enable sticky enable border normal
-for_window [class="^Steam$" title="^Steam - Self Updater$"] floating enable sticky enable border normal
-
-# Just hope to catch a few more
-for_window [window_role="About"]                       floating enable sticky enable border normal
-for_window [window_role="bubble"]                       floating enable sticky enable border normal
-for_window [window_role="pop-up"]                       floating enable sticky enable border normal
-for_window [window_role="task_dialog"]                  floating enable sticky enable border normal
-for_window [window_role="Preferences"]                  floating enable sticky enable border normal
-for_window [window_type="dialog"]                       floating enable sticky enable border normal
-for_window [window_type="menu"]                         floating enable sticky enable border normal
-for_window [class="(?i)mplayer"]                        floating enable sticky enable border normal
+for_window [class="Arandr"]                                       floating enable sticky enable border normal
+for_window [class="feh"]                                          floating enable sticky enable border normal
+for_window [class="Lxappearance"]                                 floating enable sticky enable border normal
+for_window [class="Pavucontrol"]                                  floating enable sticky enable border normal
+for_window [class="Pinentry"]                                     floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Friends List$"]               floating enable sticky enable border normal
+for_window [class="^Steam$" title="Steam - News"]                 floating enable sticky enable border normal
+for_window [class="^Steam$" title=".* - Chat"]                    floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Settings$"]                   floating enable sticky enable border normal
+for_window [class="^Steam$" title=".* - event started"]           floating enable sticky enable border normal
+for_window [class="^Steam$" title="^Steam - Self Updater$"]       floating enable sticky enable border normal
+for_window [class="Terminator" title="^Terminator Preferences$"]  floating enable sticky enable border normal
+for_window [class="(?i)mplayer"]                                  floating enable sticky enable border normal
+for_window [window_role="About"]                                  floating enable sticky enable border normal
+for_window [window_role="bubble"]                                 floating enable sticky enable border normal
+for_window [window_role="pop-up"]                                 floating enable sticky enable border normal
+for_window [window_role="task_dialog"]                            floating enable sticky enable border normal
+for_window [window_role="Preferences"]                            floating enable sticky enable border normal
+for_window [window_type="dialog"]                                 floating enable sticky enable border normal
+for_window [window_type="menu"]                                   floating enable sticky enable border normal
 
 
 # Create Log out, Reboot, Poweroff bindings
