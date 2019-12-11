@@ -46,7 +46,7 @@ bindsym $mod+l exec 	i3lock \
         --datepos='x+43:h-45' \
         --clock --date-align 1 --datestr "Und Sie sind?" \
         --insidecolor=00000000 --ringcolor=ffffffff --line-uses-inside \
-        --keyhlcolor=d23c3dff --bshlcolor=d23c3dff --separatorcolor=00000000 \
+        --keyhlcolor=007171ff --bshlcolor=007171ff --separatorcolor=00000000 \
         --insidevercolor=00000000 --insidewrongcolor=d23c3dff \
         --ringvercolor=ffffffff --ringwrongcolor=ffffffff --indpos='x+280:h-70' \
         --radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
@@ -201,15 +201,15 @@ bar {
    colors {
       background #212121
       statusline #BDBDBD
-      separator #9E9E9E
-      focused_workspace #212121 #BDBDBD #212121
+      separator #007171
+      focused_workspace #007171 #007171 #EEEEEE
       urgent_workspace #D84315 #D84315 #212121
       inactive_workspace #212121 #212121 #BDBDBD
    }
 }
 
 #Colors
-client.focused    #212121 #BDBDBD #212121 #212121 #212121
+client.focused    #212121 #007171 #EEEEEE #212121 #212121
 client.urgent     #212121 #D84315 #212121 #212121 #212121
 client.unfocused  #212121 #212121 #BDBDBD #212121 #212121
 client.background #212121
