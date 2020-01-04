@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     man-page-toc
-// @namespace https://man.openbsd.org/
+// @include https://man.openbsd.org/*
 // @version  1
 // @grant    none
 // ==/UserScript==

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     github-paranoia
-// @namespace https://github.com/rixx
+// @include https://github.com/rixx
 // @version  1
 // @grant    none
 // ==/UserScript==

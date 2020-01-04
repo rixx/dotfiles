@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     twitter-paranoia
-// @namespace https://twitter.com/rixxtr
+// @include https://twitter.com/rixxtr
 // @version  1
 // @grant    none
 // ==/UserScript==
