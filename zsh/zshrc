@@ -58,3 +58,9 @@ if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]] && type startx > /dev/null; then
 	chmod +w ~
 	exec startx
 fi
+if [[ -a /usr/share/fzf/key-bindings.zsh ]]; then
+  source /usr/share/fzf/key-bindings.zsh
+fi
+if [[ -a /usr/share/fzf/completion.zsh ]]; then
+  source /usr/share/fzf/completion.zsh
+fi

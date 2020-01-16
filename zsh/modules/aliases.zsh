@@ -2,7 +2,7 @@
 # Aliases #
 ###########
 alias bim='vim'
-alias v='vim'
+alias v='vi $(fzf)'
 alias vi="vim"
 alias im="vim"
 
