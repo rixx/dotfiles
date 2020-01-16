@@ -40,7 +40,12 @@ if type fzf > /dev/null; then
 		builtin cd "$@";
 		return
 	    fi
-	    fzf-cd-widget
+	      local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+		-o -type d -print 2> /dev/null | cut -b3-"}"
+	      local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m)"
+	      cd "$dir"
+	      unset dir # ensure this doesn't end up appearing in prompt expansion
+	      return $?
 	}
 
     fi
