@@ -37,7 +37,7 @@ bindsym $mod+u exec /home/rixx/.config/dotfiles/scripts/rofi-filebin
 # Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly
 bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
-bindsym $mod+Shift+S exec signal-desktop --start-in-tray
+# bindsym $mod+Shift+S exec signal-desktop --start-in-tray
 
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory
@@ -105,7 +105,8 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 # bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
 
 # Take screenshots
-bindsym $mod+s exec deepin-screenshot -s /home/rixx/tmp/screenshots
+bindsym $mod+s exec /home/rixx/.config/dotfiles/scripts/screenshot-filebin
+bindsym $mod+Shoft+S exec deepin-screenshot -s /home/rixx/tmp/screenshots
 
 # Define workspaces
 set $wsTerm "1: term "
