@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+
+import glob
+import os
+from pathlib import Path
+from subprocess import Popen, PIPE, check_output, run
+
+
+def get_paths(start):
+    files = glob.glob(str(start / "*"))
+    files.sort(key=os.path.getmtime, reverse=True)
+    return "\n".join([".."] + files).encode("utf-8")
+
+
+def get_path(current_path):
+    rofi = Popen(
+        args=["rofi", "-dmenu", "-i", "-p", " 😀   ", "-kb-custom-1", "Alt+c"],
+        stdin=PIPE,
+        stdout=PIPE,
+    )
+    (stdout, stderr) = rofi.communicate(input=get_paths(current_path))
+    if rofi.returncode == 1:
+        return
+    elif rofi.returncode in [0, 10]:  # 0 is enter, 10 is alt-c
+        path = stdout.strip().decode("utf-8")
+
+        if path == "..":
+            current_path = current_path.parent
+        else:
+            current_path = Path(path)
+
+        if current_path.is_dir():
+            return get_path(current_path)
+        return current_path
+
+
+path = get_path(Path.home())
+if path and path.exists():
+    url = check_output(["fb", str(path)]).strip().decode()
+    run(["notify-send", f"Uploaded {path} to {url}", "-a", "notify"])
