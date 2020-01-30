@@ -14,7 +14,7 @@ def get_paths(start):
 
 def get_path(current_path):
     rofi = Popen(
-        args=["rofi", "-dmenu", "-i", "-p", " 😀   ", "-kb-custom-1", "Alt+c"],
+        args=["rofi", "-dmenu", "-i", "-p", "$", "-kb-custom-1", "Alt+c"],
         stdin=PIPE,
         stdout=PIPE,
     )
@@ -34,7 +34,7 @@ def get_path(current_path):
         return current_path
 
 
-path = get_path(Path.home())
+path = get_path(Path.home() / "tmp")
 if path and path.exists():
     url = check_output(["fb", str(path)]).strip().decode()
     run(["notify-send", f"Uploaded {path} to {url}", "-a", "notify"])
