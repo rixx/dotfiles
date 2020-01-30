@@ -232,7 +232,7 @@ for_window [class="Pavucontrol"]                                  floating enabl
 for_window [class="Pcmanfm"]                                      floating enable
 for_window [class="Pinentry"]                                     floating enable sticky enable
 for_window [class="^Steam$" title="^Friends List$"]               floating enable
-for_window [class="^Steam$" title="Steam - News.*"]               floating enable
+for_window [class="^Steam$" title="Steam - News.*"]                floating enable
 for_window [class="^Steam$" title=".* - Chat"]                    floating enable
 for_window [class="^Steam$" title="^Settings$"]                   floating enable
 for_window [class="^Steam$" title=".* - event started"]           floating enable
