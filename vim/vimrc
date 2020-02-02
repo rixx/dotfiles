@@ -305,6 +305,7 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'junegunn/fzf.vim'
+Plugin 'vimwiki/vimwiki'
 set updatetime=100
 "highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
 "highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
@@ -361,6 +362,44 @@ let g:pymode_lint_checkers = ['pyflakes', 'pylint', 'pep8', 'mccabe']
 let g:pymode_lint_ignore = "E501"
 let g:pymode_rope = 0
 let g:pymode_syntax_print_as_function = 1
+
+""" vimwiki
+" ww opens the index
+" wd deletes wiki page
+" wr renames wiki page
+"
+" wi opens diary index, w i updates it
+" w w opens today's diary
+" w y opens yesterday's diary
+" w m opens tomorrow's diary
+" C-up: previous diary page, C-down next diary page
+"
+" = indents headers, - dedents
+" [[ go to last headline, ]] go to next headline
+" tab: move to next link
+" enter: go to page/make page
+" backspace: last page
+" plus: generate link without going there
+" C-space: toggle checkbox!
+" gl-space: remove checkbox
+" gln: make checkbox more done, glp make less done
+" gll: increade list level, glh decrease
+" glr: renumber list
+" gl-: make list item, gl1: make numbered list item
+" gqq: format table
+"
+" :tag: tags things
+" VimwikiTOC creates toc
+" TODO: lookup compl-omni and tagsrch
+let g:vimwiki_use_mouse = 1
+let g:vimwiki_list = [{
+  \ 'path': '~/doc/wiki/',
+  \ 'syntax': 'markdown',
+  \ 'ext': '.md',
+  \ 'auto_toc': 1,
+  \ 'auto_tags': 1,
+  \ 'auto_diary_index': 1,
+  \ }]
 
 """ vim-completion-manager
 " Create virtualenv neovim, and install pynvim and jedi
