@@ -106,7 +106,11 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 
 # Take screenshots
 bindsym $mod+s exec /home/rixx/.config/dotfiles/scripts/screenshot-filebin
-bindsym $mod+Shoft+S exec deepin-screenshot -s /home/rixx/tmp/screenshots
+bindsym $mod+Shift+S exec deepin-screenshot -s /home/rixx/tmp/screenshots
+
+# Scratchpad terminal (wiki)
+bindsym $mod+Shift+N move container to scratchpad
+bindsym $mod+n [class="Terminator"] scratchpad show
 
 # Define workspaces
 set $wsTerm "1: term "
