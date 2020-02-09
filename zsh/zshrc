@@ -33,7 +33,9 @@ PATH="$HOME/.local/bin:$PATH"
 # Fix non-xdg base dir compliant paths #
 ########################################
 
-PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+if type ruby > /dev/null; then
+  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+fi
 
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
