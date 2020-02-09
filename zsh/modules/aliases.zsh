@@ -31,8 +31,8 @@ alias django='python manage.py'
 
 alias pserver="python -m http.server"
 
-alias ap='ansible-playbook'
-alias av='ansible-vault'
+alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
+alias av='ansible-vault --vault-password-file=.vault_password.sh'
 
 alias ra='ranger'
 
