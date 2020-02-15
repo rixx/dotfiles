@@ -15,6 +15,10 @@ alias rsync-move="rsync -avz --info=progress2 -h --remove-source-files"
 alias rsync-update="rsync -avzu --info=progress2 -h"
 alias rsync-synchronize="rsync -avzu --delete --info=progress2 -h"
 
+certcheck() {
+    echo -n | openssl s_client -connect "$@":443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -text | grep -E "DNS|Subject: CN"
+}
+
 alias ls="ls --color"
 alias ll="ls -Ahl --color"
 alias less=$PAGER
