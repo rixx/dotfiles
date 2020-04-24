@@ -27,8 +27,11 @@ alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
 
-alias asdf='setxkbmap de neo -option'
-alias uiae='setxkbmap de nodeadkeys -option'
+alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
+alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
+
+alias please='sudo'
+alias fucking='sudo'
 
 alias pretalx='python -m pretalx'
 alias django='python manage.py'
