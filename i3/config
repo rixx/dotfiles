@@ -232,6 +232,8 @@ assign [class="spotify"] $wsRand
 
 # Floating applications
 for_window [class="Arandr"]                                       floating enable
+for_window [class="Anki" title="Add"]                             floating enable
+for_window [class="Anki" title="Browse"]                          floating enable
 for_window [class="feh"]                                          floating enable border normal
 for_window [class="Lxappearance"]                                 floating enable
 for_window [class="Pavucontrol"]                                  floating enable
