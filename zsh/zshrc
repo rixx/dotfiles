@@ -36,7 +36,7 @@ PATH="$HOME/.local/bin:$PATH"
 if type ruby > /dev/null; then
   PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 fi
-
+export PIP_REQUIRE_VIRTUALENV=true
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
