@@ -2,7 +2,7 @@
 
 Config files for my general environment:
 
-- `X/xinitrc` for general X startup
+- `X/xinitrc` for general X startup. There are a couple of very specific rules/services in there, too.
 - `calendar` contains the config files to run my calendar website as a separate window on the fly with electron
 - `dunst` is a notification daemon
 - `firefox` contains the `userChrome.css` with my slightly absurd modifications to the Firefox UI
