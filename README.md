@@ -1,6 +1,7 @@
 # dotfiles
 
-Config files for my general environment:
+Config files for my general environment. In part distributed automatically, in part manually. Pretty up to date usually.
+In use on both user and server systems.
 
 - `X/xinitrc` for general X startup. There are a couple of very specific rules/services in there, too.
 - `calendar` contains the config files to run my calendar website as a separate window on the fly with electron
