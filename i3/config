@@ -38,6 +38,7 @@ bindsym $mod+u exec /home/rixx/.config/dotfiles/scripts/rofi-filebin
 bindsym $mod+Shift+F exec firefox-nightly
 bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 # bindsym $mod+Shift+S exec signal-desktop --start-in-tray
+bindsym $mod+t exec com.github.alainm23.planner.quick-add
 
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory

@@ -44,4 +44,8 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 export SSH_AUTH_SOCK
 
+# To make sure planner starts fast
+# https://github.com/alainm23/planner/issues/124#issuecomment-573289937
+dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
+
 exec i3
