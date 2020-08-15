@@ -193,6 +193,9 @@ syntax enable
 set synmaxcol=240
 
 "" Use instead of colorcolum=120
+highlight FoldColumn ctermbg=none
+highlight LineNr ctermbg=none cterm=italic ctermfg=darkgrey
+highlight CursorLineNr ctermbg=none cterm=italic ctermfg=grey
 highlight ColorColumn ctermbg=blue
 call matchadd('Colorcolumn', '\%120v', 100)
 
@@ -270,47 +273,45 @@ nnoremap Q @@
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
-let iCanHazVundle=1
-let vundle_readme=expand('~/.config/nvim/bundle/Vundle.vim/README.md')
-if !filereadable(vundle_readme)
-    echo "Installing Vundle.."
-    echo ""
-    silent !mkdir -p ~/.config/nvim/bundle
-    silent !git clone https://github.com/VundleVim/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
-    let iCanHazVundle=0
-endif
 
+""" UNCOMMENT THIS WHEN YOU WANT TO USE VUNDLE
+
+"let iCanHazVundle=1
+"let vundle_readme=expand('~/.config/nvim/bundle/Vundle.vim/README.md')
+"if !filereadable(vundle_readme)
+"    echo "Installing Vundle.."
+"    echo ""
+"    silent !mkdir -p ~/.config/nvim/bundle
+"    silent !git clone https://github.com/VundleVim/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
+"    let iCanHazVundle=0
+"endif
+"
 set rtp+=~/.config/nvim/bundle/Vundle.vim
 call vundle#begin("~/.config/nvim/bundle")
 
-"
+"if iCanHazVundle == 0
+"    echo "Installing Bundles, please ignore key map error messages"
+"    echo ""
+"    :BundleInstall
+"endif
+
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
 " :BundleSearch(!) foo - search(or refresh cache first) for foo
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-"Plugin 'chriskempson/base16-vim'
-"Plugin 'klen/python-mode'
-"Plugin 'scrooloose/syntastic'
 
-Plugin 'bling/vim-airline'
-Plugin 'posva/vim-vue'
-Plugin 'VundleVim/Vundle.vim'
+"Plugin 'VundleVim/Vundle.vim'  "Uncomment to update vundle
+Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-sleuth'
+Plugin 'posva/vim-vue'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'junegunn/goyo.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'junegunn/fzf.vim'
 Plugin 'vimwiki/vimwiki'
-Plugin 'chrisbra/Colorizer'
-set updatetime=100
-"highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
-"highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
-"highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1 ctermbg=<Y>
+Plugin 'bling/vim-airline'
 
 if has('nvim')
   Plugin 'ncm2/ncm2'
@@ -318,20 +319,20 @@ endif
 
 call vundle#end()
 
-" vundle
-if iCanHazVundle == 0
-    echo "Installing Bundles, please ignore key map error messages"
-    echo ""
-    :BundleInstall
-endif
+
+"" gitgutter diff colours
+highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 guibg=<X> ctermfg=1
+highlight SignColumn ctermbg=none
+set updatetime=100  " Catch updates after 100ms
 
 " airline
 " display buffers instead of tabs when only one tab is open
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline_highlighting_cache = 1
+let g:airline_extensions = []
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
+let g:airline_highlighting_cache = 1
 let g:airline_detect_paste=1
 
 " let ranger/file browser be toggled by F9
@@ -342,22 +343,13 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-" Goyo
+"" Goyo: zen mode
 let g:goyo_width = 90
 noremap <leader>z :Goyo<cr>
-
-" solarized
-"set background=dark
-"let base16colorspace=256
-"colorscheme base16-grayscale-dark
-"if filereadable(expand("~/.config/nvim/vimrc_background"))
-  "source ~/.vimrc_background
-"endif
 
 "" plugin python-mode configuration
 " <leader> b for breakpoints
 " <leader> r for execution
-" don't use rope
 let g:pymode_options_max_line_length = 119
 let g:pymode_python = 'python3'
 let g:pymode_lint_onfly = 1
@@ -404,12 +396,9 @@ let g:vimwiki_list = [{
   \ 'auto_diary_index': 1,
   \ }]
 
-""" Colorizer
-let g:colorizer_auto_filetype='css,html,vue,md,markdown,rst,vim,vimwiki'
-let g:colorizer_skip_comments = 1
-
 """ vim-completion-manager
 " Create virtualenv neovim, and install pynvim and jedi
+
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
@@ -422,15 +411,9 @@ Plugin 'ncm2/ncm2-jedi'
 Plugin 'ncm2/ncm2-syntax'
 Plugin 'Shougo/neco-syntax'
 
-" suppress the annoying 'match x of y', 'The only match' and 'Pattern not
-" found' messages
+" suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
-" Leave menu with c-c
-inoremap <c-c> <ESC>
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu and also start a new
-" line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
 " Use <TAB> to select the popup menu:
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
