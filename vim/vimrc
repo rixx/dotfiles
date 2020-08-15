@@ -306,6 +306,7 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'junegunn/fzf.vim'
 Plugin 'vimwiki/vimwiki'
+Plugin 'chrisbra/Colorizer'
 set updatetime=100
 "highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2 ctermbg=<Y>
 "highlight GitGutterChange guifg=#bbbb00 guibg=<X> ctermfg=3 ctermbg=<Y>
@@ -327,6 +328,8 @@ endif
 " airline
 " display buffers instead of tabs when only one tab is open
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline_highlighting_cache = 1
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
@@ -400,6 +403,10 @@ let g:vimwiki_list = [{
   \ 'auto_tags': 1,
   \ 'auto_diary_index': 1,
   \ }]
+
+""" Colorizer
+let g:colorizer_auto_filetype='css,html,vue,md,markdown,rst,vim,vimwiki'
+let g:colorizer_skip_comments = 1
 
 """ vim-completion-manager
 " Create virtualenv neovim, and install pynvim and jedi
