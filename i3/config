@@ -115,6 +115,9 @@ bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
 bindsym $mod+s exec /home/rixx/.config/dotfiles/scripts/screenshot-filebin
 bindsym $mod+Shift+S exec deepin-screenshot -s /home/rixx/tmp/screenshots
 
+# Switch to grayscale and back
+bindsym $mod+0 exec /home/rixx/.config/dotfiles/scripts/togglecolour
+
 # Scratchpad terminal (wiki)
 bindsym $mod+Shift+N move container to scratchpad
 bindsym $mod+n [class="Terminator"] scratchpad show

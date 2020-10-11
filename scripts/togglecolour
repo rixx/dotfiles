@@ -1,0 +1,17 @@
+#!/bin/sh
+
+tmpfile=/tmp/picom.colour
+
+if [ ! -f $tmpfile ]; then
+    echo "bw" > $tmpfile
+    /home/rixx/.config/dotfiles/scripts/bw
+else
+    current=$(cat $tmpfile)
+    if [ "$current" = "bw" ]; then
+        echo "colour" > $tmpfile
+        /home/rixx/.config/dotfiles/scripts/bw
+    else
+        echo "bw" > $tmpfile
+        /home/rixx/.config/dotfiles/scripts/colour
+    fi
+fi
