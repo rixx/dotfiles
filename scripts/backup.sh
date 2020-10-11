@@ -14,7 +14,7 @@ info "Starting backup"
 
 # Backup the most important directories into an archive named after
 # the machine this script is currently running on:
-/usr/binborg create                 \
+/usr/bin/borg create                \
     --verbose                       \
     --filter AME                    \
     --stats                         \
