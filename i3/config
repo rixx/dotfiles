@@ -36,8 +36,10 @@ bindsym $mod+u exec /home/rixx/.config/dotfiles/scripts/rofi-filebin
 
 # Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly
-bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
+bindsym $mod+Shift+C exec google-chrome-stable
+bindsym $mod+C exec electron ~/.config/dotfiles/calendar
 # bindsym $mod+Shift+S exec signal-desktop --start-in-tray
+bindsym $mod+Shift+P exec com.github.alainm23.planner
 bindsym $mod+t exec com.github.alainm23.planner.quick-add
 
 # Requires i3lock-color
@@ -227,6 +229,7 @@ client.background #212121
 
 #move to correct workspace
 assign [class="Firefox"] $wsWeb
+assign [class="Chrome"] $wsWeb
 assign [class="Nightly"] $wsWeb
 assign [window_role="neomutt"] $wsMail
 assign [class="Slack"] $wsChat
