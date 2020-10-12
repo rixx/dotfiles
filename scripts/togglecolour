@@ -1,17 +1,21 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-tmpfile=/tmp/picom.colour
-
-if [ ! -f $tmpfile ]; then
-    echo "bw" > $tmpfile
-    /home/rixx/.config/dotfiles/scripts/bw
+# pgrep returns 0 if a matching process is found, 1 if not.
+# Thus 1 means there is either a picom process without b/w filter running,
+# or none at all. Either way, display is coloured when return code is 1.
+# Thanks to tercean/hansenerd for the pgrep verison of this script.
+pgrep -fa gl_FragColor &>/dev/null
+if [ $? -eq 1 ];
+then
+    pkill picom
+    picom --backend glx --glx-fshader-win \
+        "uniform sampler2D tex;
+        uniform float opacity;
+        void main() {
+            vec4 color = texture2D(tex, gl_TexCoord[0].xy);
+            gl_FragColor = vec4(vec3(0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) * opacity, color.a * opacity);
+        }" &
 else
-    current=$(cat $tmpfile)
-    if [ "$current" = "bw" ]; then
-        echo "colour" > $tmpfile
-        /home/rixx/.config/dotfiles/scripts/bw
-    else
-        echo "bw" > $tmpfile
-        /home/rixx/.config/dotfiles/scripts/colour
-    fi
+    pkill picom
+    picom &
 fi
