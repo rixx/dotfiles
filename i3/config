@@ -176,10 +176,10 @@ mode "resize" {
         bindsym h resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 5 px or 5 ppt
-        bindsym Up resize grow height 5 px or 5 ppt
-        bindsym Down resize shrink height 5 px or 5 ppt
-        bindsym Right resize grow width 5 px or 5 ppt
+        bindsym Left resize shrink width 2 px or 2 ppt
+        bindsym Up resize grow height 2 px or 2 ppt
+        bindsym Down resize shrink height 2 px or 2 ppt
+        bindsym Right resize grow width 2 px or 2 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -196,12 +196,15 @@ hide_edge_borders smart
 focus_follows_mouse no
 
 for_window [class=".*"] border pixel 0
-gaps inner 10
-gaps outer 0
 new_window pixel 0
 new_float pixel 0
-border_radius 8
-smart_gaps on
+gaps outer 0
+
+# gaps inner 10
+# border_radius 8
+# smart_gaps on
+gaps inner 0
+border_radius 0
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # has, if available)
