@@ -4,6 +4,7 @@ set spoolfile = "+cutebit/INBOX"
 set postponed = "+cutebit/Drafts"
 set trash = "+cutebit/Trash"
 set header_cache = "~/.cache/muttheaders"
+folder-hook . 'set read_inc=1000'                # don't spend too much time on writing updates
 
 alternative_order text/plain text/html
 
