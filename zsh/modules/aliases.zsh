@@ -35,6 +35,7 @@ alias fucking='sudo'
 
 alias pretalx='python -m pretalx'
 alias django='python manage.py'
+alias dj='python manage.py'
 
 alias pserver="python -m http.server"
 
