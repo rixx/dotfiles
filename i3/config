@@ -200,11 +200,11 @@ new_window pixel 0
 new_float pixel 0
 gaps outer 0
 
-# gaps inner 10
 # border_radius 8
-# smart_gaps on
-gaps inner 0
-border_radius 0
+smart_gaps on
+# gaps inner 10
+# gaps inner 0
+# border_radius 0
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # has, if available)
