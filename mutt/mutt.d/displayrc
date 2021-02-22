@@ -45,7 +45,7 @@ set size_show_mb = yes
 
 ## From field gets 30% of remaining space, Subject gets 70%.
 ## Remaining space is the total width minus the other fields (20), minus the sidebar (24)
-set my_index_format_pre='set my_col_from = `echo $((20 * ($(tput cols)-20-24) / 100))`; set my_col_subject = `echo $((60 * ($(tput cols)-20-24) / 100))`; set index_format="%4C │ %Z │ %-$my_col_subject.${my_col_subject}s │ %-$my_col_from.${my_col_from}'
+set my_index_format_pre='set my_col_from = `echo $((20 * ($(tput cols)-20-24) / 100))`; set my_col_subject = `echo $((60 * ($(tput cols)-20-24) / 100))`; set index_format="%4C │ %Z │ %-$my_col_subject.${my_col_subject}s %?X?%X📎&   ? │ %-$my_col_from.${my_col_from}'
 set my_index_format_post='  %?M?<%M>? │ %D"'
 folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"  # Use to: field
 folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"     # Use author or recipient, as appropriate
