@@ -260,6 +260,7 @@ autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
 autocmd BufNewFile,BufReadPost *.vue set filetype=vue
 autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
 
+autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
 " Repeat last macro
 nnoremap Q @@
 
