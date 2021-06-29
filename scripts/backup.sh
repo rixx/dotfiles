@@ -25,11 +25,10 @@ info "Starting backup"
     --exclude '*/static.dist'       \
     --exclude '*/vendor/bundle'     \
     ::'{hostname}-{now}'        \
-    ~/.local/share/mail                         \
+    ~/.local/share/mail/cutebit                 \
     ~/.local/share/password-store               \
     ~/.local/share/zsh                          \
     ~/.local/share/applications/mimeapps.list   \
-    ~/.local/share/com.github.alainm23.planner  \
     ~/.gnupg                                    \
     ~/.mozilla                                  \
     ~/.ssh                                      \
