@@ -43,7 +43,7 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 }
 
 
-/* START TREESTYLE TABS */
+/* START TREESTYLE TABS, PUT THIS IN TREESTYLE TABS ADVANCED SETTINGS */
 #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
   opacity: 0;
   pointer-events: none;
@@ -100,14 +100,14 @@ tab-item {
   counter-increment: tabs;
 }
 .newtab-button {
-  --tab-count-text: counter(tabs) " tabs";
+  --tab-count-text: " 🦊 " counter(tabs) " tabs 💯";
+  height: 36px;
 }
 .newtab-button::after {
   content: var(--tab-count-text);
   pointer-events: none;
-    
-  position: absolute;
-  left: 0.5em;
+  mask: none !important;
+  width: auto;
+  background: none !important;
+  margin-top: 7px;
 }
-
-*/
