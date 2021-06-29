@@ -16,6 +16,7 @@ set reply_self = no                  # Reply to other recipients if replying to 
 set reverse_name = yes               # Answer with an alias in $alternates
 set reverse_realname = yes           # … but add $realname
 set send_charset = "utf-8"
+set signature = "~/.config/dotfiles/mutt/signature"
 set smtp_pass = "`pass Mail/cutebit`"# Password managers win
 set smtp_url=smtps://rixx@mail.rixx.de
 set ssl_force_tls = yes              # There is no life without TLS
