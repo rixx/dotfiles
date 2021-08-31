@@ -27,6 +27,9 @@ PAGER=/usr/bin/less
 # Figure out the SHORT hostname
 SHORT_HOST=${HOST/.*/}
 
+# Parallel execution for makepkg when possible
+MAKEFLAGS="-j$(nproc)"
+
 PATH="$HOME/.local/bin:$PATH"
 
 ########################################
