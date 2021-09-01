@@ -183,6 +183,10 @@ autocmd BufReadPost COMMIT_EDITMSG
 autocmd BufRead /tmp/mutt-* set tw=72
 
 
+augroup templates
+    autocmd BufNewFile *.vue 0r ~/.config/dotfiles/vim/templates/skeleton.vue
+augroup END
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""  visual stuff                                          ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
