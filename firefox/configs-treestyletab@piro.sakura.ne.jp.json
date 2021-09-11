@@ -1,0 +1,33 @@
+{
+  "chunkedUserStyleRules0": "I21haW4td2luZG93W3RhYnNpbnRpdGxlYmFyPSJ0cnVlIl06bm90KFtleHRyYWRyYWdzcGFjZT0idHJ1ZSJdKSAjVGFic1Rvb2xiYXIgewogIG9wYWNpdHk6IDA7CiAgcG9pbnRlci1ldmVudHM6IG5vbmU7Cn0KI21haW4td2luZG93Om5vdChbdGFic2ludGl0bGViYXI9InRydWUiXSkgI1RhYnNUb29sYmFyIHsKICAgIHZpc2liaWxpdHk6IGNvbGxhcHNlICFpbXBvcnRhbnQ7Cn0KI3NpZGViYXItaGVhZGVyIHsKICBkaXNwbGF5OiBub25lOwp9CiNhSFRNTFRvb2x0aXAgeyAvKiBkb24ndCBkaXNwbGF5IHRvb2x0aXBzIG9uIGhvdmVyICovCiAgZGlzcGxheTogbm9uZSAhaW1wb3J0YW50Cn0KLyogRU5EIFRSRUVTVFlMRSBUQUJTICovCgovKiBCRUdJTiBDVVNUT00gVFJFRVNUWUxFIFRBQlMuIENvcHkgdGhlc2Ugc3R5bGVzIHRvIHRoZSBjb25maWcgc2VjdGlvbiBvZiBUU1QuIEluY2x1ZGVkIGhlcmUgZm9yIHZlcnNpb24gY29udHJvbC4KICoKI21haW4td2luZG93W2luRnVsbHNjcmVlbl0gI3NpZGViYXItYm94LAojbWFpbi13aW5kb3dbaW5GdWxsc2NyZWVuXSAjc2lkZWJhci1zcGxpdHRlciB7ICAvKiBhdXRvLWhpZGUgc2lkZWJhciB3aGVuIGZ1bGxzY3JlZW4gKi8KICBkaXNwbGF5OiBub25lICFpbXBvcnRhbnQ7CiAgd2lkdGg6IDBweCAhaW1wb3J0YW50Owp9CgovKiBBZGQgcHJpdmF0ZSBicm93c2luZyBpbmRpY2F0b3IgcGVyIHRhYiAqLwp0YWItaXRlbS5wcml2YXRlLWJyb3dzaW5nIHRhYi1sYWJlbDpiZWZvcmUgewogIGNvbnRlbnQ6ICLwn5W2IjsKfQovKiBkaWZmZXJlbnQgY29sb3IgKi8KdGFiLWl0ZW0gewogIGJhY2tncm91bmQtY29sb3I6IHdoaXRlICFpbXBvcnRhbnQ7CiAgYm9yZGVyOiBzb2xpZCAxcHggIzAwMDAwMDEyOyAKfQp0YWItaXRlbTpob3ZlciB7CiAgYmFja2dyb3VuZC1jb2xvcjogIzAwMDAwMDAxICFpbXBvcnRhbnQ7Cn0KdGFiLWl0ZW0uYWN0aXZlIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjMDAwMDAwMDEgIWltcG9ydGFudAp9CgojdGFiYmFyIHsKICBjb3VudGVyLXJlc2V0OiB2dGFicyBhdGFicyB0YWJzOwogIC8qIHZ0YWJzIHRyYWNrcyB2aXNpYmxlIHRhYnMsIGF0YWJzIHRyYWNrcyBhY3RpdmUgdGFicywgdGFicyB0cmFja3MgYWxsIHRhYnMgKi8KfQp0YWItaXRlbTpub3QoLmNvbGxhcHNlZCk6bm90KC5kaXNjYXJkZWQpIHsKICBjb3VudGVyLWluY3JlbWVudDogdnRhYnMgYXRhYnMgdGFiczsKfQp0YWItaXRlbTpub3QoLmNvbGxhcHNlZCkgewogIGNvdW50ZXItaW5jcmVtZW50OiB2dGFicyB0YWJzOwp9CnRhYi1pdGVtOm5vdCguZGlzY2FyZGVkKSB7CiAgY291bnRlci1pbmNyZW1lbnQ6IGF0YWJzIHRhYnM7Cn0KdGFiLWl0ZW0gewogIGNvdW50ZXItaW5jcmVtZW50OiB0YWJzOwp9Ci5uZXd0YWItYnV0dG9uIHsKICAtLXRhYi1jb3VudC10ZXh0OiAiIPCfpoogIiBjb3VudGVyKHRhYnMpICIgdGFicyDwn5KvIjsKICBoZWlnaHQ6IDM2cHg7Cn0KLm5ld3RhYi1idXR0b246OmFmdGVyIHsKICBjb250ZW50OiB2YXIoLS10YWItY291bnQtdGV4dCk7CiAgcG9pbnRlci1ldmVudHM6IG5vbmU7CiAgbWFzazogbm9uZSAhaW1wb3J0YW50OwogIHdpZHRoOiBhdXRvOwogIGJhY2tncm91bmQ6IG5vbmUgIWltcG9ydGFudDsKICBtYXJnaW4tdG9wOiA3cHg7Cn0K",
+  "closeParentBehaviorMode": 1,
+  "configsVersion": 24,
+  "context_closeOthers": true,
+  "dropLinksOnTabBehavior": 2,
+  "notifiedFeaturesVersion": 9,
+  "optionsExpandedSections": [
+    "section-advanced",
+    "section-debug",
+    "section-appearance",
+    "section-treeBehavior",
+    "section-drag",
+    "section-addons",
+    "section-newTab",
+    "section-contextMenu"
+  ],
+  "parentTabOperationBehaviorMode": 1,
+  "scrollbarMode": 1,
+  "sidebarPosition": 1,
+  "skipCollapsedTabsForTabSwitchingShortcuts": true,
+  "syncDevices": {
+    "device-1604956686517-57815": {
+      "id": "device-1604956686517-57815",
+      "name": "Firefox on Linux",
+      "icon": "device-desktop",
+      "timestamp": 1631294564502
+    }
+  },
+  "userStyleRules": "",
+  "userStyleRulesFieldHeight": "146.6666717529297px",
+  "warnOnCloseTabs": false
+}
