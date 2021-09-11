@@ -53,6 +53,12 @@ settings:
 
 browser.ctrlTab.sortByRecentlyUsed true
 
+These settings are used to make all links open in the current tab, UNLESS they come from external applications:
+
+browser.link.open_newwindow 1
+browser.link.open_newwindow.override.external 3
+browser.link.open_newwindow.restriction 0
+
 ## Downloading files
 
 browser.download.dir /home/rixx/tmp/downloads
