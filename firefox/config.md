@@ -35,6 +35,7 @@
 
 ## Display
 
+```
 browser.download.autohideButton false
 browser.download.panel.shown true  # Don't pop out downloads as they are happening
 browser.search.widget.inNavBar true
@@ -44,6 +45,7 @@ browser.urlbar.showSearchSuggestionsFirst false
 findbar.highlightAll true
 reader.content_width 4
 sidebar.position_start false  # sidebar on right side
+```
 
 
 ## Tab handling
@@ -51,35 +53,44 @@ sidebar.position_start false  # sidebar on right side
 Tab handling is mostly provided by Tree Style Tab (config in configs-treestyletab@piro.sakura.ne.jp.json). Additional
 settings:
 
+```
 browser.ctrlTab.sortByRecentlyUsed true
+```
 
 These settings are used to make all links open in the current tab, UNLESS they come from external applications:
 
+```
 browser.link.open_newwindow 1
 browser.link.open_newwindow.override.external 3
 browser.link.open_newwindow.restriction 0
+```
 
 ## Downloading files
 
+```
 browser.download.dir /home/rixx/tmp/downloads
 browser.download.viewableInternally.previousHandler.alwaysAskBeforeHandling.svg true
 browser.download.viewableInternally.previousHandler.alwaysAskBeforeHandling.xml true
 browser.download.viewableInternally.previousHandler.preferredAction.svg 0
 browser.download.viewableInternally.previousHandler.preferredAction.xml 0
+```
 
 ## Security
 
+```
 geo.enabled false
 geo.wifi.uri
 pdfjs.enableScripting false
 security.ssl3.rsa_des_ede3_sha false
 security.ssl.require_safe_negotiation true
 network.IDN_show_punycode true  # helps to spot spoofing attacks
+```
 
 ## Privacy: Telemetry, bloat and updates
 
 Disable ALL the shit. Wtf.
 
+```
 app.update.auto false
 beacon.enabled false
 browser.discovery.enabled false
@@ -119,9 +130,11 @@ toolkit.telemetry.server
 toolkit.telemetry.shutdownPingSender.enabled false
 toolkit.telemetry.unified false
 toolkit.telemetry.updatePing.enabled false
+```
 
 ## Development
 
+```
 devtools.chrome.enabled true
 devtools.command-button-measure.enabled true
 devtools.command-button-rulers.enabled true
@@ -134,3 +147,4 @@ devtools.netmonitor.persistlog true
 devtools.whatsnew.enabled true
 devtools.inspector.showAllAnonymousContent true
 devtools.inspector.showUserAgentStyles true
+```
