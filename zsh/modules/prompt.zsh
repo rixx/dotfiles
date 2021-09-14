@@ -217,5 +217,6 @@ PROMPT='%{%f%b%k%}$(build_prompt)'
 #RPROMPT='%{%f%b%k%}$(build_rprompt)%{$reset_color%}'
 PROMPT2='%{%f%b%k%}$(build_prompt2)'
 PROMPT3='%{%f%b%k%}$(build_prompt3)'
-PROMPT4='%{%f%b%k%}%{$fg[red]%}%N:%i>%{%f%b%k%} '
+#PROMPT4='%{%f%b%k%}%{$fg[red]%}%N:%i>%{%f%b%k%} '
+PROMPT4='+ '
 export PS4
