@@ -2,6 +2,8 @@
 
 - Activate Reader View: adds reader mode icon to toolbar
   https://addons.mozilla.org/en-US/firefox/addon/activate-reader-view/
+- ClearURLs: removes tracking bs from URLs
+  https://addons.mozilla.org/en-US/firefox/addon/clearurls/
 - Decentraleyes: Local CDN
   https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/
 - Django Docs version switcher: remembers last selected docs version and switches there. Great for following old Google
@@ -11,8 +13,6 @@
   https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
 - HeadingsMap: generates sidebar out of document headings
   https://addons.mozilla.org/en-US/firefox/addon/headingsmap/
-- Neat URL: removes tracking bs from URLs
-  https://addons.mozilla.org/en-US/firefox/addon/neat-url/
 - Privacy Badger: not really worth it next to ublock
 - Reddit Enhancement Suite: makes reddit usable
   https://addons.mozilla.org/en-US/firefox/addon/reddit-enhancement-suite/
