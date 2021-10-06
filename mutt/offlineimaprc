@@ -20,7 +20,7 @@ localrepository = cutebit-local
 quick = 10
 remoterepository = cutebit-de
 #status_backend = sqlite
-postsynchook = notmuch new
+#postsynchook = notmuch new
 
 [Repository cutebit-local]
 type = Maildir
