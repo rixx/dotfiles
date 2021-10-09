@@ -75,6 +75,9 @@ vmap <Leader>P "+P
 " enter visual mode with <leader><leader>
 nmap <Leader><Leader> V
 
+" remap F6 to breakpoint
+nmap <F6> obreakpoint()<C-c>
+
 "" Other shortcuts
 " paste multiple lines with pppp
 vnoremap <silent> y y`]
