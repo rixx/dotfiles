@@ -327,6 +327,8 @@ endif
 
 call vundle#end()
 
+"" vim-fugitive is slow with zsh stuff
+set shell=bash
 
 "" gitgutter diff colours
 highlight GitGutterAdd    guifg=#009900 guibg=<X> ctermfg=2
