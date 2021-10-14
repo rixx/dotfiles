@@ -216,7 +216,7 @@ set foldmethod=marker
 
 "" show cursor lines (horizontal and vertical)
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 
 "" display incomplete commands
 set showcmd
