@@ -36,11 +36,13 @@ bindsym $mod+u exec /home/rixx/.config/dotfiles/scripts/rofi-filebin
 
 # Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly
-bindsym $mod+Shift+C exec google-chrome-stable
-bindsym $mod+C exec electron ~/.config/dotfiles/calendar
+bindsym $mod+Shift+c exec google-chrome-stable
+# bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 # bindsym $mod+Shift+S exec signal-desktop --start-in-tray
-bindsym $mod+Shift+P exec com.github.alainm23.planner
-bindsym $mod+t exec com.github.alainm23.planner.quick-add
+# bindsym $mod+Shift+D exec Discord
+#bindsym $mod+Shift+P exec com.github.alainm23.planner
+#bindsym $mod+t exec com.github.alainm23.planner.quick-add
+bindsym $mod+n exec python ~/.config/dotfiles/scripts/switch
 
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory
@@ -119,8 +121,8 @@ bindsym $mod+Shift+S exec deepin-screenshot -s /home/rixx/tmp/screenshots
 bindsym $mod+0 exec /home/rixx/.config/dotfiles/scripts/togglecolour
 
 # Scratchpad terminal (wiki)
-bindsym $mod+Shift+N move container to scratchpad
-bindsym $mod+n [class="Terminator"] scratchpad show
+#bindsym $mod+Shift+N move container to scratchpad
+#bindsym $mod+n [class="Terminator"] scratchpad show
 
 # Define workspaces
 set $wsTerm "1: term "
