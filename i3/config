@@ -44,6 +44,9 @@ bindsym $mod+Shift+c exec google-chrome-stable
 #bindsym $mod+t exec com.github.alainm23.planner.quick-add
 bindsym $mod+n exec python ~/.config/dotfiles/scripts/switch
 
+bindsym Control+space exec dunstctl close
+bindsym $mod+Control+space exec dunstctl close-all
+
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory
 bindsym $mod+l exec 	i3lock \
