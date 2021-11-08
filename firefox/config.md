@@ -25,6 +25,7 @@
 - uBlock Origin: makes the whole internet usable.
   https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
   Extra script: https://github.com/pixeltris/TwitchAdSolutions/blob/master/README.md
+  Extra filters: ublock_filters.txt
 - Video Speed Controller: adds speed controls to all HTML5 videos
   https://addons.mozilla.org/en-US/firefox/addon/videospeed/
 - vue.js devtools: makes development usable

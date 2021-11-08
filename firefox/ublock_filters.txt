@@ -1,0 +1,5 @@
+! 2021-11-08 https://twitter.com
+twitter.com##div:has(>div>h2>div>span:has-text(Trends for you)) 
+twitter.com##div:has(>div>h2>div>span:has-text(Trends for you)) + div
+twitter.com##div:has(>div>h2>div>span:has-text(Who to follow)) 
+twitter.com##div:has(>div>h2>div>span:has-text(Who to follow)) + div
