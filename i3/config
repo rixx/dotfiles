@@ -31,7 +31,7 @@ bindsym $mod+Shift+Q kill
 # Additionally: rofi-pass and rofimoji
 bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
-bindsym $mod+m exec "rofimoji --insert-with-clipboard"
+bindsym $mod+m exec "rofimoji --skin-tone neutral --clipboarder xsel --typer xdotool --action copy"
 bindsym $mod+u exec /home/rixx/.config/dotfiles/scripts/rofi-filebin
 
 # Application shortcuts
