@@ -22,7 +22,7 @@ font $systemFont
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminator
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+Q kill
@@ -265,7 +265,6 @@ for_window [class="^Steam$" title="^Settings$"]                   floating enabl
 for_window [class="^Steam$" title=".* - event started"]           floating enable
 for_window [class="^Steam$" title="^Steam - Self Updater$"]       floating enable
 for_window [class="Evolution" title="^Appointment.*"]             floating enable
-for_window [class="Terminator" title="^Terminator Preferences$"]  floating enable
 for_window [class="(?i)mplayer"]                                  floating enable border normal
 for_window [window_role="About"]                                  floating enable
 for_window [window_role="bubble"]                                 floating enable
@@ -293,6 +292,5 @@ bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)ower
 # $mod+current_workspace switches back to last workspace
 workspace_auto_back_and_forth yes
 
-# exec_always "pgrep -x neomutt || (terminator -r neomutt -T neomutt -x neomutt &)"
 exec_always "feh --bg-max --randomize ~/lib/pics/wallpapers/unprocessed/* &"  # Set this command as cronjob!
 exec_always picom
