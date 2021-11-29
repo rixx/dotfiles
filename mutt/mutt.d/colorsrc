@@ -98,4 +98,12 @@ color   attach_headers     brightmagenta   default    "can't handle these multip
 color   attach_headers     brightmagenta   default    "signature verification suppressed"
 color   attach_headers     brightmagenta   default    "invalid node with packet of type"
 
+# De-highlight my own email address
+color index_author color8 default "~fr@rixx.de"
+color index_subject color8 default "~fr@rixx.de"
+
+# De-highlight less interesting columns
+color index_date color8 default
+color index_number color8 default
+
 # vim: filetype=muttrc
