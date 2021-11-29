@@ -1,8 +1,18 @@
 # Please note the completion setopts in options.zsh
 
 # We use the new completion system, including command line options and other fanciness, not just file paths.
+# We only want to update the compinit cache once a day
+# The globbing is a little complicated here, via https://gist.github.com/ctechols/ca1035271ad134841284:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
 autoload -Uz compinit
-compinit
+if [[ -n ~/.cache/compinit(#qN.mh+24) ]]; then
+    compinit -d ~/.cache/compinit
+else
+    compinit -d ~/.cache/compinit -C
+fi
 
 # Colorization
 zmodload zsh/complist

@@ -62,12 +62,12 @@ if [[ $DISPLAY ]]; then
 		fi
 		ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
 			_start_agent
+			_add_identities
 		}
 	else
 		_start_agent
+		_add_identities
 	fi
-
-	_add_identities
 fi
 
 # tidy up after ourselves

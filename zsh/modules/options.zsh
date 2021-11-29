@@ -111,9 +111,6 @@ zstyle ':vcs_info:*' formats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 precmd () { vcs_info }
 
-autoload -U zsh-mime-setup
-zsh-mime-setup
-
 # Use bash style word break, making C-w to go only back to the next slash
 autoload -U select-word-style
 select-word-style bash
