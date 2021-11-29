@@ -5,6 +5,8 @@ alias bim='vim'
 alias vi="vim"
 alias im="vim"
 
+alias kssh="kitty +kitten ssh"
+
 cpv() {
     rsync -pogbr -hhh --backup-dir=/tmp/rsync -e /dev/null --progress "$@"
 }
