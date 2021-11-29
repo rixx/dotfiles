@@ -22,6 +22,7 @@ set sort_browser = alpha
 set status_format = "━━━━%>━┫ %P ┣━━━━━┫ %l ┣━━━━━┫ %?M?%M/?%m%?n? new:%n?%?o? del:%d?%?F? flag:%F?%?t? tag:%t?%?p?? ┣━━━━"
 set status_on_top = yes              # Status bar is more visible on top and does not change places
 set strict_threads = no              # References only, same subject does not mean same thread
+set skip_quoted_offset = 3           # Show three quoted lines before the reply
 
 set to_chars = "?→⇉↔←"
                                      # 1: not addressed to me ( )
