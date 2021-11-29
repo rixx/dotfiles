@@ -17,3 +17,7 @@ set reflow_space_quotes = no         # Remove spaces between quote levels >>>
 set reflow_text = yes                # All hail format=flowed
 set reflow_wrap = 78                 # If GOD would have wanted a larger number, HE'd have given us larger screens
 set wrap = 120                       # Wrap incoming text at 180 chars
+
+# Handle forgotten attachments
+set abort_noattach = ask-yes         # Ask if sending should be aborted or not
+set abort_noattach_regex = "\\<(anhängen|angehängt|anhang|anhänge|hängt an|attached|attachments|attachments)\\>"
