@@ -13,4 +13,4 @@ set mark_old = no                    # Do not mark unread mails als Old if closi
 set resolve = yes                    # Go to next message when finished with one
 set sleep_time = 0                   # Don't sleep. Ever. You're a computer!
 
-set new_mail_command="notify-send --icon='/usr/share/icons/hicolor/48x48/apps/evolution-mail.png' 'New Email' '%n new messages, %u unread.' &"
+set new_mail_command="notify-send --icon='/usr/share/icons/hicolor/48x48/apps/evolution-mail.png' 'New Email' '%?n?%n new messages,? %?u?%u unread.?' &"
