@@ -104,13 +104,6 @@ colors
 export LSCOLORS="Gxfxcxdxbxegedabagacad"
 setopt prompt_subst
 
-# Retrieve version control information
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-precmd () { vcs_info }
-
 # Use bash style word break, making C-w to go only back to the next slash
 autoload -U select-word-style
 select-word-style bash

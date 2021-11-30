@@ -12,7 +12,7 @@ fi
 
 ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
 fpath=($ZSH/modules $fpath)
-plugins=(options completion aliases lib bgnotify colored-man git prompt ssh-agent title fzf)
+plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent title fzf)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"

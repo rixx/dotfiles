@@ -1,5 +1,37 @@
 CURRENT_BG='NONE'
 SEGMENT_SEPARATOR=''
+RETVAL=$?
+
+# show sophisticated git status
+# look wedisagree.zsh-theme for more possible symbols
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}\u272e"
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}\u271a"
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}\u2738"
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%}\u279c"
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}\u2716"
+ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[white]%}\u267b"
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}\u21cc"
+ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[white]%}\u2b06"
+ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%}\u2b07"
+ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[yellow]%}\u2646"
+
+ZSH_THEME_GIT_PROMPT_PREFIX=""
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_DIRTY=" \u2718 "
+ZSH_THEME_GIT_PROMPT_CLEAN=" \u2714 "
+ZSH_THEME_GIT_PROMPT_CONFIG=" \u270e "
+
+# build teststring for utf8 symbols
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_UNTRACKED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_ADDED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_MODIFIED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_RENAMED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_DELETED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_STASHED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_UNMERGED
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_AHEAD
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_BEHIND
+ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_DIVERGED
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -31,47 +63,6 @@ prompt_end() {
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
-# Context: user@hostname (who am I and where am I)
-prompt_context() {
-  local user=`whoami`
-
-  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$user@%m"
-  fi
-}
-
-# Git: branch/detached head, dirty status
-prompt_git() {
-  local ref dirty
-  inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
-  if [ "$inside_git_repo" ]; then
-    [[ ! (-n ZSH_THEME_GIT_PROMPT_DIRTY) ]] && ZSH_THEME_GIT_PROMPT_DIRTY='±'
-    dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null)
-    if [[ ! $ref = *[a-zA-Z0-9]* ]]; then
-      ref="$(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
-      if [[ ! $ref = *[a-zA-Z0-9]* ]]; then
-	ref="➦ $ref"
-      fi
-    fi
-    if [[ $dirty == $(echo $ZSH_THEME_GIT_PROMPT_DIRTY) ]]; then
-      prompt_segment yellow black
-    elif [[ $dirty == $(echo $ZSH_THEME_GIT_PROMPT_CLEAN) ]]; then
-      prompt_segment green black
-      #prompt_segment black white
-    else
-      #prompt_segment magenta black
-    fi
-    echo -n "${ref/refs\/heads\// }$dirty$(git_prompt_status)"
-    # add up/down
-  fi
-}
-
-# Dir: current working directory
-prompt_dir() {
-  prompt_segment blue black '%~'
-}
-
 # Status:
 # - was there an error
 # - am I root
@@ -86,106 +77,115 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
-# show the current path within the git repository
-prompt_git_dir(){
-  dirty=$(parse_git_dirty)
-  if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
-    prompt_segment blue white "/`git rev-parse --show-prefix`"
-  fi
+# Context: user@hostname (who am I and where am I)
+prompt_context() {
+  prompt_segment black default "%(!.%{%F{yellow}%}.)$(whoami)@%m"
 }
 
-# show current path, if in a git repository only the path to the .git directory
-prompt_my_dir(){
-  prompt_segment blue white
-  if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
-    local CWD
-    CWD=`git rev-parse --show-toplevel`
-    echo -n "${CWD/#$HOME/~}%u" 
+# Git: branch/detached head, dirty status
+prompt_git_dir() {
+  local CWD ref dirty INDEX STATUS=""
+  CWD=`git rev-parse --show-toplevel`
+  echo -n "${CWD/#$HOME/~}%u" 
+
+  INDEX=$(command git status --porcelain --ignore-submodules=dirty --untracked-files=no 2> /dev/null)
+
+  if [[ -n $INDEX ]]; then
+    prompt_segment yellow black
+    dirty="$ZSH_THEME_GIT_PROMPT_DIRTY"
+    if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+    elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+    elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+    fi
+    if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
+      STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
+    fi
   else
-    echo -n "%~"
+    prompt_segment green black
+    dirty="$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
+
+  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+  fi
+
+  ref=$(git rev-parse --abbrev-ref HEAD)
+  if [[ $ref = "HEAD" ]]; then
+    ref=$(git show-ref --head -s --abbrev |head -n1 2> /dev/null)
+    ref="➦  $ref"
+  else
+    ref=" $ref"
+  fi
+  echo -n "$ref$dirty"
+  if [[ -n $STATUS ]]; then
+    echo -n " $STATUS"
+  fi
+
+  prompt_segment blue white "/`git rev-parse --show-prefix`"
 }
 
 # change into a new line and show an prompt symbol
 prompt_prompt_line(){
   echo -n -e "\n"
   CURRENT_BG='NONE'
-  if [[ `whoami` = "root" ]]; then
-    prompt_segment red black "!!"
-  else
-    prompt_segment blue black " "
-  fi
+  prompt_segment blue black " "
   prompt_end
   echo -n " "
 }
 
-# build the left prompt
+# build the default prompt
 build_prompt() {
-  RETVAL=$?
+  if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
+    IS_GIT=1
+  else
+    IS_GIT=0
+  fi
   echo -n -e "\n"
-	prompt_status
+  prompt_status
   prompt_context
-  prompt_my_dir
-  prompt_git
-  prompt_git_dir
+  prompt_segment blue white
+  if [[ $IS_GIT -eq 1 ]]; then
+    prompt_git_dir
+  else
+    echo -n "%~"
+  fi
   prompt_end
   prompt_prompt_line
 }
-
-# show current time
-prompt_date(){
-  #prompt_segment white black "%D{%H:%M:%S %d.%m.%Y}"
-  prompt_segment blue black "%*"
-}
-
-# show the return value of last command if not zero
-prompt_return_code(){
-  [[ $RETVAL -ne 0 ]] && prompt_segment red black "$RETVAL \u21b5"
-}
-
-# show sophisticated git status
-# look wedisagree.zsh-theme for more possible symbols
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} \u272e"
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%} \u271a"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%} \u2738"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%} \u279c"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%} \u2716"
-ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[white]%} \u267b"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} \u21cc"
-ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[white]%} \u2b06"
-ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%} \u2b07"
-ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[yellow]%} \u2646"
-
-ZSH_THEME_GIT_PROMPT_PREFIX=""
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY=" \u2718"
-ZSH_THEME_GIT_PROMPT_CLEAN=" \u2714"
-ZSH_THEME_GIT_PROMPT_CONFIG=" \u270e"
-
-# build teststring for utf8 symbols
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_UNTRACKED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_ADDED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_MODIFIED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_RENAMED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_DELETED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_STASHED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_UNMERGED
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_AHEAD
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_BEHIND
-ZSH_THEME_GIT_PROMPT+=$ZSH_THEME_GIT_PROMPT_DIVERGED
-
-#prompt_git_status(){
-#  [[ -n "$(git_prompt_status)" ]] && prompt_segment black default "$(git_prompt_status)"
-#}
-
-# build the right prompt
-#build_rprompt(){
-#  RETVAL=$?
-#  prompt_git_status
-#  prompt_return_code
-  # prompt_date
-  # prompt_battery
-#}
 
 # build the prompt2
 build_prompt2(){
@@ -211,12 +211,9 @@ build_prompt3(){
   echo -n " "
 }
 
-
 # set the actual prompt
 PROMPT='%{%f%b%k%}$(build_prompt)'
-#RPROMPT='%{%f%b%k%}$(build_rprompt)%{$reset_color%}'
 PROMPT2='%{%f%b%k%}$(build_prompt2)'
 PROMPT3='%{%f%b%k%}$(build_prompt3)'
-#PROMPT4='%{%f%b%k%}%{$fg[red]%}%N:%i>%{%f%b%k%} '
 PROMPT4='+ '
 export PS4
