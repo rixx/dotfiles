@@ -52,6 +52,7 @@ function wttr () {
 }
 
 alias work='workon $(basename $(git rev-parse --show-toplevel))'
+alias gitstat='git rev-list --no-commit-header --format=%as --author=rixx @ | cut -d- -f1 | feedgnuplot --unset grid --histogram 0 --terminal dumb'
 
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}

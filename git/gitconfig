@@ -8,7 +8,6 @@
     # Option aliases
     lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
     lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
-    last = show @
     delete-remote = push --delete origin
     unstage = reset @ --
 
@@ -25,6 +24,8 @@
 	helper = cache
 [push]
 	default = current
+[pull]
+    rebase = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -32,3 +33,7 @@
 	required = true
 [init]
 	defaultBranch = main
+[submodule]
+    stickyRecursiveClone = true
+[checkout]
+    workers = 0
