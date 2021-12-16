@@ -1,5 +1,5 @@
 configuration {
     modi: "combi,drun";
-    font: "Source Code Pro for Powerline 14";
+    font: "Iosevka 14";
 }
 @theme "/usr/share/rofi/themes/paper-float.rasi"
