@@ -23,8 +23,6 @@ certcheck() {
 
 alias ls="ls --color"
 alias ll="ls -Ahl --color"
-alias less=$PAGER
-alias zless=$PAGER 
 alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'

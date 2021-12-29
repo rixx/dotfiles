@@ -406,7 +406,7 @@ let g:vimwiki_list = [{
   \ 'auto_diary_index': 1,
   \ }]
 
-""" vim-completion-manager
+""" ncm2
 " Create virtualenv neovim, and install pynvim and jedi
 
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
