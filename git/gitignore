@@ -1,1 +1,19 @@
+# Apple stuff
 .DS_Store/
+
+# Python byte cache
+*.pyc
+
+# latex build files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.toc
+*.snm
+*.nav
