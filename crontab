@@ -1,0 +1,3 @@
+0 * * * * /usr/bin/feh --bg-max --randomize /home/rixx/lib/pics/wallpapers/unprocessed/*
+20 20 * * * BORG_PASSPHRASE="REDACTED" /home/rixx/.config/dotfiles/scripts/backup.sh
+21 21 * * * sudo /usr/bin/updatedb
