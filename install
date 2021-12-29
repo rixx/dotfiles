@@ -41,6 +41,7 @@ function conflink {
 }
 
 # Straightforward links
+conflink autorandr
 conflink dunst
 conflink gtk-3.0
 conflink i3
@@ -55,6 +56,7 @@ conflink vim/vimrc
 # Nonstandard links
 link git/gitconfig .config/git/config
 link git/gitignore .gitignore
+link mimeapps.list .local/share/applications/mimeapps.list
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
 link notmuch/notmuch-config .notmuch-config
