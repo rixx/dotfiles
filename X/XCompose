@@ -1,0 +1,52 @@
+include "%L"
+
+<Multi_key> <g> <a> : "α"
+<Multi_key> <g> <b> : "β"
+<Multi_key> <g> <g> : "γ"
+
+<Multi_key> <c> <c> <c> <p>       : "☭"
+<Multi_key> <V> <V>               : "✔"
+<Multi_key> <X> <X>               : "✘"
+<Multi_key> <asterisk> <asterisk> : "•"
+<Multi_key> <q> <e> <d>           : "∎"
+
+<Multi_key> <e> <n> <space>       : " "  # U+2002 EN SPACE
+<Multi_key> <e> <m> <space>       : " "  # U+2003 EM SPACE
+<Multi_key> <3> <e> <m>           : " "  # U+2004 THREE-PER-EM SPACE
+<Multi_key> <4> <e> <m>           : " "  # U+2005 FOUR-PER-EM SPACE
+<Multi_key> <6> <e> <m>           : " "  # U+2006 SIX-PER-EM SPACE
+<Multi_key> <f> <space>           : " "  # U+2007 FIGURE SPACE
+<Multi_key> <period> <space>      : " "  # U+2008 PUNCTUATION SPACE
+<Multi_key> <t> <space>           : " "  # U+2009 THIN SPACE
+<Multi_key> <h> <space>           : " "  # U+200A HAIR SPACE
+<Multi_key> <n> <b> <space>       : " "  # U+00A0 NO-BREAK SPACE
+<Multi_key> <z> <w> <space>       : "​"  # U+200B ZERO WIDTH SPACE
+<Multi_key> <z> <w> <n> <j>       : "‌"  # U+200C ZERO WIDTH NON-JOINER
+<Multi_key> <z> <w> <j>           : "‌"  # U+200D ZERO WIDTH JOINER
+<Multi_key> <l> <t> <r> <m>       : "‎"  # U+200E LEFT-TO-RIGHT MARK
+<Multi_key> <r> <t> <l> <m>       : "‏"  # U+200F RIGHT-TO-LEFT MARK
+
+
+# Some Unicode smileys
+<Multi_key> <O> <colon> <parenright>      : "😇"
+<Multi_key> <colon> <D>                   : "😁"
+<Multi_key> <colon> <P>                   : "😛"
+<Multi_key> <colon> <p>                   : "😛"
+<Multi_key> <colon> <bar>                 : "😑"
+<Multi_key> <colon> <slash>               : "😕"
+<Multi_key> <colon> <parenleft>           : "😞"
+<Multi_key> <colon> <parenright>          : "🙂"       # U+1F642 SLIGHTLY SMILING FACE
+<Multi_key> <semicolon> <parenright>      : "😉"
+<Multi_key> <semicolon> <P>               : "😜"
+<Multi_key> <B> <parenright>              : "😎"
+<Multi_key> <colon> <O>                   : "😮"
+<Multi_key> <greater> <colon> <parenleft> : "😠"
+<Multi_key> <backslash> <o> <slash>       : "🙌"
+<Multi_key> <p> <o> <o>                   : "💩"       # U+1F4A9 PILE OF POO
+<Multi_key> <colon> <t> <h> <i>           : "🤔"       # U+1F914 THINKING FACE
+<Multi_key> <colon> <g> <r> <i>           : "😬"       # U+1F62C GRIMACING FACE
+<Multi_key> <colon> <s> <w> <e>           : "😅"       # U+1F605 SMILING FACE WITH OPEN MOUTH AND COLD SWEAT
+<Multi_key> <asterisk> <underscore> <asterisk> : "😍"  # U+1F60D SMILING FACE WITH HEART-SHAPED EYES
+<Multi_key> <colon> <3>                   : "😊"       # U+1F60A SMILING FACE WITH SMILING EYES
+
+<Multi_key> <t> <a> <b> <l> <e> <f> <l> <i> <p>      : "(╯°□°）╯︵ ┻━┻"
