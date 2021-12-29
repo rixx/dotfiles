@@ -30,7 +30,7 @@ SHORT_HOST=${HOST/.*/}
 # Parallel execution for makepkg when possible
 MAKEFLAGS="-j$(nproc)"
 
-PATH="$HOME/.local/bin:$PATH"
+PATH="$HOME/.local/bin:$HOME/.config/dotfiles/bin:$PATH"
 
 ########################################
 # Fix non-xdg base dir compliant paths #
