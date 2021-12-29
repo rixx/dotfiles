@@ -27,6 +27,9 @@ bindsym $mod+Return exec kitty
 # kill focused window
 bindsym $mod+Shift+Q kill
 
+# kill all windows
+bindsym $mod+Shift+Z [class=".*"] kill
+
 # Use rofi as application starter and application switcher
 # Additionally: rofi-pass and rofimoji
 bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode

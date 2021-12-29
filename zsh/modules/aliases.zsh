@@ -1,6 +1,7 @@
 ###########
 # Aliases #
 ###########
+alias vim="vim -O"
 alias bim='vim'
 alias vi="vim"
 alias im="vim"
