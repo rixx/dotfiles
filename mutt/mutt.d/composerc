@@ -11,6 +11,7 @@ set editor = `echo \$EDITOR`         # Obviously
 set fast_reply = yes                 # Don't ask for Subject/recipient when replying, or Subject when forwarding
 set forward_edit = yes               # Always allow to edit before forwarding
 set forward_format = "Fwd: %s"       # Jesus, mutt
+set forward_references = yes         # Say No to thread breakers
 set include = yes                    # include body
 set indent_string = '>'              # Spaces are overrated
 set reflow_space_quotes = no         # Remove spaces between quote levels >>>

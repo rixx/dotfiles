@@ -12,6 +12,7 @@ bind index,pager \CL sync-mailbox      # originally: $
 bind index,pager gt  next-thread
 bind index,pager gT  previous-thread
 bind index,pager n next-new-then-unread
+bind index u toggle-new
 
 bind attach,index,pager \CD next-page
 bind attach,index,pager \CU previous-page
@@ -23,6 +24,7 @@ bind attach <return>    view-mailcap
 bind index,pager K sidebar-prev
 bind index,pager J sidebar-next
 bind index,pager \CN sidebar-next-new
+bind index,pager <Tab> sidebar-next-new
 bind index,pager i sidebar-next-new
 bind index,pager o sidebar-open
 bind index,pager B sidebar-toggle-visible
