@@ -1,0 +1,73 @@
+#!/bin/zsh
+set -e
+
+DOTFILES="$HOME/.config/dotfiles"
+movesuffix="moved-by-dotfiles-install"
+
+function doit {
+	printf "%s\n" "$*"
+	"$@"
+}
+
+function link {
+    readonly origin=$DOTFILES/${1:?"The origin must be specified."}
+    target=${2:?"The target must be specified."}
+    if [[ "${target##/home/}" == $target ]]; then
+        target=$HOME/$target
+    fi
+
+    if [[ -L $target ]]; then
+        linktarget=$(readlink -f $target)
+        if [[ $linktarget == $origin ]]; then
+            echo "# already linked: $origin to $target"
+        else
+            doit mv $target $target.$movesuffix
+            doit ln -s $origin $target
+        fi
+    elif [[ -f $target || -d $target ]]; then
+        doit mv $target $target.$movesuffix
+        doit ln -s $origin $target
+    else
+        parent=$(dirname "$target")
+        if [[ ! -d $parent ]]; then
+            doit mkdir -p $parent;
+        fi
+        doit ln -s $origin $target
+    fi
+}
+
+function conflink {
+    link $1 .config/$1
+}
+
+# Straightforward links
+conflink dunst
+conflink gtk-3.0
+conflink i3
+conflink kitty
+conflink mimeapps.list
+conflink mutt/muttrc
+conflink ranger/rc.conf
+conflink rofi/config.rasi
+conflink tmux/tmux.conf
+conflink vim/vimrc
+
+# Nonstandard links
+link git/gitconfig .config/git/config
+link git/gitignore .gitignore
+link mutt/notmuch-mutt .local/bin/notmuch-mutt
+link mutt/offlineimaprc .config/offlineimap/config
+link notmuch/notmuch-config .notmuch-config
+link picom/picom.conf .config/picom.conf
+link rofi/rofi-pass.conf .config/rofi-pass/config
+link tig/tigrc .tigrc
+link virtualenvs/postactivate .local/share/virtualenvs/postactivate
+link virtualenvs/postdeactivate .local/share/virtualenvs/postdeactivate
+link X/XCompose .XCompose
+link X/xintitrc .xinitrc
+link zsh/zshrc .zshrc
+
+# Oh firefox. Why.
+for profile in $HOME/.mozilla/firefox/*default*; do
+    link firefox/userChrome.css $profile/chrome/userChrome.css;
+done
