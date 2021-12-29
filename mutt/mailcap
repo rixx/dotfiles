@@ -1,3 +1,14 @@
+# application formats that are basically human-understandable:
+application/ecmascript; cat %s; copiousoutput;
+application/javascript; cat %s; copiousoutput;
+application/json; cat %s; copiousoutput;
+application/x-shellscript; cat %s; copiousoutput;
+application/sieve; cat %s; copiousoutput;
+application/SGML; cat %s; copiousoutput;
+application/sql; cat %s; copiousoutput;
+application/xml; cat %s; copiousoutput;
+
+# Resort to xdg-open
 application/*; mkdir -p /tmp/mutt \; cp %s /tmp/mutt \; xdg-open /tmp/mutt/$(basename %s) & > /dev/null 2&>1
 image/*; mkdir -p /tmp/mutt \; cp %s /tmp/mutt \; xdg-open /tmp/mutt/$(basename %s) & > /dev/null 2&>1
 text/html; mkdir -p /tmp/mutt \; cp %s /tmp/mutt \; xdg-open /tmp/mutt/$(basename %s) & > /dev/null 2&>1
