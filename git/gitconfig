@@ -1,9 +1,21 @@
 [user]
     name = Tobias Kunze
 	email = r@rixx.de
+
 [alias]
     # Shortening aliases
+    a = add -p
+    amend = commit --amend
+    c = commit -v
+    ca = commit --all -v
     co = checkout
+    br = branch
+    d = diff
+    dca = diff --cached
+    f = fetch
+    hard = reset --hard
+	pushf = push --force-with-lease
+    rehead = reset --hard @
 
     # Option aliases
     lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
@@ -13,27 +25,72 @@
 
     # Function aliases
     go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
-	pushf = push --force-with-lease
+
+[checkout]
+    workers = 0
+
+[color]
+	ui = true
+
+[commit]
+    verbose = 1
+
 [core]
 	excludesfile = /home/rixx/.gitignore
-[help]
-    autocorrect = 1
-[gpg]
-	program = gpg2
+	pager = diff-so-fancy | less --tabs=4 -RFX
+
 [credential]
 	helper = cache
-[push]
-	default = current
+
+[gpg]
+	program = gpg2
+
+[help]
+    autocorrect = 1
+
+[init]
+	defaultBranch = main
+
+[interactive]
+	diffFilter = diff-so-fancy --patch
+
 [pull]
     rebase = true
+
+[push]
+	default = current
+
+[rebase]
+	autoSquash = true
+	autoStash = true
+	missingCommitsCheck = warn
+
+[submodule]
+    stickyRecursiveClone = true
+    fetchJobs = 4
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[init]
-	defaultBranch = main
-[submodule]
-    stickyRecursiveClone = true
-[checkout]
-    workers = 0
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[diff-so-fancy]
+	markEmptyLines = false
+[maintenance]
+	repo = /home/rixx/.config/dotfiles
