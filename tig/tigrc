@@ -1,0 +1,5 @@
+set line-graphics = utf-8
+set truncation-delimiter = utf-8
+set tab-size = 4
+
+set main-view = author:full,maxwidth=24 date:relative,width=18 id commit-title:graph=v2,refs=yes
