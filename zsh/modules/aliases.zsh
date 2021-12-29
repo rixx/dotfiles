@@ -27,6 +27,9 @@ alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
 alias feh="feh --conversion-timeout 1"  # makes feh work with svg
+alias colorcat="pygmentize -g"
+alias diff="diff --color -u"
+alias dd="dd status=progress conv=fsync,fdatasync"
 
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
