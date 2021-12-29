@@ -5,7 +5,7 @@ import subprocess
 
 def switch():
     if "nodeadkeys" in subprocess.check_output(["setxkbmap", "-query"]).decode():
-        os.system("setxkbmap de neo -option")
+        os.system("setxkbmap de neo -option compose:prsc -option")
     else:
         os.system("setxkbmap de nodeadkeys -option compose:prsc")
 
