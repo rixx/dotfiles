@@ -48,5 +48,6 @@ include "%L"
 <Multi_key> <colon> <s> <w> <e>           : "😅"       # U+1F605 SMILING FACE WITH OPEN MOUTH AND COLD SWEAT
 <Multi_key> <asterisk> <underscore> <asterisk> : "😍"  # U+1F60D SMILING FACE WITH HEART-SHAPED EYES
 <Multi_key> <colon> <3>                   : "😊"       # U+1F60A SMILING FACE WITH SMILING EYES
+<Multi_key> <plus> <1>                    : "👍"
 
 <Multi_key> <t> <a> <b> <l> <e> <f> <l> <i> <p>      : "(╯°□°）╯︵ ┻━┻"
