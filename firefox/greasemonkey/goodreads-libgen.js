@@ -10,7 +10,7 @@ const getUrl = (title) => {
     title = title.replace('…', '')
     title = title.replaceAll(/\(.*\)/g, '')
     title = title.trim()
-    return encodeURI(libgenUrl + encodeURIComponent(title));
+    return libgenUrl + encodeURIComponent(title);
 }
 
 const addDownloadLink = (bookElem) => {
