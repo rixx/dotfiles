@@ -43,6 +43,7 @@ alias django='python manage.py'
 alias dj='python manage.py'
 
 alias pserver="python -m http.server"
+alias pydist="rm -rf dist && python setup.py sdist bdist_wheel && twine upload dist/*"
 
 alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
 alias av='ansible-vault --vault-password-file=.vault_password.sh'
