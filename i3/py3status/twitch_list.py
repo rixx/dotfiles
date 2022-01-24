@@ -114,5 +114,12 @@ if __name__ == "__main__":
     Run module in test mode.
     """
     from py3status.module_test import module_test
+    config = {
+        "client_id": open("secrets/twitch_clientid").read().strip(),
+        "client_secret": open("secrets/twitch_clientsecret").read().strip(),
+        "bearer": open("secrets/twitch_bearer").read().strip(),
+        "user_id": 419412255,
+        "format": "{live_count}"
+    }
 
     module_test(Py3status, config=config)
