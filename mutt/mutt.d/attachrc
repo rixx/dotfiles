@@ -29,3 +29,6 @@ set attach_split = yes               # Operate on attachments separately
 set honor_disposition = no           # Display everything in text that you can
 
 set attach_save_dir = ~/tmp/downloads
+
+macro attach A "<pipe-message>/home/rixx/.config/dotfiles/mutt/rangersave.sh"<enter>
+macro compose A "<shell-escape>bash $HOME/.config/dotfiles/mutt/rangerattach.sh<enter><enter-command>source $HOME/.config/mutt/tmpfile<enter><shell-escape>bash $HOME/.config/dotfiles/mutt/rangerattach.sh clean<enter>" "Attach with your file manager"
