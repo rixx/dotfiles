@@ -3,3 +3,8 @@ twitter.com##div:has(>div>h2>div>span:has-text(Trends for you))
 twitter.com##div:has(>div>h2>div>span:has-text(Trends for you)) + div
 twitter.com##div:has(>aside>div>h2>div>span:has-text(Who to follow))
 twitter.com##div:has(>aside>div>h2>div>span:has-text(Who to follow)) + div
+
+twitch.tv##+js(twitch-videoad)
+twitch.tv##.front-page-carousel
+twitch.tv##.extensions-dock-card
+ext-twitch.tv##.prime-extension-root
