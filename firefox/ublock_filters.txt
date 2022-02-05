@@ -7,4 +7,5 @@ twitter.com##div:has(>aside>div>h2>div>span:has-text(Who to follow)) + div
 twitch.tv##+js(twitch-videoad)
 twitch.tv##.front-page-carousel
 twitch.tv##.extensions-dock-card
+twitch.tv##.prime-offers
 ext-twitch.tv##.prime-extension-root
