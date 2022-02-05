@@ -54,16 +54,16 @@ bindsym $mod+Control+space exec dunstctl close-all
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory
 bindsym $mod+l exec 	i3lock \
         -t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
-        --timepos='x+110:h-70' \
-        --datepos='x+43:h-45' \
-        --clock --date-align 1 --datestr "Und Sie sind?" \
-        --insidecolor=00000000 --ringcolor=ffffffff --line-uses-inside \
-        --keyhlcolor=007171ff --bshlcolor=007171ff --separatorcolor=00000000 \
-        --insidevercolor=00000000 --insidewrongcolor=d23c3dff \
-        --ringvercolor=ffffffff --ringwrongcolor=ffffffff --indpos='x+280:h-70' \
-        --radius=20 --ring-width=4 --veriftext='' --wrongtext='Nochmaaal!' \
-        --verifcolor=ffffffff --timecolor=ffffffff --datecolor=ffffffff \
-        --noinputtext='' --force-clock
+        --time-pos='x+110:h-70' \
+        --date-pos='x+43:h-45' \
+        --clock --date-align 1 --date-str "Und Sie sind?" \
+        --inside-color=00000000 --ring-color=ffffffff --line-uses-inside \
+        --keyhl-color=007171ff --bshl-color=007171ff --separator-color=00000000 \
+        --insidever-color=00000000 --insidewrong-color=d23c3dff \
+        --ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos='x+280:h-70' \
+        --radius=20 --ring-width=4 --verif-text='' --wrong-text='Nochmaaal!' \
+        --verif-color=ffffffff --time-color=ffffffff --date-color=ffffffff \
+        --noinput-text='' --force-clock
 
 # focus window with cursor keys:
 bindsym $mod+Left focus left
