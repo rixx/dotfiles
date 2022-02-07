@@ -29,8 +29,8 @@ color message     default     default
 color markers     color1      default
 color attachment  color8      default
 color search      color2      default
-color status      default     color4
-color indicator   default     color4
+color status      white     color6
+color indicator   white     color6
 color tree        color8      default                  # arrow in threads
 
 color index       default     default       "~A"       # all messages
@@ -49,9 +49,12 @@ color sidebar_divider color4  default
 
 # header
 color hdrdefault  default     default
-color header      white       color4      "^"
-#color header      black       default      "^(From)"
-#color header      black       default      "^(Subject)"
+color header      black       color39      "^"
+color header      black       color39      "^(Date)"
+color header      black       color38      "^(From)"
+color header      black       color37      "^(To)"
+color header      black       color36      "^(CC)"
+color header      black       color35      "^(Subject)"
 
 # body
 color normal      default     default

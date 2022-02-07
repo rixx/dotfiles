@@ -51,3 +51,8 @@ set my_index_format_pre='set my_col_from = `echo $((20 * ($(tput cols)-20-24) / 
 set my_index_format_post='  %?M?<%M>? │ %D"'
 folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"  # Use to: field
 folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"     # Use author or recipient, as appropriate
+
+# Choose which headers to display
+ignore *
+unignore from date subject to cc
+hdr_order Date: From: To: Cc: Subject:
