@@ -193,18 +193,29 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""  visual stuff                                          ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set background=dark
+"set background=dark
+set background=light
 syntax enable
 
 "" only highlight the first 240 columns
-set synmaxcol=240
+set synmaxcol=280
 
 "" Use instead of colorcolum=120
 highlight FoldColumn ctermbg=none
 highlight LineNr ctermbg=none cterm=italic ctermfg=darkgrey
-highlight CursorLineNr ctermbg=none cterm=italic ctermfg=grey
-highlight ColorColumn ctermbg=blue
+highlight CursorLineNr ctermbg=none cterm=italic ctermfg=red
+highlight ColorColumn ctermbg=red ctermfg=white
 call matchadd('Colorcolumn', '\%120v', 100)
+
+"" Set some more colours
+"" Suggestions/popup menu
+highlight Pmenu ctermbg=cyan
+highlight PmenuSel ctermbg=white ctermfg=darkgrey
+highlight PmenuSbar ctermbg=gray
+highlight PmenuThumb ctermbg=gray
+
+"" Matchng parens
+highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white
 
 "" show line number of current line and relative line numbers otherwise
 set number
@@ -319,7 +330,8 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vimwiki/vimwiki'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 if has('nvim')
   Plugin 'ncm2/ncm2'
@@ -344,6 +356,7 @@ let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_highlighting_cache = 1
 let g:airline_detect_paste=1
+let g:airline_theme='sol'
 
 " let ranger/file browser be toggled by F9
 nnoremap <f9> :tabe %:p:h<cr>
