@@ -9,7 +9,7 @@ ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}\u271a"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}\u2738"
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%}\u279c"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}\u2716"
-ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[white]%}\u267b"
+ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[blue]%}\u267b"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}\u21cc"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[white]%}\u2b06"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%}\u2b07"
@@ -74,12 +74,12 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment blue default "$symbols"
 }
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  prompt_segment black default "%(!.%{%F{yellow}%}.)$(whoami)@%m"
+  prompt_segment 24 white "%(!.%{%F{yellow}%}.)$(whoami)@%m"
 }
 
 # Git: branch/detached head, dirty status
@@ -91,7 +91,7 @@ prompt_git_dir() {
   INDEX=$(command git status --porcelain --ignore-submodules=dirty --untracked-files=no 2> /dev/null)
 
   if [[ -n $INDEX ]]; then
-    prompt_segment yellow black
+    prompt_segment 215 default
     dirty="$ZSH_THEME_GIT_PROMPT_DIRTY"
     if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
       STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
@@ -135,7 +135,7 @@ prompt_git_dir() {
       STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
     fi
   else
-    prompt_segment green black
+    prompt_segment 81 default
     dirty="$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 
@@ -169,6 +169,7 @@ prompt_prompt_line(){
 
 # build the default prompt
 build_prompt() {
+  RETVAL=$?
   if [[ $(git rev-parse --is-inside-work-tree 2>&1) == "true" ]]; then
     IS_GIT=1
   else
@@ -193,7 +194,7 @@ build_prompt2(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black ">"
   else
-    prompt_segment green black ">"
+    prompt_segment 86 default ">"
   fi
   prompt_end
   echo -n " "
@@ -205,7 +206,7 @@ build_prompt3(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black "?#"
   else
-    prompt_segment green black "?#"
+    prompt_segment 86 default "?#"
   fi
   prompt_end
   echo -n " "

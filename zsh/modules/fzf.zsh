@@ -35,7 +35,7 @@ if type fzf > /dev/null; then
         unset dir # ensure this doesn't end up appearing in prompt expansion
         return $?
     }
-    FZF_DEFAULT_OPTS="--inline-info --cycle --border --color=16"
+    FZF_DEFAULT_OPTS="--inline-info --cycle --border --color=light"
 
     alias v='vi $(fzf)'
     alias y="yay -Slq | fzf -m --preview 'yay -Si {1}'| xargs -ro yay -S"
