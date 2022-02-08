@@ -6,6 +6,9 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+"" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme at least
+let &rtp .= ','.expand('~/.config/dotfiles/vim/')
+
 filetype plugin indent on  " Load plugins according to detected filetype.
 
 "" set history size
@@ -297,9 +300,6 @@ nnoremap Q @@
 "endif
 "
 set rtp+=~/.config/nvim/bundle/Vundle.vim
-
-"" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme at least
-let &rtp .= ','.expand('~/.config/dotfiles/vim/')
 
 call vundle#begin("~/.config/nvim/bundle")
 
