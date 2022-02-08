@@ -43,8 +43,6 @@ bindsym $mod+Shift+c exec google-chrome-stable
 # bindsym $mod+Shift+C exec electron ~/.config/dotfiles/calendar
 # bindsym $mod+Shift+S exec signal-desktop --start-in-tray
 # bindsym $mod+Shift+D exec Discord
-#bindsym $mod+Shift+P exec com.github.alainm23.planner
-#bindsym $mod+t exec com.github.alainm23.planner.quick-add
 bindsym $mod+n exec python ~/.config/dotfiles/bin/switch
 
 bindsym Control+space exec dunstctl close
@@ -218,7 +216,10 @@ smart_gaps on
 # has, if available)
 bar {
    status_command /usr/bin/py3status -b -c ~/.config/i3/status.conf
+   i3bar_command i3bar --transparency
+
    font $systemFont
+   # height 35
 
    position top
    workspace_buttons yes
@@ -226,19 +227,22 @@ bar {
    tray_output eDP1
 
    colors {
-      background #212121
-      statusline #BDBDBD
-      separator #007171
-      focused_workspace #007171 #007171 #EEEEEE
-      urgent_workspace #D84315 #D84315 #212121
-      inactive_workspace #212121 #212121 #BDBDBD
+      background #000000aa
+      statusline #ffffffaa
+      separator #555555
+      # border background foreground
+      # ff is opaque, 00 is transparent
+      focused_workspace #00000000 #078787aa #ffffff
+      urgent_workspace #D84315aa #D84315aa #212121aa
+      inactive_workspace #00000000 #000000aa #ffffffaa
    }
 }
 
 #Colors
-client.focused    #212121 #007171 #EEEEEE #212121 #212121
+#<colorclass> <border> <background> <text> <indicator> <child_border>
+client.focused    #00000000 #078787aa #ffffff #212121 #212121
 client.urgent     #212121 #D84315 #212121 #212121 #212121
-client.unfocused  #212121 #212121 #BDBDBD #212121 #212121
+client.unfocused  #00000000 #000000aa #ffffffaa #212121 #212121
 client.background #212121
 
 #move to correct workspace
@@ -275,6 +279,9 @@ for_window [window_role="Preferences"]                            floating enabl
 for_window [window_type="dialog"]                                 floating enable
 for_window [window_type="menu"]                                   floating enable
 
+for_window [class=".*"] title_format " %title"
+for_window [all] title_window_icon padding 5px
+for_window [class="kitty"] title_window_icon off
 
 # Create Log out, Reboot, Poweroff bindings
 mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff" {
