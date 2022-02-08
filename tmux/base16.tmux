@@ -4,7 +4,7 @@ set -g status-style bg='#d0d0d0',fg=default
 setw -g window-status-style bg=default,fg=default
 
 ## highlight active window
-setw -g window-status-current-style bg=default,fg=default,bold,italic
+setw -g window-status-current-style bg=default,fg=default,bold
 
 ## highlight activity in status bar
 setw -g window-status-activity-style bg=default,fg=red,bold
