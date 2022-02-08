@@ -21,22 +21,17 @@ prompt_segment() {
 
 # End the prompt, closing any open segments
 prompt_end() {
-    echo " "
+    echo "   "
 }
 
 prompt_date() {
-    when=$(date "+%d/%m/%Y")
-    prompt_segment "#009ddc" "#111111" "$when"
+    when=$(date "+%Y-%m-%d")
+    prompt_segment "#bcbcbc" "#000000" "$when"
 }
 
 prompt_clock() {
     time=$(date "+%H:%M")
-    prompt_segment "#3c3c3c" "#ffffff" "◷ $time"
-}
-
-prompt_boxname() {
-    name=$(hostname)
-    prompt_segment "#009ddc" "#ffffff" "$name"
+    prompt_segment "#a8a8a8" "#000000" " $time • "
 }
 
 build_prompt() {

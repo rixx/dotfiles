@@ -36,7 +36,7 @@ prompt_context() {
 
 prompt_boxname() {
     name=$(hostname)
-    prompt_segment "#3c3c3c" "#ffffff" "$name"
+    prompt_segment "#a8a8a8" "#000000" "$name"
 }
 
 build_prompt() {
