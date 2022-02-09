@@ -151,6 +151,7 @@ hi! link SignColumn       LineNr
 
 " __Comment__
 call s:h("Comment",       {"fg": s:comment, "gui": "italic", "cterm": "italic"})
+call s:h("Todo",          {"bg": s:selection, "fg": s:black, "gui": "bold,italic", "cterm": "bold,italic"})
 
 " __Constant__
 call s:h("Constant",      {"fg": s:constant})
