@@ -205,8 +205,8 @@ syntax enable
 set synmaxcol=280
 
 "" Use instead of colorcolum=120
-highlight ColorColumn ctermbg=red ctermfg=white
-call matchadd('Colorcolumn', '\%120v', 100)
+"highlight ColorColumn ctermbg=red ctermfg=white
+"call matchadd('Colorcolumn', '\%120v', 100)
 
 "" Matchng parens
 highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white
