@@ -82,7 +82,7 @@
 	newHighlight = green bold 22
 
 [color "diff"]
-	meta = 11
+	meta = 3
 	frag = magenta bold
 	func = 146 bold
 	commit = yellow bold
