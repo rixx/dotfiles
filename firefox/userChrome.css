@@ -79,11 +79,12 @@ tab-item:hover tab-item-substance {
   background-color: #00000001 !important;
 }
 tab-item.active tab-item-substance {
-  background-color: #1f1fff20 !important
+  background-color: #99c6e490 !important
 }
-tab-item.active .label-content {
-  font-weight: 600;
-  font-size: 14px;
+
+/* add gap between favicon and text */
+tab-item .label-content {
+  margin-left: 4px;
 }
 
 /* make unloaded tabs favicons fairly transparent */
