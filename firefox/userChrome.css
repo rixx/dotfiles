@@ -54,35 +54,54 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 #sidebar-header {
   display: none;
 }
-#aHTMLTooltip { /* don't display tooltips on hover */
+/* don't display tooltips on hover */
+#aHTMLTooltip,
+#remoteBrowserTooltip {
   display: none !important
 }
 /* END TREESTYLE TABS */
 
 /* BEGIN CUSTOM TREESTYLE TABS. Copy these styles to the config section of TST. Included here for version control.
  *
-#main-window[inFullscreen] #sidebar-box,
-#main-window[inFullscreen] #sidebar-splitter {  /* auto-hide sidebar when fullscreen */
-  display: none !important;
-  width: 0px !important;
-}
 
 /* Add private browsing indicator per tab */
 tab-item.private-browsing tab-label:before {
   content: "🕶";
 }
 /* different color */
-tab-item {
-  background-color: white !important;
-  border: solid 1px #00000012; 
+tab-item tab-item-substance {
+  background-color: #ffffff70 !important;
 }
-tab-item:hover {
+tab-item {
+  border: solid 1px #00000010; 
+}
+tab-item:hover tab-item-substance {
   background-color: #00000001 !important;
 }
-tab-item.active {
-  background-color: #00000001 !important
+tab-item.active tab-item-substance {
+  background-color: #1f1fff20 !important
+}
+tab-item.active .label-content {
+  font-weight: 600;
+  font-size: 14px;
 }
 
+/* make unloaded tabs favicons fairly transparent */
+tab-item.discarded tab-favicon {
+  opacity: 0.5 !important;
+}
+
+/* hide favicon on new tabs */
+tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current-uri="about:home"], [data-current-uri="about:blank"]) tab-favicon {
+  visibility: hidden;
+}
+
+/* only show "close tab" button on hover */
+#tabbar tab-item tab-item-substance:not(:hover) tab-closebox {
+  display: none;
+}
+
+/* Count tabs */
 #tabbar {
   counter-reset: vtabs atabs tabs;
   /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
@@ -100,8 +119,9 @@ tab-item {
   counter-increment: tabs;
 }
 .newtab-button {
-  --tab-count-text: " 🦊 " counter(tabs) " tabs 💯";
-  height: 36px;
+  --tab-count-text: counter(tabs) " tabs";
+  height: 38px;
+  border-top: 1px solid #00000055 !important;
 }
 .newtab-button::after {
   content: var(--tab-count-text);
