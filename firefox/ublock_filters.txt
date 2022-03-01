@@ -9,3 +9,21 @@ twitch.tv##.front-page-carousel
 twitch.tv##.extensions-dock-card
 twitch.tv##.prime-offers
 ext-twitch.tv##.prime-extension-root
+
+! 2021-11-11 https://isthereanydeal.com
+isthereanydeal.com###promo
+
+
+! 2021-12-07 https://www.royalroad.com
+||www.royalroad.com/a/c$subdocument
+
+! 2021-12-15 https://twitchtracker.com
+twitchtracker.com##.gbslot
+
+! 2022-03-01 https://bitly.com
+!bitly top and bottom
+bitly.com##hero
+bitly.com##.cards-block
+bitly.com##.sticky-container
+bitly.com##section:not(.url-shorten-row)
+bitly.com##footer
