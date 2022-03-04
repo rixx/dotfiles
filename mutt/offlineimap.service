@@ -1,13 +1,13 @@
 [Unit]
 Description=Start offlineimap as a daemon
-Requires=network-online.target
 After=network.target
 
 [Service]
-User=%i
 ExecStart=/usr/bin/offlineimap
 KillSignal=SIGUSR2
 Restart=always
+# restart after 12 hours to avoid memleaking all over the place
+# RuntimeMaxSec=43200
 
 [Install]
 WantedBy=multi-user.target

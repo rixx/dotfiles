@@ -59,6 +59,7 @@ link git/gitignore .gitignore
 link mimeapps.list .local/share/applications/mimeapps.list
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
+link mutt/offlineimap.service .config/systemd/user/offlineimap.service
 link notmuch/notmuch-config .notmuch-config
 link picom/picom.conf .config/picom.conf
 link rofi/rofi-pass.conf .config/rofi-pass/config
