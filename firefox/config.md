@@ -11,8 +11,6 @@
   https://addons.mozilla.org/en-US/firefox/addon/django-docs-version-switcher/
 - Greasemonkey: user scripts
   https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
-- HeadingsMap: generates sidebar out of document headings
-  https://addons.mozilla.org/en-US/firefox/addon/headingsmap/
 - Reddit Enhancement Suite: makes reddit usable
   https://addons.mozilla.org/en-US/firefox/addon/reddit-enhancement-suite/
 - Refined GitHub: makes github usable
@@ -21,6 +19,9 @@
   https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/
 - Tree Style Tab: makes firefox usable. Config in configs-treestyletab@piro.sakura.ne.jp.json
   https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
+- uBlacklist: remove domains from Google results.
+  https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
+  Filters and subscriptions: ublacklist_filters.txt
 - uBlock Origin: makes the whole internet usable.
   https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
   Extra script: https://github.com/pixeltris/TwitchAdSolutions/blob/master/README.md

@@ -1,0 +1,11 @@
+# Filters:
+
+*:///w3schools.com/*
+*://www.w3resource.com/*
+
+# Subscriptions:
+
+- Name: Filter that enables excluding the machine-translated sites of Stack Overflow
+  URL: https://raw.githubusercontent.com/arosh/ublacklist-stackoverflow-translation/master/uBlacklist.txt
+- Name: GitHub translations
+  URL: https://raw.githubusercontent.com/arosh/ublacklist-github-translation/master/uBlacklist.txt
