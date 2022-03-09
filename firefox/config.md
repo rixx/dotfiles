@@ -31,6 +31,18 @@
 - Wayback Machine: offers archives on 404 pages, "archive now" button etc
   https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/
 
+# Search engines
+
+- [Google](https://google.com), keyword `g`
+- [Wikipedia](https://en.wikipedia.org), keyword wiki
+- [OpenBSD manual](http://man.openbsd.org/), keyword man
+- [dict.cc](https://www.dict.cc/), keyword en
+- [YouTube](https://youtube.com), keyword y
+- [PyPI](https://pypi.org/search/), keyword pypi
+- [Amazon](https://amazon.de), keyword ama
+- [MDN Web Docs](https://developer.mozilla.org/), keyword mdn
+- [DWDS](https://www.dwds.de/), keyword dwds
+
 # about.config
 
 ## Display
