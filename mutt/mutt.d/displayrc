@@ -54,5 +54,5 @@ folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"     # U
 
 # Choose which headers to display
 ignore *
-unignore from date subject to cc
-hdr_order Date: From: To: Cc: Subject:
+unignore from date subject to cc x-spam-level
+hdr_order Date: From: To: Cc: Subject: X-Spam-Level:
