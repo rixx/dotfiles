@@ -31,6 +31,7 @@ alias feh="feh --conversion-timeout 1"  # makes feh work with svg
 alias colorcat="pygmentize -g"
 alias diff="diff --color -u"
 alias dd="dd status=progress conv=fsync,fdatasync"
+alias yay="sudo trickle -s -d 6000 yay"
 
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
