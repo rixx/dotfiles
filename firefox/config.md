@@ -4,13 +4,15 @@
   https://addons.mozilla.org/en-US/firefox/addon/activate-reader-view/
 - ClearURLs: removes tracking bs from URLs
   https://addons.mozilla.org/en-US/firefox/addon/clearurls/
-- Decentraleyes: Local CDN
-  https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/
 - Django Docs version switcher: remembers last selected docs version and switches there. Great for following old Google
   or StackOverflow links
   https://addons.mozilla.org/en-US/firefox/addon/django-docs-version-switcher/
 - Greasemonkey: user scripts
   https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
+- I don't care about cookies
+  https://addons.mozilla.org/en-GB/firefox/addon/i-dont-care-about-cookies/
+- LocalCDN
+  https://addons.mozilla.org/en-US/firefox/addon/localcdn-fork-of-decentraleyes/
 - Reddit Enhancement Suite: makes reddit usable
   https://addons.mozilla.org/en-US/firefox/addon/reddit-enhancement-suite/
 - Refined GitHub: makes github usable
@@ -48,6 +50,8 @@
 ## Display
 
 ```
+accessibility.typeaheadfind.flashBar 0  # Don't flash the search bar when auto-completing
+browser.download.alwaysOpenPanel false  # Don't always open the download panel when downloading a file
 browser.download.autohideButton false
 browser.download.panel.shown true  # Don't pop out downloads as they are happening
 browser.search.widget.inNavBar true
@@ -55,7 +59,9 @@ browser.slowStartup.notificationDisabled true
 browser.toolbars.bookmarks.visibility never
 browser.urlbar.showSearchSuggestionsFirst false
 findbar.highlightAll true
+full-screen-api.warning.timeout 0  # Remove full-screen warning
 reader.content_width 4
+security.dialog_enable_delay 100  # Remove most of the delay on showing download prompts
 sidebar.position_start false  # sidebar on right side
 ```
 
@@ -122,6 +128,8 @@ browser.newtabpage.activity-stream.telemetry.structuredIngestion.endpoint
 browser.newtabpage.activity-stream.telemetry.ut.events false
 browser.ping-centre.telemetry false
 devtools.onboarding.telemetry.logged false
+datareporting.healthreport.uploadEnabled false
+datareporting.policy.dataSubmissionEnabled false
 dom.battery.enabled false
 dom.security.unexpected_system_load_telemetry_enabled false
 extensions.formautofill.creditCards.enabled false
