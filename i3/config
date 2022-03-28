@@ -195,29 +195,20 @@ bindsym $mod+r mode "resize"
 
 popup_during_fullscreen smart
 
-# Border style with gaps, requires i3-gaps
-new_window pixel 1
-new_float pixel 0
-hide_edge_borders smart
 focus_follows_mouse no
 
 for_window [class=".*"] border pixel 0
 new_window pixel 0
 new_float pixel 0
-gaps outer 0
 
 # border_radius 8
-smart_gaps on
-# gaps inner 10
-# gaps inner 0
 # border_radius 0
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # has, if available)
 bar {
    status_command /usr/bin/py3status -b -c ~/.config/i3/status.conf
-   # no need for transparency if the bar is hidden anyways
-   # i3bar_command i3bar --transparency
+   i3bar_command i3bar --transparency
 
    font $systemFont
    # height 35
