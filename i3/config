@@ -218,11 +218,12 @@ bar {
    workspace_buttons yes
    strip_workspace_numbers yes
    tray_output eDP1
+   separator_symbol "┊"
 
    colors {
       background #000000aa
       statusline #ffffffaa
-      separator #555555
+      separator #dddddd
       # border background foreground
       # ff is opaque, 00 is transparent
       focused_workspace #00000000 #078787aa #ffffff
