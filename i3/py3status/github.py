@@ -157,7 +157,9 @@ class Py3status:
         cached_until = self.py3.time_in(self.cache_timeout)
 
         return {
-            "full_text": self.py3.safe_format(self.format, status) if status else "",
+            # this is cheating, as it only works with notifications (not pull requests or issues)
+            # but that's my only use case, so.
+            "full_text": self.py3.safe_format(self.format, status) if status.get("notifications_count") else "",
             "cached_until": cached_until,
         }
 
