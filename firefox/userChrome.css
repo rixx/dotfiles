@@ -43,7 +43,8 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 }
 
 
-/* START TREESTYLE TABS, PUT THIS IN TREESTYLE TABS ADVANCED SETTINGS */
+/* BEGIN CUSTOM TREESTYLE TABS. Copy these styles to the config section of TST. Included here for version control. */
+
 #main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
   opacity: 0;
   pointer-events: none;
@@ -54,16 +55,6 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 #sidebar-header {
   display: none;
 }
-/* don't display tooltips on hover */
-#aHTMLTooltip,
-#remoteBrowserTooltip {
-  display: none !important
-}
-/* END TREESTYLE TABS */
-
-/* BEGIN CUSTOM TREESTYLE TABS. Copy these styles to the config section of TST. Included here for version control.
- *
-
 /* Add private browsing indicator per tab */
 tab-item.private-browsing tab-label:before {
   content: "🕶";
