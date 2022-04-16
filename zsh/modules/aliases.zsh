@@ -34,12 +34,12 @@ alias colorcat="pygmentize -g"
 alias diff="diff --color -u"
 alias dd="dd status=progress conv=fsync,fdatasync"
 
-if [ -x "$(command -v trickle)" ]; then
-    alias yay="sudo trickle -s -d 6000 yay"
+if [ -x "$(command -v btop)" ]; then
+    alias htop="btop"
 fi
 
-if [ -x "$(command -v htop)" ]; then
-    alias htop="btop"
+if [ -x "$(command -v duf)" ]; then
+    alias df="duf"
 fi
 
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
