@@ -3,6 +3,7 @@ set folder = "~/.local/share/mail"               # This is what + or = expand to
 set spoolfile = "+cutebit/INBOX"
 set postponed = "+cutebit/Drafts"
 set trash = "+cutebit/Trash"
+set hostname = "rixx.de"
 
 set header_cache = "~/.cache/muttheaders"
 set header_cache_compress_method = "lz4"
