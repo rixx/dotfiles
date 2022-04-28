@@ -213,8 +213,8 @@ bar {
    font $systemFont
    # height 35
 
-   position bottom
-   mode hide
+   position top
+   # mode hide
    workspace_buttons yes
    strip_workspace_numbers yes
    tray_output eDP1
