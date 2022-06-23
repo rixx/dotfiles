@@ -1,4 +1,8 @@
-"""""""""""""""""""""""""""""""""""""""""""""
+" This config requires Plug to install plugins.
+" Follow the installation instructions here: https://github.com/junegunn/vim-plug#neovim=
+" Then run :PlugInstall once, and you should be good to go.
+
+""""""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
 """""""""""""""""""""""""""""""""""""""""""""
 
@@ -287,52 +291,27 @@ nnoremap Q @@
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
 
-""" UNCOMMENT THIS WHEN YOU WANT TO USE VUNDLE
-
-"let iCanHazVundle=1
-"let vundle_readme=expand('~/.config/nvim/bundle/Vundle.vim/README.md')
-"if !filereadable(vundle_readme)
-"    echo "Installing Vundle.."
-"    echo ""
-"    silent !mkdir -p ~/.config/nvim/bundle
-"    silent !git clone https://github.com/VundleVim/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
-"    let iCanHazVundle=0
-"endif
-"
-set rtp+=~/.config/nvim/bundle/Vundle.vim
-
-call vundle#begin("~/.config/nvim/bundle")
-
-"if iCanHazVundle == 0
-"    echo "Installing Bundles, please ignore key map error messages"
-"    echo ""
-"    :BundleInstall
-"endif
+call plug#begin()
 
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
 " :BundleSearch(!) foo - search(or refresh cache first) for foo
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
-"Plugin 'VundleVim/Vundle.vim'  "Uncomment to update vundle
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-sleuth'
-Plugin 'posva/vim-vue'
-Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'junegunn/goyo.vim'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'vimwiki/vimwiki'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-
-if has('nvim')
-  Plugin 'ncm2/ncm2'
-endif
-
-call vundle#end()
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
+Plug 'posva/vim-vue'
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'junegunn/goyo.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'airblade/vim-gitgutter'
+Plug 'vimwiki/vimwiki'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf'
+Plug 'ncm2/ncm2'
 
 "" vim-fugitive is slow with zsh stuff
 set shell=bash
@@ -416,15 +395,17 @@ let g:vimwiki_list = [{
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
-Plugin 'roxma/nvim-yarp'
-Plugin 'ncm2/ncm2-bufword'
-Plugin 'ncm2/ncm2-path'
-Plugin 'ncm2/ncm2-jedi'
-Plugin 'ncm2/ncm2-syntax'
-Plugin 'Shougo/neco-syntax'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi'
+Plug 'ncm2/ncm2-syntax'
+Plug 'Shougo/neco-syntax'
 
+call plug#end()
+
+autocmd BufEnter * call ncm2#enable_for_buffer()
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
 
