@@ -413,4 +413,19 @@ set shortmess+=c
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+""" fzf config
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" Open at bottom of screen
+let g:fzf_layout = { 'down': '30%' }
+
+" Temporarily hide status line
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
+nnoremap <C-O> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
+
 " vim:set ft=vim et sw=2:
