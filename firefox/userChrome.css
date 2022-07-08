@@ -129,3 +129,8 @@ tab-item {
   background: none !important;
   margin-top: 7px;
 }
+/* Potential fix for https://github.com/piroor/treestyletab/issues/3153 */
+:root.simulate-svg-context-fill .newtab-button::after {
+	background: none;
+	mask: none;
+}
