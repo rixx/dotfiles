@@ -41,3 +41,15 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 .customization-target {
     padding: 6px !important;   
 }
+
+/* userChrome things for TreeStyle Tabs */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
+  opacity: 0;
+  pointer-events: none;
+}
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+#sidebar-header {
+  display: none;
+}
