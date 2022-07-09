@@ -21,6 +21,7 @@
   https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/
 - Tree Style Tab: makes firefox usable. Config in configs-treestyletab@piro.sakura.ne.jp.json
   https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
+  And add styling from treestyletabs.css
 - uBlacklist: remove domains from Google results.
   https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
   Filters and subscriptions: ublacklist_filters.txt

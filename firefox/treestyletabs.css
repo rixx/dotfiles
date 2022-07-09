@@ -1,0 +1,89 @@
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
+  opacity: 0;
+  pointer-events: none;
+}
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+#sidebar-header {
+  display: none;
+}
+/* don't display tooltips on hover */
+#aHTMLTooltip,
+#remoteBrowserTooltip {
+  display: none !important
+}
+
+/* Add private browsing indicator per tab */
+tab-item.private-browsing tab-label:before {
+  content: "🕶";
+}
+/* different color */
+tab-item tab-item-substance {
+  background-color: #ffffff70 !important;
+}
+tab-item {
+  border: solid 1px #00000010; 
+}
+tab-item:hover tab-item-substance {
+  background-color: #00000001 !important;
+}
+tab-item.active tab-item-substance {
+  background-color: #99c6e490 !important
+}
+
+/* add gap between favicon and text */
+tab-item .label-content {
+  margin-left: 4px;
+}
+
+/* make unloaded tabs favicons fairly transparent */
+tab-item.discarded tab-favicon {
+  opacity: 0.5 !important;
+}
+
+/* hide favicon on new tabs */
+tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current-uri="about:home"], [data-current-uri="about:blank"]) tab-favicon {
+  visibility: hidden;
+}
+
+/* only show "close tab" button on hover */
+#tabbar tab-item tab-item-substance:not(:hover) tab-closebox {
+  display: none;
+}
+
+/* Count tabs */
+#tabbar {
+  counter-reset: vtabs atabs tabs;
+  /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
+}
+tab-item:not(.collapsed):not(.discarded) {
+  counter-increment: vtabs atabs tabs;
+}
+tab-item:not(.collapsed) {
+  counter-increment: vtabs tabs;
+}
+tab-item:not(.discarded) {
+  counter-increment: atabs tabs;
+}
+tab-item {
+  counter-increment: tabs;
+}
+.newtab-button {
+  --tab-count-text: counter(tabs) " tabs";
+  height: 38px;
+  border-top: 1px solid #00000055 !important;
+}
+.newtab-button::after {
+  content: var(--tab-count-text);
+  pointer-events: none;
+  mask: none !important;
+  width: auto;
+  background: none !important;
+  margin-top: 7px;
+}
+/* Potential fix for https://github.com/piroor/treestyletab/issues/3153 */
+:root.simulate-svg-context-fill .newtab-button::after {
+	background: none;
+	mask: none;
+}
