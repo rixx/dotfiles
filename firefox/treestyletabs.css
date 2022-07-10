@@ -64,16 +64,11 @@ tab-item {
   height: 38px;
   border-top: 1px solid #00000055 !important;
 }
-.newtab-button::after {
+:root.simulate-svg-context-fill .newtab-button::after {
   content: var(--tab-count-text);
   pointer-events: none;
-  mask: none !important;
   width: auto;
+  mask: none !important;
   background: none !important;
   margin-top: 7px;
-}
-/* Potential fix for https://github.com/piroor/treestyletab/issues/3153 */
-:root.simulate-svg-context-fill .newtab-button::after {
-	background: none;
-	mask: none;
 }
