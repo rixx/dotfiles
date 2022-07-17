@@ -39,6 +39,10 @@
 	excludesfile = /home/rixx/.gitignore
 	pager = diff-so-fancy | less --tabs=4 -RFX
 
+[add.interactive]
+    # Bug(?) in git 2.37.0 when using diff-so-fancy
+    useBuiltin = false
+
 [credential]
 	helper = cache
 
