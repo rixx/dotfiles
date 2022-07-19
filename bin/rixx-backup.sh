@@ -29,6 +29,7 @@ info "Starting backup"
     ~/.local/share/password-store               \
     ~/.local/share/zsh                          \
     ~/.local/share/applications/mimeapps.list   \
+    ~/.local/share/Anki2                        \
     ~/.gnupg                                    \
     ~/.mozilla                                  \
     ~/.ssh                                      \
