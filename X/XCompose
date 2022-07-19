@@ -4,6 +4,11 @@ include "%L"
 <Multi_key> <g> <b> : "β"
 <Multi_key> <g> <g> : "γ"
 
+<Multi_key> <ö> <ö> : "ő"
+<Multi_key> <Ö> <Ö> : "Ő"
+<Multi_key> <ü> <ü> : "ű"
+<Multi_key> <Ü> <Ü> : "Ű"
+
 <Multi_key> <c> <c> <c> <p>       : "☭"
 <Multi_key> <V> <V>               : "✔"
 <Multi_key> <X> <X>               : "✘"
