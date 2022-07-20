@@ -13,7 +13,6 @@ ext-twitch.tv##.prime-extension-root
 ! 2021-11-11 https://isthereanydeal.com
 isthereanydeal.com###promo
 
-
 ! 2021-12-07 https://www.royalroad.com
 ||www.royalroad.com/a/c$subdocument
 
@@ -27,3 +26,7 @@ bitly.com##.cards-block
 bitly.com##.sticky-container
 bitly.com##section:not(.url-shorten-row)
 bitly.com##footer
+
+! 2022-07-20 https://*.substack.com
+substack.com###headlessui-dialog-overlay-4
+substack.com###headlessui-dialog-1
