@@ -20,7 +20,7 @@ const addDownloadLink = (bookElem) => {
     const title = bookElem.innerText;
     let link = document.createElement('a');
     link.href =  getUrl(title)
-    link.innerHTML = "⬇️"
+    link.innerHTML = " ⬇️"
     bookElem.appendChild(link)
 }
 
@@ -29,10 +29,17 @@ const selectors = [
     "div.gr-book__title",
     "div.bookTitle",
     "a.bookTitle",
+  	// new book page
+    "h1.Text.Text__title1",
+    "div.BookCard__title",
 ];
 
-selectors.forEach(selector => {
-  document.querySelectorAll(selector).forEach(book => {
-    addDownloadLink(book)
-  })
-})
+const addBookLinks = () => {
+  selectors.forEach(selector => {
+  	document.querySelectorAll(selector).forEach(book => {
+    	addDownloadLink(book)
+  	})
+	})
+}
+
+setTimeout(addBookLinks, 3500)
