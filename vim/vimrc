@@ -88,6 +88,8 @@ nnoremap gX :silent :execute "!xdg-open" expand('%:p:h') . "/" . expand("<cfile>
 " Exit terminal input mode with Escape
 tnoremap <ESC><ESC> <C-\><C-N>
 
+nnoremap <CR> G
+
 " really really save
 cmap w!! w !sudo tee %
 map q: :q
@@ -255,24 +257,32 @@ nnoremap <silent> <C-o> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR
 nnoremap , :
 
 " assume .md files are markdown, not modula-2
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-autocmd BufNewFile,BufReadPost *.md set colorcolumn=120
-autocmd BufNewFile,BufReadPost *.md set tw=120
-autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
-autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
-autocmd BufNewFile,BufReadPost *.vue set filetype=vue
-autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
+augroup markdown
+  autocmd!
+  autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+  autocmd BufNewFile,BufReadPost *.md set colorcolumn=120
+  autocmd BufNewFile,BufReadPost *.md set tw=120
+  autocmd BufNewFile,BufReadPost *.md set formatoptions+=t
+  autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
+  autocmd BufNewFile,BufReadPost *.vue set filetype=vue
+  autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
+augroup end
+
+augroup python
+  autocmd!
+  autocmd BufNewFile,BufReadPost *.py set foldmethod=indent
+  autocmd BufNewFile,BufReadPost *.py set foldnestmax=2
+augroup end
+nnoremap <space>f za
+nnoremap <space>F zA
 
 autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
+
 " Repeat last macro
 nnoremap Q @@
 
-" augroup NoSimultaneousEdits
-"   autocmd!
-"   autocmd SwapExists * let v:swapchoice = 'o'
-"   autocmd SwapExists * echo 'Duplicate edit session (readonly)'
-"   autocmd SwapExists * echohl None
-" augroup END
+" Abbreviations
+noreab @@r r@rixx.de
 
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""
@@ -327,17 +337,6 @@ let g:syntastic_check_on_wq = 0
 "" Goyo: zen mode
 let g:goyo_width = 90
 noremap <leader>z :Goyo<cr>
-
-"" plugin python-mode configuration
-" <leader> b for breakpoints
-" <leader> r for execution
-let g:pymode_options_max_line_length = 119
-let g:pymode_python = 'python3'
-let g:pymode_lint_onfly = 1
-let g:pymode_lint_checkers = ['pyflakes', 'pylint', 'pep8', 'mccabe']
-let g:pymode_lint_ignore = "E501"
-let g:pymode_rope = 0
-let g:pymode_syntax_print_as_function = 1
 
 """ vimwiki
 " ww opens the index
