@@ -22,7 +22,7 @@ if has('autocmd')
 endif
 
 "" set history size
-set history=1000
+set history=10000
 set tabpagemax=50
 set undolevels=10000
 set undoreload=10000
@@ -59,22 +59,13 @@ let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 
 "" Leader shortcuts
+nmap <leader><leader> :
 nnoremap <leader>w :w!<cr>
 nnoremap <leader>wq :wq!<cr>
-nnoremap <leader>q :wq!<cr>
-nnoremap <leader>x :q!<cr>
+nnoremap <leader>q :q!<cr>
 noremap <leader>ss :setlocal spell!<cr>
-
-" copy and paste to system clipboard
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
-
-" enter visual mode with <leader><leader>
-nmap <Leader><Leader> V
+" Close all other splits
+nnoremap <leader>o :only<cr>
 
 " remap F6 to breakpoint
 nmap <F6> obreakpoint()<C-c>
@@ -114,10 +105,10 @@ endif
 " don't change working directories to files
 set noautochdir
 
-"" toggle insert (paste) mode by pressing INS
+" toggle insert (paste) mode by pressing INS
 set pastetoggle=<INS>
 
-"" hide abandoned buffers
+" allow unsaved background buffers and remember marks/undo for them
 set hidden
 
 " allow backspacing over everything in insert mode
@@ -127,6 +118,11 @@ set whichwrap+=<,>,h,l
 
 " Delete comment character when joining comment lines
 set formatoptions+=j
+" Insert only one space when joining on punctuation like .
+set nojoinspaces
+
+" Make sure diffs get shown side-by-side
+set diffopt=vertical
 
 "" ignore case when searching, but be smart about it
 set ignorecase
@@ -163,11 +159,11 @@ set magic
 "" intendation
 set autoindent
 set smartindent
+set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set smarttab
-set expandtab
 
 "" do wrap, but don't break lines
 set textwidth=0
@@ -293,15 +289,19 @@ augroup markdown
   autocmd BufNewFile,BufReadPost *.md set conceallevel=2
 augroup end
 
-augroup python
+augroup development
   autocmd!
   autocmd BufNewFile,BufReadPost *.py set foldmethod=indent
   autocmd BufNewFile,BufReadPost *.py set foldnestmax=2
+  autocmd FileType python set sw=4 sts=4 et
+  " Two-space indents in json
+  autocmd! FileType json set sw=2 sts=2 expandtab
+  autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
+  " Compute syntax highlighting from beginning of file.
+  autocmd BufEnter * :syntax sync fromstart
 augroup end
 nnoremap <space>f za
 nnoremap <space>F zA
-
-autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
 
 " Repeat last macro
 nnoremap Q @@
@@ -326,7 +326,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/goyo.vim'
 " Increment/decrement dates
 Plug 'tpope/vim-speeddating'
-
+Plug 'tpope/vim-vinegar'
 """ Code plugins
 " Add gc (gcc, gcap etc) to toggle comments
 Plug 'tpope/vim-commentary'
@@ -351,7 +351,7 @@ Plug 'roxma/nvim-yarp'
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-set completeopt=noinsert,menuone,noselect
+set completeopt=noinsert,menuone,noselect,preview
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-jedi'
@@ -370,13 +370,37 @@ set updatetime=100  " Catch updates after 100ms
 let g:context_highlight_tag = '<hide>'
 
 " airline
-" display buffers instead of tabs when only one tab is open
-let g:airline_extensions = []
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_highlighting_cache = 1
 let g:airline_detect_paste=1
 let g:airline_theme='sol'
+" Show tabs on top, disable other extensions for performance reasons
+" Mouse integration: click to go, middle click to close, right click to delete file
+let g:airline_extensions = ['tabline']
+let g:airline#extensions#tabline#enabled = 1
+" Only show path if the filename isn't unique
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#overflow_marker = '…'
+" Show buffer numbers
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#tabline#buffer_min_count = 2
+
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>0 <Plug>AirlineSelectTab0
+" nmap <leader>N <Plug>AirlineSelectPrevTab
+" nmap <leader>n <Plug>AirlineSelectNextTab
+nmap <leader>N :bp<cr>
+nmap <leader>n :bn<cr>
+nmap <leader>bd :bd<cr>
 
 " Autoformat with black on F9
 nnoremap <F9> :Black<CR>
