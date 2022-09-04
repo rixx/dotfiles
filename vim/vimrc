@@ -6,7 +6,7 @@
 " Create virtualenv neovim, and install pynvim and jedi (for completion) and
 " black (for F9 formatting)
 
-""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
 """""""""""""""""""""""""""""""""""""""""""""
 
@@ -17,7 +17,9 @@ set nocompatible
 "" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme at least
 let &rtp .= ','.expand('~/.config/dotfiles/vim/')
 
-filetype plugin indent on  " Load plugins according to detected filetype.
+if has('autocmd')
+  filetype plugin indent on  " Load plugins according to detected filetype.
+endif
 
 "" set history size
 set history=1000
@@ -39,6 +41,10 @@ if !has('nvim')
 "  - don't save marks for /temp
 "  - save in ~/.vim/viminfo
   set viminfo='100,%,s100,<1000,h,r/temp,n/home/rixx/.cache/vim/viminfo
+  if &ttimeoutlen == -1
+    set ttimeout
+    set ttimeoutlen=100
+  endif
 endif
 
 "" read file again if it changes while open and unmodified in vim
@@ -119,6 +125,9 @@ set backspace=indent,eol,start
 set complete-=i
 set whichwrap+=<,>,h,l
 
+" Delete comment character when joining comment lines
+set formatoptions+=j
+
 "" ignore case when searching, but be smart about it
 set ignorecase
 set smartcase
@@ -136,7 +145,7 @@ set splitright
 "" Always report changed lines
 set report=0
 
-"" Faster, lazy redrawing
+"" Faster, lazy redrawing when executing macros
 set ttyfast
 set lazyredraw
 
@@ -168,6 +177,10 @@ set wrapmargin=0
 " don't see 07 as an octal number to be increased to 10
 set nrformats-=octal
 
+" various options copied from vim-sensible
+set sessionoptions-=options
+set viewoptions-=options
+
 " Remember and restore curser position
 autocmd BufReadPost *
      \ if line("'\"") > 3 && line("'\"") <= line("$") |
@@ -192,7 +205,14 @@ augroup END
 set background=light
 colorscheme duochrome
 
-syntax enable
+" Allow color schemes to do bright colors without forcing bold.
+if &t_Co == 8 && $TERM !~# '^Eterm'
+  set t_Co=16
+endif
+
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
 
 "" only highlight the first 240 columns
 set synmaxcol=280
@@ -295,7 +315,8 @@ call plug#begin()
 " :BundleSearch(!) foo - search(or refresh cache first) for foo
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
-Plug 'tpope/vim-sensible'
+""" Code plugins
+" Add gc (gcc, gcap etc) to toggle comments
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
@@ -314,7 +335,7 @@ Plug 'psf/black'
 "" vim-fugitive is slow with zsh stuff
 set shell=bash
 
-"" gitgutter diff colours
+"" gitgutter update speed
 set updatetime=100  " Catch updates after 100ms
 
 " airline
