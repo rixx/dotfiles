@@ -315,20 +315,27 @@ noreab @@r r@rixx.de
 
 call plug#begin()
 
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+""" General plugins
+" Removes search highlight when not needed
+Plug 'romainl/vim-cool'
+Plug 'junegunn/fzf'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Provides zen mode with <space> z
+Plug 'junegunn/goyo.vim'
+" Increment/decrement dates
+Plug 'tpope/vim-speeddating'
 
 """ Code plugins
 " Add gc (gcc, gcap etc) to toggle comments
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sleuth'
-Plug 'posva/vim-vue'
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'junegunn/goyo.vim'
+" Automatically add closing braces and delete matching ones
 Plug 'jiangmiao/auto-pairs'
+" Auto-set tabs vs spaces
+Plug 'tpope/vim-sleuth'
+" Provides :G[it]
+Plug 'tpope/vim-fugitive'
+" Show git changes/diff indicator in side column
 Plug 'airblade/vim-gitgutter'
 " Provide context when scrolling <3
 Plug 'wellle/context.vim'
@@ -337,11 +344,29 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'posva/vim-vue'
 Plug 'psf/black'
 
+""" Completion
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+set completeopt=noinsert,menuone,noselect
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi'
+Plug 'ncm2/ncm2-syntax'
+Plug 'Shougo/neco-syntax'
+
+call plug#end()
+
 "" vim-fugitive is slow with zsh stuff
 set shell=bash
 
 "" gitgutter update speed
 set updatetime=100  " Catch updates after 100ms
+
+" remove decoration from context
+let g:context_highlight_tag = '<hide>'
 
 " airline
 " display buffers instead of tabs when only one tab is open
@@ -369,7 +394,6 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 """ fzf config
-
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
