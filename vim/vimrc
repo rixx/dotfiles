@@ -346,17 +346,12 @@ Plug 'posva/vim-vue'
 Plug 'psf/black'
 
 """ Completion
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-set completeopt=noinsert,menuone,noselect,preview
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi'
-Plug 'ncm2/ncm2-syntax'
-Plug 'Shougo/neco-syntax'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
+
+verbose imap <tab>
 
 call plug#end()
 
@@ -400,7 +395,7 @@ nmap <leader>0 <Plug>AirlineSelectTab0
 " nmap <leader>n <Plug>AirlineSelectNextTab
 nmap <leader>N :bp<cr>
 nmap <leader>n :bn<cr>
-nmap <leader>bd :bd<cr>
+nmap <leader>d :bd<cr>
 
 " Autoformat with black on F9
 nnoremap <F9> :Black<CR>
@@ -409,16 +404,20 @@ nnoremap <F9> :Black<CR>
 let g:goyo_width = 90
 noremap <leader>z :Goyo<cr>
 
-""" Completion settings
-autocmd BufEnter * call ncm2#enable_for_buffer()
+" Completion
+" Use <TAB> to select the popup menu:
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Use gd to go to actual definition
+nmap <silent> gd <Plug>(coc-definition)
+set completeopt=noinsert,menuone,noselect,preview
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
 
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-""" fzf config
+"""" fzf config
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
@@ -431,5 +430,4 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 
 nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
 nnoremap <C-O> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
-
 " vim:set ft=vim et sw=2:
