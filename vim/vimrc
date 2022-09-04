@@ -286,6 +286,11 @@ augroup markdown
   autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
   autocmd BufNewFile,BufReadPost *.vue set filetype=vue
   autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
+
+  " Conceal links in Markdown
+  autocmd Filetype markdown syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
+  autocmd Filetype markdown syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
+  autocmd BufNewFile,BufReadPost *.md set conceallevel=2
 augroup end
 
 augroup python
@@ -325,11 +330,11 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'junegunn/goyo.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
-Plug 'vimwiki/vimwiki'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/fzf'
-Plug 'ncm2/ncm2'
+" Provide context when scrolling <3
+Plug 'wellle/context.vim'
+" Language specific plugins
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'posva/vim-vue'
 Plug 'psf/black'
 
 "" vim-fugitive is slow with zsh stuff
@@ -350,68 +355,11 @@ let g:airline_theme='sol'
 " Autoformat with black on F9
 nnoremap <F9> :Black<CR>
 
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-"" Goyo: zen mode
+" Goyo: zen mode
 let g:goyo_width = 90
 noremap <leader>z :Goyo<cr>
 
-""" vimwiki
-" ww opens the index
-" wd deletes wiki page
-" wr renames wiki page
-"
-" wi opens diary index, w i updates it
-" w w opens today's diary
-" w y opens yesterday's diary
-" w m opens tomorrow's diary
-" C-up: previous diary page, C-down next diary page
-"
-" = indents headers, - dedents
-" [[ go to last headline, ]] go to next headline
-" tab: move to next link
-" enter: go to page/make page
-" backspace: last page
-" plus: generate link without going there
-" C-space: toggle checkbox!
-" gl-space: remove checkbox
-" gln: make checkbox more done, glp make less done
-" gll: increade list level, glh decrease
-" glr: renumber list
-" gl-: make list item, gl1: make numbered list item
-" gqq: format table
-"
-" :tag: tags things
-" VimwikiTOC creates toc
-" TODO: lookup compl-omni and tagsrch
-let g:vimwiki_use_mouse = 1
-let g:vimwiki_list = [{
-  \ 'path': '~/doc/wiki/',
-  \ 'syntax': 'markdown',
-  \ 'ext': '.md',
-  \ 'auto_toc': 1,
-  \ 'auto_tags': 1,
-  \ 'auto_diary_index': 1,
-  \ }]
-
-""" ncm2
-
-let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-let g:ncm2_jedi#environment = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-set completeopt=noinsert,menuone,noselect
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi'
-Plug 'ncm2/ncm2-syntax'
-Plug 'Shougo/neco-syntax'
-
-call plug#end()
-
+""" Completion settings
 autocmd BufEnter * call ncm2#enable_for_buffer()
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
