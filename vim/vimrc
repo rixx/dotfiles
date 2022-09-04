@@ -308,6 +308,7 @@ nnoremap Q @@
 
 " Abbreviations
 noreab @@r r@rixx.de
+inoremap @@tr Tobias<space>Kunze<space><r@rixx.de>
 
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""
