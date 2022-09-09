@@ -32,6 +32,7 @@ info "Starting backup"
     ~/.local/share/Anki2                        \
     ~/.gnupg                                    \
     ~/.mozilla                                  \
+    ~/.nom                                      \
     ~/.ssh                                      \
     ~/.stepmania-5.1                            \
     ~/doc                                       \
