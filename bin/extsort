@@ -1,57 +1,29 @@
-#! /bin/zsh -
-# speed things up by making mv builtin
-zmodload zsh/files
+#! /bin/bash
 
-# associative array giving the destination directory for each
-# type of file
-typeset -A dst=(
-  azw3 book
-  epub book
-  mobi book
-  lit book
-  tar data
-  gz data
-  xz data
-  zip data
-  doc  doc
-  docx doc
-  ods doc
-  odt doc
-  pdf doc
-  pptx doc
-  ppt doc
-  rtf doc
-  xlsx doc
-  gif  img
-  ico  img
-  jpg  img
-  jpeg img
-  png img
-  svg img
-  webp img
-  csv txt
-  css txt
-  eml txt
-  html txt
-  js txt
-  json txt
-  log txt
-  txt txt
-  py txt
-  sh txt
-  zsh txt
-  mp3 sound
-  ogg sound
-  flv vid
-  mp4 vid
-  mkv vid
-  mov vid
-)
+set +e
 
-# default for files with extensions not covered by $dst above or
-# files without extension
-default=misc
+sort_file () {
+  if [ -f "$1" ]; then
+    ext=$(file -b --mime-type "$1" | cut -d/ -f1)
+    mkdir -p "$ext"
+    mv "$1" "$ext/$1"
+  fi
+}
 
-mkdir -p $dst $default || exit
+if [[ -n $1 ]]; then
+  if [[ "$1" == *.part ]]; then
+    exit
+  fi
+  if [[ -d $1 ]]; then
+    cd "$1" || exit
+  elif [[ -f $1 ]]; then
+    cd "$(dirname "$1")" || exit
+    sort_file "$(basename "$1")"
+    exit
+  fi
+fi
 
-for f (*(N.)) mv -i -- $f ${dst[$f:e:l]-$default}/
+for filename in ./*
+do
+  sort_file "$filename"
+done
