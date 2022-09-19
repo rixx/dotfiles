@@ -14,16 +14,16 @@ if [[ -n $1 ]]; then
   if [[ "$1" == *.part ]]; then
     exit
   fi
-  if [[ -d $1 ]]; then
-    cd "$1" || exit
-  elif [[ -f $1 ]]; then
+  if [[ -f $1 ]]; then
     cd "$(dirname "$1")" || exit
     sort_file "$(basename "$1")"
     exit
+  elif [[ -d $1 ]]; then
+    cd "$1" || exit
+    for filename in ./*
+    do
+      sort_file "$filename"
+    done
+    exit
   fi
 fi
-
-for filename in ./*
-do
-  sort_file "$filename"
-done
