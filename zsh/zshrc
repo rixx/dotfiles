@@ -41,6 +41,7 @@ if type ruby > /dev/null; then
   [ -s "/usr/bin/rbenv" ] && eval "$(rbenv init - zsh)"
 fi
 export PIP_REQUIRE_VIRTUALENV=true
+export PYTHONDONTWRITEBYTECODE=1
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
