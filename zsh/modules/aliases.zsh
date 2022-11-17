@@ -57,6 +57,8 @@ alias av='ansible-vault --vault-password-file=.vault_password.sh'
 
 alias ra='ranger'
 
+alias dc='docker-compose'
+
 function wttr () {
     curl "https://wttr.in/$1"
 }
