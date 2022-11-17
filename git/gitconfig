@@ -99,3 +99,5 @@
 	markEmptyLines = false
 [maintenance]
 	repo = /home/rixx/.config/dotfiles
+[advice]
+	statusHints = false
