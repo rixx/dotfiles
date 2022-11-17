@@ -64,6 +64,7 @@ nnoremap <leader>w :w!<cr>
 nnoremap <leader>wq :wq!<cr>
 nnoremap <leader>q :q!<cr>
 noremap <leader>ss :setlocal spell!<cr>
+nnoremap zz :w\|bd<cr>
 " Close all other splits
 nnoremap <leader>o :only<cr>
 
