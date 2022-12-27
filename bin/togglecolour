@@ -5,19 +5,11 @@
 # or none at all. Either way, display is coloured when return code is 1.
 # Thanks to tercean/hansenerd for the pgrep verison of this script.
 
-set -e
-
 pgrep -fa gl_FragColor &>/dev/null
 if [ $? -eq 1 ];
 then
     pkill picom
-    picom --backend glx --glx-fshader-win \
-        "uniform sampler2D tex;
-        uniform float opacity;
-        void main() {
-            vec4 color = texture2D(tex, gl_TexCoord[0].xy);
-            gl_FragColor = vec4(vec3(0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) * opacity, color.a * opacity);
-        }" &
+    picom --backend glx --glx-fshader-win "$(cat /home/rixx/.config/dotfiles/bin/grayscale.glsl)" &
 else
     pkill picom
     picom &
