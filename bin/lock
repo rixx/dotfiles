@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-kill -SIGUSR1 $(pidof dunst)
+dunstctl set-paused true
 i3lock \
         -t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
         --time-pos='x+110:h-70' \
@@ -14,4 +14,4 @@ i3lock \
         --radius=20 --ring-width=4 --verif-text='' --wrong-text='Nochmaaal!' \
         --verif-color=ffffffff --time-color=ffffffff --date-color=ffffffff \
         --noinput-text='' --force-clock
-kill -SIGUSR2 $(pidof dunst) 
+dunstctl set-paused false

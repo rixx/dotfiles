@@ -11,7 +11,7 @@ scrot $tmpbg
 #/usr/bin/gm convert $tmpbg -fill white -undercolor '#00000080' -gravity South -pointsize 40 -font Monofur -annotate +500+100 ' '$(whoami)' ' $tmpbg
 #dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
 
-kill -SIGUSR1 $(pidof dunst)
+dunstctl set-paused true
 i3lock -feu -i $tmpbg
-kill -SIGUSR2 $(pidof dunst) 
+dunstctl set-paused false
 rm $tmpbg
