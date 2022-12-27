@@ -21,3 +21,13 @@ Things you might want to look at:
 4. Perform Firefox plugin config steps.
 5. If on a Desktop system, install ``X/override.conf`` for login handling.
 6. If on a Desktop system on a ThinkPad, install ``X/40-thinkpad-keyboard.conf``.
+7. Download [this obsidian fork](https://github.com/rixx/obsidian-local-images), `npm install && npm run build`, ``cp -r
+   build ~/doc/wiki/.obsidian/plugins/obsidian-local-images``, be sad.
+
+## Troubleshooting
+
+### All GTK apps take forever to start
+
+```
+systemctl --user mask xdg-desktop-portal-gtk.service 
+```
