@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 tmpbg="/tmp/lock_$(whoami).png"
 scrot $tmpbg

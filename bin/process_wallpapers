@@ -1,6 +1,8 @@
 #!/bin/zsh
 # Iterate through wallpaper directory, resizing and adding the input box in the right place
 
+set -e
+
 rectangles="rectangle 25,1050 325,970"
 
 base_folder=~/lib/pics/wallpapers

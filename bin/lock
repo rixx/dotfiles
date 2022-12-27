@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 kill -SIGUSR1 $(pidof dunst)
 i3lock \

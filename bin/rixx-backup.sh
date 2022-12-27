@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # Create crontab with BORG_PASSPHRASE
 # export BORG_PASSPHRASE='XYZl0ngandsecurepa_55_phrasea&&123'
 

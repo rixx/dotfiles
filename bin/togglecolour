@@ -4,6 +4,9 @@
 # Thus 1 means there is either a picom process without b/w filter running,
 # or none at all. Either way, display is coloured when return code is 1.
 # Thanks to tercean/hansenerd for the pgrep verison of this script.
+
+set -e
+
 pgrep -fa gl_FragColor &>/dev/null
 if [ $? -eq 1 ];
 then
