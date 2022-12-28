@@ -18,11 +18,15 @@ Things you might want to look at:
 1. Install the packages listed in ``packages-to-install``.
 2. Run ``./install``.
 3. Install crontabs from ``./crontab``
-4. Perform Firefox plugin config steps.
-5. If on a Desktop system, install ``X/override.conf`` for login handling.
-6. If on a Desktop system on a ThinkPad, install ``X/40-thinkpad-keyboard.conf``.
-7. Download [this obsidian fork](https://github.com/rixx/obsidian-local-images), `npm install && npm run build`, ``cp -r
+
+### If on a Desktop system
+
+1. Perform Firefox plugin config steps.
+2. If on a Desktop system, install ``X/override.conf`` for login handling.
+3. If on a Desktop system on a ThinkPad, install ``X/40-thinkpad-keyboard.conf``.
+4. Download [this obsidian fork](https://github.com/rixx/obsidian-local-images), `npm install && npm run build`, ``cp -r
    build ~/doc/wiki/.obsidian/plugins/obsidian-local-images``, be sad.
+5. ``pip install --user ticktock-py``
 
 ## Troubleshooting
 
