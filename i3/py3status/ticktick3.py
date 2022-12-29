@@ -111,9 +111,13 @@ class Py3status:
             if not self.current_task:
                 return
             self.client.task.complete(self.current_task)
-        if event["button"] in (2, 3):
-            # middle click (2) and right click (3) cycle
-            self.current_index += 1 % (len(self.tasks) - 1)
+        elif event["button"] == 2:
+            # middle click reloads
+            self.tasks = self._fetch_tasks()
+        elif event["button"] == 3:
+            # right click (3) cycles
+            self.current_index += 1
+            self.current_index = self.current_index % (len(self.tasks) - 1)
 
 
 if __name__ == "__main__":
