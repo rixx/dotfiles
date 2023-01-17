@@ -436,5 +436,5 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
-nnoremap <C-O> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
+nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
 " vim:set ft=vim et sw=2:
