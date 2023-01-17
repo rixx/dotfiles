@@ -68,12 +68,18 @@ prune_exit=$?
 # use highest exit code as global exit code
 global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
 
+/usr/bin/borg compact
+compact_exit=$?
+
+# use highest exit code as global exit code
+global_exit=$(( compact_exit > global_exit ? compact_exit : global_exit ))
+
 if [ ${global_exit} -eq 0 ]; then
-    info "Backup and Prune finished successfully"
+    info "Backup and Prune and Compact finished successfully"
 elif [ ${global_exit} -eq 1 ]; then
-    info "Backup and/or Prune finished with warnings"
+    info "Backup and/or Prune and Compact finished with warnings"
 else
-    info "Backup and/or Prune finished with errors"
+    info "Backup and/or Prune and Compact finished with errors"
 fi
 
 exit ${global_exit}
