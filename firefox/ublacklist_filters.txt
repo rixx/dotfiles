@@ -2,6 +2,11 @@
 
 *:///w3schools.com/*
 *://www.w3resource.com/*
+*://de.wikibrief.org/*
+*://www.bild.de/*
+*://.*quora.*
+
+
 
 # Subscriptions:
 
