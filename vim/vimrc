@@ -59,7 +59,6 @@ let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 
 "" Leader shortcuts
-nmap <leader><leader> :
 nnoremap <leader>w :w!<cr>
 nnoremap <leader>wq :wq!<cr>
 nnoremap <leader>q :q!<cr>
@@ -345,6 +344,14 @@ Plug 'wellle/context.vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'posva/vim-vue'
 Plug 'psf/black'
+Plug 'github/copilot.vim'
+
+""" Enable copilot always
+let g:copilot_enabled = 1
+let g:copilot_autocomplete = 1
+let g:copilot_autocomplete_delay = 0
+" copilot keybindings
+inoremap ^ <Plug>(copilot-next)
 
 """ Completion
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
