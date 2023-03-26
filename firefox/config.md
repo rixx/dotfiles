@@ -64,6 +64,7 @@ full-screen-api.warning.timeout 0  # Remove full-screen warning
 reader.content_width 4
 security.dialog_enable_delay 100  # Remove most of the delay on showing download prompts
 sidebar.position_start false  # sidebar on right side
+layout.css.has-selector.enabled  # required for ublock functioning
 ```
 
 
