@@ -283,7 +283,7 @@ augroup markdown
   autocmd BufNewFile,BufReadPost *.vue set filetype=vue
   autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
 
-  autocmd Filetype cfg,json,mail,txt,text,xml let b:copilot_enabled = v:false
+  autocmd Filetype cfg,json,mail,txt,text,xml,yaml,yml let b:copilot_enabled = v:false
 
   " Conceal links in Markdown
   autocmd Filetype markdown syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
