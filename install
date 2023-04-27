@@ -76,3 +76,6 @@ link zsh/zshrc .zshrc
 for profile in $HOME/.mozilla/firefox/*default*; do
     link firefox/userChrome.css $profile/chrome/userChrome.css;
 done
+
+# Some directories need to exist
+mkdir -p ~/.local/share/zsh
