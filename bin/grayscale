@@ -1,0 +1,157 @@
+#!/bin/bash
+
+# should also work with compositor=compton, untested
+compositor=picom
+toggle_mode=0
+
+function usage {
+
+    bin=$(basename $0)
+
+    echo
+    echo "Toggle monitors between color and grayscale mode."
+    echo 
+    echo "$bin [$compositor|nvidia|ddc|auto]"
+    echo "$bin $compositor [$compositor args]"
+    echo "$bin nvidia [nv mon]"
+    echo "$bin ddc [ddc mon]"
+    echo
+    echo "$compositor:   use a GLX shader to set grayscale"
+    echo "nvidia:  use NVIDIA proprietary driver Digital Vibrance setting to set grayscale"
+    echo "ddc:     use DDC/CI monitor protocol to set the monitor saturation to 0 (grayscale) if supported by monitor"
+    echo "auto:    use $compositor if running, otherwise nvidia if available, otherwise ddc if available"
+    echo
+    echo "$compositor args: in $compositor mode, optional $compositor parameters"
+    echo
+    echo "nv mon:     in nvidia mode, an optional monitor name as enumerated by xrandr."
+    echo "            if unspecified, apply to all monitors managed by the NVIDIA driver"
+    echo "ddc mon:    in ddc mode, optional ddcutil options to identify the monitor. See 'man ddcutil'"
+    echo "            if unspecified, apply to the first monitor detected by ddcutil"
+    echo "if invoked with no argument, auto is used."
+    echo
+
+    exit 0
+}
+
+function toggle_nvidia {
+    dpy=$1
+    
+    value=$(nvidia-settings -t -q DigitalVibrance)
+
+    # set a value in ]-1024..0[ range to desaturate colors instead of full grayscale
+    # -1024 => full grayscale
+    desaturate_value=-1024
+
+    if [[ "$toggle_mode" == "color" ]]; then
+        value=0
+    elif [[ "$toggle_mode" == "grayscale" ]]; then
+        value=$desaturate_value
+    else
+        if (( value == $desaturate_value )); then
+        value=0
+        toggle_mode="color"
+        else
+        value=$desaturate_value
+        toggle_mode="grayscale"
+        fi
+    fi
+
+    if [ -n "$dpy" ]; then
+        param="[DPY:$dpy]/DigitalVibrance"
+    else
+        param="DigitalVibrance"
+    fi
+
+    nvidia-settings -a ${param}=${value} > /dev/null
+}
+
+function _compositor_grayscale {
+        pkill -x $compositor
+        sleep 1
+
+        shader='uniform sampler2D tex; uniform float opacity; void main() { vec4 c = texture2D(tex, gl_TexCoord[0].xy); float y = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722)); gl_FragColor = opacity*vec4(y, y, y, c.a); }'
+        
+        $compositor $* -b --backend glx --glx-fshader-win "${shader}" 2> /dev/null
+        toggle_mode="grayscale"
+}
+
+function _compositor_color {
+        pkill -x $compositor
+        sleep 1
+        $compositor $* -b
+}
+
+
+function toggle_compositor {
+    if [[ "$toggle_mode" == "color" ]]; then
+        _compositor_color
+    elif [[ "$toggle_mode" == "grayscale" ]]; then
+        _compositor_grayscale
+    fi
+
+
+    if [[ -z $toggle_mode ]]; then
+        if pgrep -a -x $compositor | grep glx-fshader-win > /dev/null; then
+            _compositor_color
+        else
+            _compositor_grayscale
+        fi
+    fi
+}
+
+arg=$1
+mode=auto
+
+case $arg in
+
+    --help|-h)
+	usage
+	;;
+
+    --grayscale|-g)
+        toggle_mode="grayscale"
+        ;;
+
+    --color|-c)
+        toggle_mode="color"
+        ;;
+    *)
+	
+	
+	
+esac
+
+if [ "$mode" = "auto" ]; then
+    if pgrep -x $compositor > /dev/null; then
+        mode=$compositor
+    elif which nvidia-settings &> /dev/null; then
+        mode=nvidia
+    elif which ddcutil &> /dev/null; then
+        mode=ddc
+    else
+        echo "neither $compositor is running, nor nvidia-settings installed, nor ddcutil installed"
+        exit 1
+    fi
+else
+    usage
+fi
+
+
+# pass eventual remaining arguments to toggle_* function
+if (( $# > 0 )); then
+   shift
+fi
+
+if [ "$mode" = "nvidia" ]; then
+    toggle_nvidia $*
+elif [ "$mode" = "$compositor" ]; then
+    toggle_compositor $*
+else
+    echo "no mode, doing nothing"
+fi
+
+if (( $? == 0 )); then
+    echo "$mode: set to $toggle_mode"
+else
+    echo "$mode: toggle failed"
+fi
