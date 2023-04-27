@@ -52,6 +52,7 @@ conflink ranger/rc.conf
 conflink rofi/config.rasi
 conflink tmux/tmux.conf
 conflink vim/vimrc
+conflink vim/colors
 
 # Nonstandard links
 link git/gitconfig .config/git/config
@@ -66,6 +67,7 @@ link rofi/rofi-pass.conf .config/rofi-pass/config
 link tig/tigrc .tigrc
 link virtualenvs/postactivate .local/share/virtualenvs/postactivate
 link virtualenvs/postdeactivate .local/share/virtualenvs/postdeactivate
+link vim/vimrc .config/nvim/init.vim
 link X/XCompose .XCompose
 link X/xintitrc .xinitrc
 link zsh/zshrc .zshrc
