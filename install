@@ -58,6 +58,7 @@ conflink vim/colors
 link git/gitconfig .config/git/config
 link git/gitignore .gitignore
 link mimeapps.list .local/share/applications/mimeapps.list
+link ./user-dirs.dirs .config/user-dirs.dirs
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
 link mutt/offlineimap.service .config/systemd/user/offlineimap.service

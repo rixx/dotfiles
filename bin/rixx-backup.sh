@@ -6,7 +6,7 @@ set -e
 # export BORG_PASSPHRASE='XYZl0ngandsecurepa_55_phrasea&&123'
 
 # export BORG_REPO=ssh://username@example.com:2022/~/backup/main
-export BORG_REPO=/backup/cordelia
+export BORG_REPO=/backup/eustace
 
 # some helpers and error handling:
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
