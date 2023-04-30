@@ -96,17 +96,18 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # function keys
-bindsym XF86AudioMute exec /usr/bin/amixer -D pulse -q sset Master toggle  # <F1>
-bindsym XF86AudioLowerVolume exec /usr/bin/amixer -D pulse -q sset Master 5%-  # <F2>
-bindsym XF86AudioRaiseVolume exec /usr/bin/amixer -D pulse -q sset Master 5%+  # <F3>
-bindsym XF86AudioMicMute exec /usr/bin/amixer -D pulse -q sset Capture toggle  # <F4>
+bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle  # <F1>
+bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%  # <F2>
+bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%  # <F3>
+bindsym XF86AudioMicMute exec /usr/bin/pactl set-source-mute 0 toggle  # <F4>
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5  # <F5>
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10  # <F6>
-bindsym XF86Display exec /usr/bin/wxcam  # <F7>
-bindsym XF86Tools exec /usr/bin/pcmanfm  # <F9>
-#bindsym XF86Search
-#bindsym XF86WakeUp exec notify-send 'hi'  # sent on long fn press
-# bindsym Multi_key exec /usr/bin/scrot  # 'Druck'/'Print'
+bindsym XF86Display exec /usr/bin/arandr  # <F7>
+# bindsym XF86WLAN  # <F8>
+# bindsym XF86Messenger  # <F9>
+bindsym XF86Go exec /usr/bin/pavucontrol  # <F10>
+# bindsym Cancel  # <F11>
+bindsym XF86Favorites exec /usr/bin/pcmanfm  # <F12>
 
 # Take screenshots
 bindsym $mod+s exec /home/rixx/.config/dotfiles/bin/screenshot-filebin
