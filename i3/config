@@ -103,7 +103,7 @@ bindsym XF86AudioMicMute exec /usr/bin/pactl set-source-mute 0 toggle  # <F4>
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5  # <F5>
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10  # <F6>
 bindsym XF86Display exec /usr/bin/arandr  # <F7>
-# bindsym XF86WLAN  # <F8>
+# bindsym XF86WLAN  # <F8> DO NOT USE, SETS RFKILL
 # bindsym XF86Messenger  # <F9>
 bindsym XF86Go exec /usr/bin/pavucontrol  # <F10>
 # bindsym Cancel  # <F11>
