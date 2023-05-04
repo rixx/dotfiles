@@ -13,5 +13,5 @@ i3lock \
         --ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos='x+280:h-70' \
         --radius=20 --ring-width=4 --verif-text='' --wrong-text='Nochmaaal!' \
         --verif-color=ffffffff --time-color=ffffffff --date-color=ffffffff \
-        --noinput-text='' --force-clock
+        --noinput-text='' --force-clock --nofork
 dunstctl set-paused false
