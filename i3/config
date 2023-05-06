@@ -97,8 +97,8 @@ bindsym $mod+a focus parent
 
 # function keys
 bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle  # <F1>
-bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%  # <F2>
-bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%  # <F3>
+bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%  # <F2>
+bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%  # <F3>
 bindsym XF86AudioMicMute exec /usr/bin/pactl set-source-mute 0 toggle  # <F4>
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5  # <F5>
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10  # <F6>
