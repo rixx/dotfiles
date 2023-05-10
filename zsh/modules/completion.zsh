@@ -26,6 +26,9 @@ zstyle ':completion:*' menu select
 # =, = includes the regex match, followed by the default color, and then one color for each bracket pair
 zstyle ':completion:*' list-colors "=(#b) #([0-9]#)*=$color[cyan]=$color[red]"
 
+# support sudo completion
+zstyle ':completion::complete:*' gain-privileges 1
+
 # Fuzzy matching of completions when mistyping
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
