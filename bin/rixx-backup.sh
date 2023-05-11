@@ -27,23 +27,21 @@ info "Starting backup"
     --exclude '*/static.dist'       \
     --exclude '*/vendor/bundle'     \
     ::'{hostname}-{now}'        \
+    ~/.gnupg                                    \
+    ~/.local/share/Anki2                        \
+    ~/.local/share/applications/mimeapps.list   \
     ~/.local/share/mail/cutebit                 \
     ~/.local/share/password-store               \
     ~/.local/share/zsh                          \
-    ~/.local/share/applications/mimeapps.list   \
-    ~/.local/share/Anki2                        \
-    ~/.gnupg                                    \
     ~/.mozilla                                  \
     ~/.nom                                      \
     ~/.ssh                                      \
     ~/.stepmania-5.1                            \
+    ~/data                                      \
     ~/doc                                       \
-    ~/src                                       \
-    ~/lib/pics                                  \
-    ~/lib/sound                                 \
-    ~/lib/books                                 \
-    ~/lib/movies                                \
-    ~/Downloads
+    ~/Downloads                                 \
+    ~/lib                                       \
+    ~/src
 
 
 backup_exit=$?
