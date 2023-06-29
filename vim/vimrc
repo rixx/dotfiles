@@ -14,6 +14,9 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" Show title, then edit indicator, then path, then annoying NVIM indicator
+set title
+
 "" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme at least
 let &rtp .= ','.expand('~/.config/dotfiles/vim/')
 
@@ -43,13 +46,19 @@ if !has('nvim')
   set viminfo='100,%,s100,<1000,h,r/temp,n/home/rixx/.cache/vim/viminfo
 
   if &ttimeoutlen == -1
+    " Time out on keycodes but not mappings
     set ttimeout
-    set ttimeoutlen=100
+    set ttimeoutlen=10
   endif
 endif
 
 "" read file again if it changes while open and unmodified in vim
 set autoread
+" Write to disk when navigating files
+set autowrite
+augroup AutoWrite
+    autocmd! BufLeave * :update
+augroup END
 
 " Anything that is put in a register (mostly by yanking or deleting) is also put in the
 " special + register, which is synced with the system clipboard
@@ -176,6 +185,9 @@ set synmaxcol=280
 "" Matchng parens
 highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white
 
+" Highlight VCS conflict markers
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
 "" show line number of current line and relative line numbers otherwise
 set number
 
@@ -192,8 +204,12 @@ set cursorline
 set showcmd
 
 "" set 7 lines and 5 columns between the cursor and the end of screen
-set scrolloff=7
+set scrolloff=999
 set sidescrolloff=5
+
+" Make window navigation a little snappier
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
 
 "" show as much as possible of the last line
 set display+=lastline
@@ -208,7 +224,7 @@ if has('mouse')
 endif
 
 "" how to display whitespace characters when set list
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+set listchars=tab:▸\ ,trail:-,extends:❯,precedes:❮,trail:·,nbsp:·
 
 "" always show status line
 set laststatus=2
@@ -228,6 +244,11 @@ set complete-=i
 set wildmenu
 set wildmode=list:longest,full
 
+set wildignore=*.o,*~,*.pyc,.tox,*.egg-info
+set wildignore+=.git,.hg,.svn                            " Version control
+set wildignore+=*.bmp,*.gif,*.jpg,*.jpeg,*.png           " Binary images
+set wildignore+=*.DS_Store                               " OSX
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -243,6 +264,14 @@ noremap <leader>ss :setlocal spell!<cr>
 nnoremap zz :w\|bd<cr>
 " Close all other splits
 nnoremap <leader>o :only<cr>
+
+" Easy buffer navigation
+noremap <C-h>  <C-w>h
+noremap <C-j>  <C-w>j
+noremap <C-k>  <C-w>k
+noremap <C-l>  <C-w>l
+noremap <leader>v <C-w>v
+noremap <leader>w <C-w>w
 
 " remap F6 to breakpoint
 nmap <F6> obreakpoint()<C-c>
@@ -278,6 +307,15 @@ nnoremap , :
 
 " Repeat last macro
 nnoremap Q @@
+
+" Remove trailing whitespace
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" Grab full document
+nnoremap <leader>a ggVG
+
+" Format JSON
+nmap <leader>J :%!python -m json.tool<CR>:%s/\s\+$//g<CR>
 
 " Abbreviations
 noreab @@r r@rixx.de
@@ -322,6 +360,12 @@ augroup development
   " Compute syntax highlighting from beginning of file.
   autocmd BufEnter * :syntax sync fromstart
 augroup end
+
+augroup ft_vim
+    au!
+    " Display help in a vsplit
+    au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+augroup END
 
 autocmd BufRead /tmp/mutt-* set tw=72
 
