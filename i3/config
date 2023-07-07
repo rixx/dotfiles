@@ -49,7 +49,7 @@ bindsym Control+space exec dunstctl close
 bindsym $mod+Control+space exec dunstctl close-all
 
 # Make sure we can always get a monitor running again
-bindsym $mod+Shift+A exec autorandr --change
+bindsym $mod+Shift+A exec ~/.config/dotfiles/bin/rotate-screens
 
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory

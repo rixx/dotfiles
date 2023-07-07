@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Rotate through three possible screen configurations, "lap", "schreibtisch", "schreibtisch2"
+# This script is called by the keyboard shortcut Super+Shift+A
+
+current=$(autorandr --current)
+
+# Try to switch to the next possible configuration.
+
+if [ "$current" == "lap" ]; then
+    autorandr --load schreibtisch
+elif [ "$current" == "schreibtisch" ]; then
+    autorandr --load schreibtisch2
+elif [ "$current" == "schreibtisch2" ]; then
+    autorandr --load lap
+else
+    autorandr --load lap
+fi
+
+# If an error occurs, switch to the one after that. Failing that, switch to the first one.
+
+if [ $? -ne 0 ]; then
+    if [ "$current" == "lap" ]; then
+        autorandr --load schreibtisch2
+    elif [ "$current" == "schreibtisch" ]; then
+        autorandr --load lap
+    elif [ "$current" == "schreibtisch2" ]; then
+        autorandr --load schreibtisch
+    else
+        autorandr --load lap
+    fi
+fi
+
+# If an error occurs again, switch to the safe option.
+if [ $? -ne 0 ]; then
+    autorandr --load lap
+fi
+
+# If an error occurs again, do nothing.
+if [ $? -ne 0 ]; then
+    echo "Error: Could not switch to any configuration."
+fi
