@@ -4,7 +4,7 @@
 // @version  1
 // @grant    none
 // ==/UserScript==
-const libgenUrl = 'https://libgen.is/fiction/?q='
+const libgenUrl = 'https://libgen.is/fiction/?sort=filesize:a&language=English&format=epub&q='
 
 const getUrl = (title, author) => {
     title = title.replace('…', '') + ' ' + author
