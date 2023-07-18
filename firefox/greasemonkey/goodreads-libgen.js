@@ -6,8 +6,8 @@
 // ==/UserScript==
 const libgenUrl = 'https://libgen.is/fiction/?q='
 
-const getUrl = (title) => {
-    title = title.replace('…', '')
+const getUrl = (title, author) => {
+    title = title.replace('…', '') + ' ' + author
     title = title.replaceAll(/\(.*\)/g, '')
     title = title.trim()
     return libgenUrl + encodeURIComponent(title);
@@ -18,8 +18,10 @@ const addDownloadLink = (bookElem) => {
         return;
     }
     const title = bookElem.innerText;
+    const authorElem = document.querySelector(".ContributorLinksList")
+    const author = authorElem ? authorElem.innerText : ''
     let link = document.createElement('a');
-    link.href =  getUrl(title)
+    link.href =  getUrl(title, author)
     link.innerHTML = " ⬇️"
     bookElem.appendChild(link)
 }
@@ -42,4 +44,4 @@ const addBookLinks = () => {
 	})
 }
 
-setTimeout(addBookLinks, 3500)
+setTimeout(addBookLinks, 2500)
