@@ -141,6 +141,7 @@ autocmd BufReadPost *
 autocmd BufReadPost COMMIT_EDITMSG
   \ exe "normal! gg"
 
+autocmd FileType mail execute "normal /^\\n\<CR>o"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
