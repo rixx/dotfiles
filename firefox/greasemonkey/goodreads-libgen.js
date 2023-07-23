@@ -45,4 +45,29 @@ const addBookLinks = () => {
     })
 }
 
+const addBookID = () => {
+    // Add copy button to copy book ID if we're on a book page
+    // Book detail urls match this regex: https://www.goodreads.com/book/show/(\d+)
+    // After the number, there can be a dash or a dot and any other characters
+    const bookIdRegex = /https:\/\/www.goodreads.com\/book\/show\/(\d+)[-.]*/
+    const bookIdMatch = bookIdRegex.exec(window.location.href)
+    if (bookIdMatch) {
+        const bookId = bookIdMatch[1]
+        const bookTitleElem = document.querySelector('.BookPageTitleSection__title')
+        const bookIdElem = document.createElement('span')
+        bookIdElem.innerText = "ID: " + bookId
+        bookIdElem.style = 'margin-left: 10px; font-size: 0.8em;'
+        bookTitleElem.appendChild(bookIdElem)
+        const copyButton = document.createElement('button')
+        copyButton.innerText = 'Copy'
+        copyButton.style = 'margin-left: 10px; font-size: 0.8em; background-color: #f2f2f2; border: 1px solid #ccc; padding: 2px 5px; border-radius: 3px;'
+        copyButton.onclick = () => {
+            navigator.clipboard.writeText(bookId)
+            copyButton.innerText = 'Copied!'
+        }
+        bookTitleElem.appendChild(copyButton)
+    }
+}
+
 setTimeout(addBookLinks, 2500)
+setTimeout(addBookID, 2500)
