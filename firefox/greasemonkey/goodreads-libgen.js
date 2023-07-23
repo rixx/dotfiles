@@ -60,7 +60,17 @@ const addBookID = () => {
         bookTitleElem.appendChild(bookIdElem)
         const copyButton = document.createElement('button')
         copyButton.innerText = 'Copy'
-        copyButton.style = 'margin-left: 10px; font-size: 0.8em; background-color: #f2f2f2; border: 1px solid #ccc; padding: 2px 5px; border-radius: 3px;'
+        copyButton.style = `
+            margin-left: 10px;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 3px;
+            border: 1px solid #D6D0C4;
+            background-color: #F4F1EA;
+            color: #333;
+            cursor: pointer;
+            line-height: 1;
+        `
         copyButton.onclick = () => {
             navigator.clipboard.writeText(bookId)
             copyButton.innerText = 'Copied!'
