@@ -48,8 +48,9 @@ const addBookLinks = () => {
 const addBookID = () => {
     // Add copy button to copy book ID if we're on a book page
     // Book detail urls match this regex: https://www.goodreads.com/book/show/(\d+)
-    // After the number, there can be a dash or a dot and any other characters
-    const bookIdRegex = /https:\/\/www.goodreads.com\/book\/show\/(\d+)[-.]*/
+    // After the number, there can be a dash or a dot and any other characters, or nothing
+    // Before the /book/ there can be a language code, e.g. /en/book/show/12345
+    const bookIdRegex = /\/book\/show\/(\d+)[-.]?/
     const bookIdMatch = bookIdRegex.exec(window.location.href)
     if (bookIdMatch) {
         const bookId = bookIdMatch[1]
