@@ -74,9 +74,12 @@ link X/xintitrc .xinitrc
 link zsh/zshrc .zshrc
 
 # Oh firefox. Why.
-for profile in $HOME/.mozilla/firefox/*default*; do
-    link firefox/userChrome.css $profile/chrome/userChrome.css;
-done
+# First, check if there is a .mozilla directory.
+if [[ -d $HOME/.mozilla ]]; then
+    for profile in $HOME/.mozilla/firefox/*default*; do
+        link firefox/userChrome.css $profile/chrome/userChrome.css;
+    done
+fi
 
 # Some directories need to exist
 mkdir -p ~/.local/share/zsh
