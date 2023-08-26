@@ -36,8 +36,7 @@ bind index,pager R group-reply
 bind index,pager M resend-message
 macro index,pager 0 "<save-message>=cutebit/Junk<enter>" "Move to Junk"
 macro index,pager gi "<change-folder>=cutebit/INBOX<enter><enter>" "Go to inbox"
-# 'o' usually sorts the inbox, which we don't really need. Can always fall back to 'O'.
-macro index,pager o "<view-attachments><search>html<enter><view-mailcap><exit>" "Open html email in browser"
+macro index,pager , "<view-attachments><search>html<enter><view-mailcap><exit>" "Open html email in browser"
 set wait_key = false  # Do not wait for key input to continue
 
 macro index <F8> \

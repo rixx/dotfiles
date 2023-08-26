@@ -55,9 +55,6 @@
 [init]
 	defaultBranch = main
 
-[interactive]
-	diffFilter = diff-so-fancy --patch
-
 [pull]
     rebase = true
 
