@@ -46,8 +46,19 @@ alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
 
 alias pretalx='python -m pretalx'
-alias django='python manage.py'
-alias dj='python manage.py'
+
+function django() {
+  if [ -f "manage.py" ]; then
+      python manage.py "$@"
+  elif [ "$PWD" = / ]; then
+    echo "manage.py not found"
+    exit 1
+  else
+    # subshell so we don't change the directory
+    (cd .. && django "$@")
+  fi
+}
+alias dj='django'
 
 alias pserver="python -m http.server"
 alias pydist="rm -rf dist && python setup.py sdist bdist_wheel && twine upload dist/*"
