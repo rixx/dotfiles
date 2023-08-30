@@ -6,7 +6,7 @@ RETVAL=$?
 # have decent contrast to the rest of the prompt, look good with white
 # text, and not look too alarming (no strong reds).
 # Also they spark joy.
-READABLE_COLOURS=(12 18 23 24 29 30 35 36 37 38 43 54 59 67 71 72 73 74 79 90 97 103 107 108 109 125 132 133 138 140 145 168 169 203 205 209 211 241 244 245 246 248)
+READABLE_COLOURS=(12 18 23 24 29 30 35 36 37 38 43 54 59 67 71 72 73 74 79 90 97 103 107 108 109 125 132 133 138 140 145 168 169 203 205 209 211 241 246)
 COLOUR_AMOUNT=${#READABLE_COLOURS[@]}
 
 # we hash username@hostname, then mod it by the colour count
