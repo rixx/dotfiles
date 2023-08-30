@@ -2,6 +2,22 @@ CURRENT_BG='NONE'
 SEGMENT_SEPARATOR=''
 RETVAL=$?
 
+# These colours are selected to look good with my terminal background,
+# have decent contrast to the rest of the prompt, look good with white
+# text, and not look too alarming (no strong reds).
+# Also they spark joy.
+READABLE_COLOURS=(12 18 23 24 29 30 35 36 37 38 43 54 59 67 71 72 73 74 79 90 97 103 107 108 109 125 132 133 138 140 145 168 169 203 205 209 211 241 244 245 246 248)
+COLOUR_AMOUNT=${#READABLE_COLOURS[@]}
+
+# we hash username@hostname, then mod it by the colour count
+HOST_STRING=$(whoami)@$(hostnamectl hostname)
+HOST_STRING_HASH=$(( 0x$(echo $HOST_STRING | sha1sum | cut -d ' ' -f 1 | head -c 10) ))
+HOST_COLOUR_INDEX=$(( $HOST_STRING_HASH % $COLOUR_AMOUNT))
+HOST_COLOUR_INDEX=$((HOST_COLOUR_INDEX+1)) # increase by one as zsh arrays start at 1
+
+#HOST_COLOUR=24
+HOST_COLOUR=${READABLE_COLOURS[$HOST_COLOUR_INDEX]}
+
 # show sophisticated git status
 # look wedisagree.zsh-theme for more possible symbols
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}\u272e"
@@ -79,7 +95,7 @@ prompt_status() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  prompt_segment 24 white "%(!.%{%F{yellow}%}.)$(whoami)@%m"
+  prompt_segment $HOST_COLOUR white "%(!.%{%F{yellow}%}.)$(whoami)@%m"
 }
 
 # Git: branch/detached head, dirty status
