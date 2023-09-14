@@ -231,18 +231,26 @@ client.urgent     #212121 #D84315 #212121 #212121 #212121
 client.unfocused  #00000000 #000000aa #ffffffaa #212121 #212121
 client.background #212121
 
-#move to correct workspace
+# move to correct workspace
+# find with xprop + click
 assign [class="Firefox"] $wsWeb
-assign [class="Chrome"] $wsWeb
-assign [class="Nightly"] $wsWeb
+assign [class="firefox-nightly"] $wsWeb
+assign [class="Google-chrome"] $wsWeb
+
 assign [window_role="neomutt"] $wsMail
+
 assign [class="Slack"] $wsChat
-assign [class="whats-app-nativefier-.*"] $wsChat
+assign [class="whatsapp-nativefier-*"] $wsChat
+assign [class="ticktick"] $wsChat
 assign [class="Signal"] $wsChat
+assign [class="threema"] $wsChat
 assign [class="discord"] $wsChat
-assign [class="spotify"] $wsRand
+
+assign [class="Spotify"] $wsRand
+assign [class="Pavucontrol"] $wsRand
 
 # Floating applications
+# find with xprop + click
 for_window [class="Arandr"]                                       floating enable
 for_window [class="Anki" title="Add"]                             floating enable
 for_window [class="Anki" title="Browse"]                          floating enable
