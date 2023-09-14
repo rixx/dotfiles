@@ -29,10 +29,12 @@ alias ll="ls -Ahl --color"
 alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
+alias mosh='LANG=en_US.UTF-8 mosh'
 alias feh="feh --conversion-timeout 1"  # makes feh work with svg
 alias colorcat="pygmentize -g"
 alias diff="diff --color -u"
 alias dd="dd status=progress conv=fsync,fdatasync"
+alias grep="grep --color=auto"
 
 if [ -x "$(command -v btop)" ]; then
     alias htop="btop"
