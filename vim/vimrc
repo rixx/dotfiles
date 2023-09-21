@@ -5,6 +5,7 @@
 " Also!
 " Create virtualenv neovim, and install pynvim and jedi (for completion) and
 " black (for F9 formatting)
+" Then run :CocInstall coc-python
 
 """""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
