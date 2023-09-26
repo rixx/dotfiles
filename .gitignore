@@ -1,2 +1,4 @@
 *.pyc
 vim/*.log
+
+autorandr/conf
