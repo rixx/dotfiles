@@ -79,6 +79,30 @@ function wttr () {
 alias work='workon $(basename $(git rev-parse --show-toplevel))'
 alias gitstat='git rev-list --no-commit-header --format=%as --author=rixx @ | cut -d- -f1 | feedgnuplot --unset grid --histogram 0 --terminal dumb'
 
+# We want to activate virtualenvs in some directories, if `workon` is available
+if ! type workon >/dev/null 2>&1; then
+    function cd() {
+	builtin cd "$@"
+
+	# Skip if we are in a venv, no auto-deactivation
+	if [ -n "$VIRTUAL_ENV" ]; then
+	    echo "Already in a virtualenv"
+	    return
+	fi
+
+	# Skip if we are not in a git repo / get basename
+	local gitdir="$(git rev-parse --show-toplevel 2>/dev/null)"
+	if [ -z "$gitdir" ]; then
+	    echo "Not in a git repo"
+	    return
+	fi
+
+	# Call our existing `work` alias
+	echo "Activating virtualenv for $gitdir"
+	work
+    }
+fi
+
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}
     find ${ZSH_PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
