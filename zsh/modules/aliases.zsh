@@ -61,6 +61,7 @@ alias dc='docker-compose'
 
 alias work='workon $(basename $(git rev-parse --show-toplevel))'
 
+VENV_CACHE=()
 # We want to activate virtualenvs in some directories, if `workon` is available
 if ! type workon >/dev/null 2>&1; then
     function cd() {
@@ -68,20 +69,25 @@ if ! type workon >/dev/null 2>&1; then
 
 	# Skip if we are in a venv, no auto-deactivation
 	if [ -n "$VIRTUAL_ENV" ]; then
-	    echo "Already in a virtualenv"
 	    return
 	fi
 
 	# Skip if we are not in a git repo / get basename
 	local gitdir="$(git rev-parse --show-toplevel 2>/dev/null)"
 	if [ -z "$gitdir" ]; then
-	    echo "Not in a git repo"
 	    return
 	fi
 
-	# Call our existing `work` alias
-	echo "Activating virtualenv for $gitdir"
-	work
+	# Check/update cache to avoid repeated directory lookups
+	basename="$(basename "$gitdir")"
+	if [[ " ${VENV_CACHE[@]} " =~ " ${basename} " ]]; then
+	    return
+	fi
+	if [ ! -d "$WORKON_HOME/$basename" ]; then
+	    VENV_CACHE+=("$basename")
+	    return
+	fi
+	workon "$basename"
     }
 fi
 
