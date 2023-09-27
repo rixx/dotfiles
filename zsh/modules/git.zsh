@@ -43,16 +43,11 @@ gitPreAutoStatusCommands=(
     'push'
     'pull'
 )
-function elementInArray() {
-	local e
-	for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
-	return 1
-}
 
 function gitStatusPrompt() {
 	command git "$@"
-
-	if (elementInArray $1 $gitPreAutoStatusCommands); then
+	# Check if the command is in the list of commands to run git status after
+	if [[ " ${gitPreAutoStatusCommands[@]} " =~ " $1 " ]]; then
 		command git status --short --branch
 	fi
 }
