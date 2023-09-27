@@ -61,10 +61,10 @@ browser.toolbars.bookmarks.visibility never
 browser.urlbar.showSearchSuggestionsFirst false
 findbar.highlightAll true
 full-screen-api.warning.timeout 0  # Remove full-screen warning
+layout.css.has-selector.enabled  # required for ublock functioning
 reader.content_width 4
 security.dialog_enable_delay 100  # Remove most of the delay on showing download prompts
 sidebar.position_start false  # sidebar on right side
-layout.css.has-selector.enabled  # required for ublock functioning
 ```
 
 
@@ -106,10 +106,10 @@ browser.download.viewableInternally.previousHandler.preferredAction.xml 0
 ```
 geo.enabled false
 geo.wifi.uri
-pdfjs.enableScripting false
-security.ssl3.rsa_des_ede3_sha false
-security.ssl.require_safe_negotiation true
 network.IDN_show_punycode true  # helps to spot spoofing attacks
+pdfjs.enableScripting false
+security.ssl.require_safe_negotiation true
+security.ssl3.rsa_des_ede3_sha false
 ```
 
 ## Privacy: Telemetry, bloat and updates
@@ -129,9 +129,9 @@ browser.newtabpage.activity-stream.telemetry.structuredIngestion false
 browser.newtabpage.activity-stream.telemetry.structuredIngestion.endpoint
 browser.newtabpage.activity-stream.telemetry.ut.events false
 browser.ping-centre.telemetry false
-devtools.onboarding.telemetry.logged false
 datareporting.healthreport.uploadEnabled false
 datareporting.policy.dataSubmissionEnabled false
+devtools.onboarding.telemetry.logged false
 dom.battery.enabled false
 dom.security.unexpected_system_load_telemetry_enabled false
 extensions.formautofill.creditCards.enabled false
@@ -170,9 +170,9 @@ devtools.debugger.event-listeners-visible true
 devtools.debugger.expressions-visible true
 devtools.gridinspector.showGridAreas true
 devtools.gridinspector.showGridLineNumbers true
+devtools.inspector.showAllAnonymousContent true
+devtools.inspector.showUserAgentStyles true
 devtools.inspector.show_pseudo_elements true
 devtools.netmonitor.persistlog true
 devtools.whatsnew.enabled true
-devtools.inspector.showAllAnonymousContent true
-devtools.inspector.showUserAgentStyles true
 ```
