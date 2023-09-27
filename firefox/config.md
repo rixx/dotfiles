@@ -1,34 +1,46 @@
 # Plugins
 
-- Activate Reader View: adds reader mode icon to toolbar
-  https://addons.mozilla.org/en-US/firefox/addon/activate-reader-view/
 - ClearURLs: removes tracking bs from URLs
   https://addons.mozilla.org/en-US/firefox/addon/clearurls/
+- Consent-O-Matic: hides cookie banners, by Aarhus University
+  Settings: run in private windows
+  https://addons.mozilla.org/en-US/firefox/addon/consent-o-matic/
 - Django Docs version switcher: remembers last selected docs version and switches there. Great for following old Google
   or StackOverflow links
   https://addons.mozilla.org/en-US/firefox/addon/django-docs-version-switcher/
+- FediAct: seamless Fediverse integration with home server
+  Settings: NOT muted/blocked, NOT ignore sessions, NOT prompt, everything else on
+  https://addons.mozilla.org/en-US/firefox/addon/fediact/
 - Greasemonkey: user scripts
   https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
-- I don't care about cookies
-  https://addons.mozilla.org/en-GB/firefox/addon/i-dont-care-about-cookies/
-- LocalCDN
-  https://addons.mozilla.org/en-US/firefox/addon/localcdn-fork-of-decentraleyes/
+- Kagi
+  Allow in anonymous.
+  https://addons.mozilla.org/en-US/firefox/addon/kagi-search-for-firefox/
+- PassFF
+  Settings: Ctrl-y, Handle HTTP, Enter key fills, Shift-enter is goto, fill, submit, Ctrl-enter is goto fill sumbit in
+  new tab, try to auto-fill login forms, do NOT auto submit, exclude feeds.rixx.de/i/, warn about phishing, url field
+  names url,http, default password length 32, do not show a status bar, list directories first
+  https://addons.mozilla.org/en-US/firefox/addon/passff/
 - Reddit Enhancement Suite: makes reddit usable
+  Allow in anonymous.
   https://addons.mozilla.org/en-US/firefox/addon/reddit-enhancement-suite/
 - Refined GitHub: makes github usable
+  Generate token.
   https://addons.mozilla.org/en-US/firefox/addon/refined-github-/
 - SponsorBlock: crowdsourced skipper for intros, outtros and sponsorship segments on YouTube
   https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/
-- Tree Style Tab: makes firefox usable. Config in configs-treestyletab@piro.sakura.ne.jp.json
+- Tree Style Tab: makes firefox usable.
+  Config in configs-treestyletab@piro.sakura.ne.jp.json And add styling from treestyletabs.css
+  Allow in anonymous.
   https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
-  And add styling from treestyletabs.css
 - uBlacklist: remove domains from Google results.
   https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
   Filters and subscriptions: ublacklist_filters.txt
 - uBlock Origin: makes the whole internet usable.
-  https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
   Extra script: https://github.com/pixeltris/TwitchAdSolutions/blob/master/README.md
   Extra filters: ublock_filters.txt
+  Allow in anonymous.
+  https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 - vue.js devtools: makes development usable
   https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 - Wayback Machine: offers archives on 404 pages, "archive now" button etc
@@ -36,6 +48,7 @@
 
 # Search engines
 
+- [Kagi](https://kagi.com), default
 - [Google](https://google.com), keyword `g`
 - [Wikipedia](https://en.wikipedia.org), keyword wiki
 - [OpenBSD manual](http://man.openbsd.org/), keyword man
