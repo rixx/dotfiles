@@ -11,56 +11,20 @@ if [[ -z "$ZSH_CACHE_DIR" ]]; then
 fi
 
 ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
-fpath=($ZSH/modules $fpath)
-plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent title fzf)
+fpath=($ZSH/modules $fpath)  # include functions from modules directory
+
+plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent title tools fzf)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"
 done
 
 # Load all stock functions (from $fpath files) called below.
-autoload -U compaudit compinit
-
-EDITOR=nvim
-PAGER=/usr/bin/less
-
-# Figure out the SHORT hostname
-SHORT_HOST=${HOST/.*/}
-
-# Parallel execution for makepkg when possible
-MAKEFLAGS="-j$(nproc)"
+autoload -U compaudit
 
 PATH="$HOME/.local/bin:$HOME/.config/dotfiles/bin:$PATH"
 
-########################################
-# Fix non-xdg base dir compliant paths #
-########################################
-
-if type ruby > /dev/null; then
-  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-  [ -s "/usr/bin/rbenv" ] && eval "$(rbenv init - zsh)"
-fi
-export PIP_REQUIRE_VIRTUALENV=true
-export PYTHONDONTWRITEBYTECODE=1
-LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
-
-alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
-export TMUX_TMPDIR="$XDG_RUNTIME_DIR" 
-
-export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
-#export PASSWORD_STORE_KEY="7A2D8B7875486954"
-
-export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"
-
-export ANSIBLE_LOCAL_TEMP=~/.cache/ansible/tmp
-export ANSIBLE_SSH_CONTROL_PATH_DIR=~/.cache/ansible/cp
-
-alias mycli="mycli --myclirc=~/.config/myclirc --logfile=/home/rixx/.cache/mycli.log"
-export MYCLI_HISTFILE=~/.cache/mycli.hist
-
-WORKON_HOME=$XDG_DATA_HOME/virtualenvs
-[ -s "/usr/bin/virtualenvwrapper_lazy.sh" ] && source /usr/bin/virtualenvwrapper_lazy.sh
-
+# If X is available and we're on one of the first 3 VTs, start X.
 if [[ ! $DISPLAY && $XDG_VTNR -le 3 ]] && type startx > /dev/null; then
 	chmod +w ~
 	exec startx

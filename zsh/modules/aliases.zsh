@@ -1,11 +1,10 @@
 ###########
 # Aliases #
 ###########
-alias vim="vim -O"
-alias bim='vim'
-alias vi="vim"
-alias im="vim"
 
+alias vi="vim"
+
+# Distribute terminfo via ssh
 alias kssh="kitty +kitten ssh"
 
 if [ -x "$(command -v rsync)" ]; then
@@ -24,32 +23,21 @@ certcheck() {
     echo -n | openssl s_client -connect "$@":443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -text | grep -E "DNS|Subject: CN"
 }
 
-alias ls="ls --color"
 alias ll="ls -Ahl --color"
 alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
-alias mosh='LANG=en_US.UTF-8 mosh'
-alias feh="feh --conversion-timeout 1"  # makes feh work with svg
-alias colorcat="pygmentize -g"
-alias diff="diff --color -u"
-alias dd="dd status=progress conv=fsync,fdatasync"
-alias grep="grep --color=auto"
+alias ccat="pygmentize -g"
 
 if [ -x "$(command -v btop)" ]; then
     alias htop="btop"
 fi
 
-if [ -x "$(command -v duf)" ]; then
-    alias df="duf"
-fi
-
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
 
-alias pretalx='python -m pretalx'
-
 function django() {
+  # Search for manage.py in current and parent directories and run given command
   if [ -f "manage.py" ]; then
       python manage.py "$@"
   elif [ "$PWD" = / ]; then
@@ -69,15 +57,9 @@ alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
 alias av='ansible-vault --vault-password-file=.vault_password.sh'
 
 alias ra='ranger'
-
 alias dc='docker-compose'
 
-function wttr () {
-    curl "https://wttr.in/$1"
-}
-
 alias work='workon $(basename $(git rev-parse --show-toplevel))'
-alias gitstat='git rev-list --no-commit-header --format=%as --author=rixx @ | cut -d- -f1 | feedgnuplot --unset grid --histogram 0 --terminal dumb'
 
 # We want to activate virtualenvs in some directories, if `workon` is available
 if ! type workon >/dev/null 2>&1; then
