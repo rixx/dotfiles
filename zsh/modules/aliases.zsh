@@ -97,6 +97,7 @@ function pyclean() {
     find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
     find ${ZSH_PYCLEAN_PLACES} -type d -name ".mypy_cache" -delete
 }
+alias agpy='ag --python'
 
 alias ...='../..'
 alias ....='../../..'
