@@ -33,6 +33,6 @@ keepalive = 60
 maxconnections = 5
 remotehost = mail.rixx.de
 remoteuser = rixx
-remotepasseval = get_pass("cutebit")
+remotepasseval = get_pass("tonks")
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 ssl = yes
