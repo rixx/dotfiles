@@ -1,0 +1,48 @@
+#!/bin/zsh
+
+set -e
+
+# Script can take an optional path in which to check, and the --force flag to run all linters regardless of changes
+
+# Parse --all and optional path (can be path --all or --all path)
+
+if [ "$1" = "--all" ]; then
+    all=true
+    patharg=$2
+elif [ "$2" = "--all" ]; then
+    all=true
+    patharg=$1
+else
+    all=false
+    patharg=$1
+fi
+
+# Change to the path if given
+if [ -n "$patharg" ]; then
+    cd $patharg
+fi
+
+# If we are running all linters, run them all and exit
+if [ "$all" = true ]; then
+    black .
+    isort .
+    flake8 .
+    djhtml .
+    exit 0
+fi
+
+# Check if the git repo has changed files relevant to us
+changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.py$')
+
+if [ -n "$changed_files" ]; then
+    # Run the linters on the changed files
+    black $changed_files
+    isort $changed_files
+    flake8 $changed_files
+fi
+
+# Same again with djhtml, only for HTML files
+changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.html$')
+if [ -n "$changed_files" ]; then
+    djhtml $changed_files
+fi
