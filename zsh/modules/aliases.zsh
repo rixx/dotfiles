@@ -99,6 +99,8 @@ function pyclean() {
 }
 alias agpy='ag --python'
 
+alias host='systemd-resolve'
+
 alias ...='../..'
 alias ....='../../..'
 alias .....='../../../..'
