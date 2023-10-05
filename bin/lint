@@ -22,27 +22,46 @@ if [ -n "$patharg" ]; then
     cd $patharg
 fi
 
-# If we are running all linters, run them all and exit
+# If we are running all linters, run them all and exit with 1 if any fail
 if [ "$all" = true ]; then
+    set +e
+    result=0
+
     black .
+    result=$(($result + $?))
     isort .
+    result=$(($result + $?))
     flake8 .
+    result=$(($result + $?))
     djhtml .
-    exit 0
+    result=$(($result + $?))
+    exit $result
 fi
 
 # Check if the git repo has changed files relevant to us
-changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.py$')
+changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative . | grep -E '\.py$')
+
+set +e
+result=0
 
 if [ -n "$changed_files" ]; then
     # Run the linters on the changed files
+    # $changed_files is a list separated by newlines, so we'll use zsh's array splitting to pass each file as a separate argument
+    changed_files=(${(f)changed_files})
+
     black $changed_files
+    result=$(($result + $?))
     isort $changed_files
+    result=$(($result + $?))
     flake8 $changed_files
+    result=$(($result + $?))
 fi
 
-# Same again with djhtml, only for HTML files
 changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.html$')
 if [ -n "$changed_files" ]; then
+    changed_files=(${(f)changed_files})
     djhtml $changed_files
+    result=$(($result + $?))
 fi
+
+exit $result
