@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+import os
+import sys
+import subprocess
+
+DOMAINS = [
+    # volunteer work is always tempting
+    "chaos.social",
+    "events.ccc.de",
+    "git.cccv.de",
+    "rocket.cccv.de",
+    "rt.cccv.de",
+    "tickets-backend.events.ccc.de",
+    "tickets.events.ccc.de",
+    # dire danger of rabbit holes
+    "feeds.rixx.de",
+    "ebay.com",
+    "kleinanzeigen.de",
+    "reddit.com",
+    "etsy.com",
+    # friends and family
+    "forum.berlinscifibook.club",
+    "photos.rixx.de",
+]
+
+
+def save_status(status):
+    with open("/tmp/focus", "w") as f:
+        f.write(status)
+
+
+def start_focus():
+    # Kill all time wasting apps
+    for tool in ["Discord", "signal-desktop", "threema-web"]:
+        subprocess.run(["killall", tool])
+    # Pause notifications
+    subprocess.run(["dunstctl", "set-paused", "true"])
+    # Disable domains that are distracting via /etc/hosts, set them to 0.0.0.0
+    with open("/etc/hosts", "a") as f:
+        for domain in DOMAINS:
+            f.write(f"0.0.0.0 {domain}\n")
+    save_status("1")
+
+
+def stop_focus():
+    # Enable domains that are distracting via /etc/hosts
+    with open("/etc/hosts", "r") as f:
+        lines = f.readlines()
+    with open("/etc/hosts", "w") as f:
+        for line in lines:
+            if not any(domain in line for domain in DOMAINS):
+                f.write(line)
+    # Unpause notifications
+    subprocess.run(["dunstctl", "set-paused", "false"])
+    save_status("0")
+
+
+def start_break():
+    # Start a break
+    # Start time wasting apps
+    for tool in ["threema", "discord", "signal-desktop"]:
+        # fork to background to not block the script
+        subprocess.Popen([tool])
+    save_status("0")
+
+
+def main():
+    # super cheap arg parsing: there is start, stop and break (stop focus and start cool tools)
+    if len(sys.argv) == 1:
+        mode = "start"
+    else:
+        mode = sys.argv[1]
+    if mode not in ["start", "stop", "break"]:
+        print("Invalid argument")
+        sys.exit(1)
+
+    if mode == "start":
+        start_focus()
+    elif mode == "stop":
+        stop_focus()
+    elif mode == "break":
+        stop_focus()
+        start_break()
+
+
+if __name__ == "__main__":
+    main()
