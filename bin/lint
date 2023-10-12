@@ -22,30 +22,14 @@ if [ -n "$patharg" ]; then
     cd $patharg
 fi
 
-# If we are running all linters, run them all and exit with 1 if any fail
-if [ "$all" = true ]; then
-    set +e
-    result=0
-
-    black .
-    result=$(($result + $?))
-    isort .
-    result=$(($result + $?))
-    flake8 .
-    result=$(($result + $?))
-    djhtml .
-    result=$(($result + $?))
-    exit $result
-fi
+set +e
+result=0
 
 # Check if the git repo has changed files relevant to us
 changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative . | grep -E '\.py$')
 
-set +e
-result=0
-
-if [ -n "$changed_files" ]; then
-    # Run the linters on the changed files
+# If there are changed files and we're not running all linters, run only the relevant ones
+if [ -n "$changed_files" ] && [ "$all" = false ]; then
     # $changed_files is a list separated by newlines, so we'll use zsh's array splitting to pass each file as a separate argument
     changed_files=(${(f)changed_files})
 
@@ -55,12 +39,24 @@ if [ -n "$changed_files" ]; then
     result=$(($result + $?))
     flake8 $changed_files
     result=$(($result + $?))
+else
+    echo "Running all linters"
+    black .
+    result=$(($result + $?))
+    isort .
+    result=$(($result + $?))
+    flake8 .
+    result=$(($result + $?))
 fi
 
 changed_files=$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.html$')
 if [ -n "$changed_files" ]; then
     changed_files=(${(f)changed_files})
     djhtml $changed_files
+    result=$(($result + $?))
+else
+    # We're using find + xargs here to exclude all html files in vendored/ and node_modules/
+    find . -name '*.html' -not -path '*/vendored/*' -not -path '*/node_modules/*' -not -path '*/local/*' -print | xargs djhtml
     result=$(($result + $?))
 fi
 
