@@ -12,8 +12,7 @@ import urllib.parse as urlparse
 
 
 class Py3status:
-    """
-    """
+    """ """
 
     # available configuration parameters
     auth_token = None
@@ -159,7 +158,9 @@ class Py3status:
         return {
             # this is cheating, as it only works with notifications (not pull requests or issues)
             # but that's my only use case, so.
-            "full_text": self.py3.safe_format(self.format, status) if status.get("notifications_count") else "",
+            "full_text": self.py3.safe_format(self.format, status)
+            if status.get("notifications_count")
+            else "",
             "cached_until": cached_until,
         }
 

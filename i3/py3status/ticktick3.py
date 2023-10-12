@@ -29,7 +29,6 @@ CACHE_PATH = "/home/rixx/.cache/.ticktick-oauth-token"
 
 
 class Py3status:
-
     cache_timeout = 300
     client_id = None
     client_secret = None
