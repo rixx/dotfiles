@@ -1,0 +1,7 @@
+configuration {
+    dmenu {
+		fallback-icon: "password-copy";
+    }
+}
+@import "./base.rasi"
+@import "../themes/launcher"
