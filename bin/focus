@@ -55,22 +55,13 @@ def stop_focus():
     save_status("0")
 
 
-def start_break():
-    # Start a break
-    # Start time wasting apps
-    for tool in ["threema", "discord", "signal-desktop"]:
-        # fork to background to not block the script
-        subprocess.Popen([tool])
-    save_status("0")
-
-
 def main():
-    # super cheap arg parsing: there is start, stop and break (stop focus and start cool tools)
+    # super cheap arg parsing: there is start and stop
     if len(sys.argv) == 1:
         mode = "start"
     else:
         mode = sys.argv[1]
-    if mode not in ["start", "stop", "break"]:
+    if mode not in ["start", "stop"]:
         print("Invalid argument")
         sys.exit(1)
 
@@ -78,9 +69,6 @@ def main():
         start_focus()
     elif mode == "stop":
         stop_focus()
-    elif mode == "break":
-        stop_focus()
-        start_break()
 
 
 if __name__ == "__main__":
