@@ -1,5 +1,0 @@
-configuration {
-    modi: "combi,drun";
-    font: "Iosevka 14";
-}
-@theme "/usr/share/rofi/themes/paper-float.rasi"

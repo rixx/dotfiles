@@ -1,0 +1,124 @@
+* {
+    // to override colors, either change an entire color, or just change
+    // a definition like element normal.normal {} in the file importing this file
+
+    background: #F5F5F5FF;
+    background-alt: #E0E0E0FF;
+    foreground: #252525FF;
+    selected: #078787ff; 
+    urgent: #C30771FF;
+    white: #ffffffff;
+
+
+    border-color: var(selected);
+    handle-color: var(selected);
+    background-color: var(background);
+    foreground-color: var(foreground);
+    alternate-background: var(background-alt);
+
+    normal-background: var(background);
+    normal-foreground: var(foreground);
+    urgent-background: var(urgent);
+    urgent-foreground: var(background);
+    active-background: var(background);
+    active-foreground: var(selected);
+
+    selected-normal-background: var(selected);
+    selected-normal-foreground: var(white);
+    selected-urgent-background: var(selected);
+    selected-urgent-foreground: var(urgent);
+    selected-active-background: var(selected);
+    selected-active-foreground: var(urgent);
+
+    alternate-normal-background: var(background-alt);
+    alternate-normal-foreground: var(foreground);
+    alternate-urgent-background: var(background-alt);
+    alternate-urgent-foreground: var(urgent);
+    alternate-active-background: var(selected);
+    alternate-active-foreground: var(background);
+}
+
+window {
+    font: "Iosevka 13";
+    transparency: "real";
+    location: center;
+    anchor: north;
+    y-offset: -15%;
+    x-offset: 0px;
+    border: 0px;
+    border-radius: 10px;
+    text-color: @foreground-color;
+    background-color: @background;
+    //background-image: url("/path/to/image.png", none);
+    //background-image: linear-gradient(red, orange, pink, purple);
+    //background-image: linear-gradient(to bottom, pink, yellow, magenta);
+    //background-image: linear-gradient(45, cyan, purple, indigo);
+}
+
+mainbox {
+    background-color: transparent;
+    border-radius: 0px;
+}
+
+inputbar {
+    spacing: 10px;
+}
+
+listview {
+    scrollbar: false;
+    fixed-height: false;
+    border: 0px;
+    cycle: true;
+    scrollbar: false;
+}
+
+element {
+    cursor: pointer;
+}
+element-text {
+    background-color: transparent;
+}
+element-icon {
+    background-color: transparent;
+}
+
+button selected {
+    background-color: var(selected-normal-background);
+    text-color: var(selected-normal-foreground);
+}
+
+element normal.normal {
+    background-color: var(normal-background);
+}
+element normal.urgent {
+    background-color: var(urgent-background);
+    text-color: var(urgent-foreground);
+}
+element normal.active {
+    background-color: var(active-background);
+    text-color: var(active-foreground);
+}
+element selected.normal {
+    text-color: var(selected-normal-foreground);
+    background-color: var(selected-normal-background);
+}
+element selected.urgent {
+    background-color: var(selected-urgent-background);
+    text-color: var(selected-urgent-foreground);
+}
+element selected.active {
+    background-color: var(selected-active-background);
+    text-color: var(selected-active-foreground);
+}
+element alternate.normal {
+    text-color: var(alternate-normal-foreground);
+    background-color: var(alternate-normal-background);
+}
+element alternate.urgent {
+    background-color: var(alternate-urgent-background);
+    text-color: var(alternate-urgent-foreground);
+}
+element alternate.active {
+    background-color: var(alternate-active-background);
+    text-color: var(alternate-active-foreground);
+}
