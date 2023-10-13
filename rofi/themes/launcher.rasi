@@ -1,0 +1,77 @@
+@import "./theme.rasi"
+
+window {
+    spacing: 20;
+    width: 1000px;
+}
+
+mainbox {
+    spacing: 10px;
+    padding: 20px;
+    children: [ "inputbar", "mode-switcher", "message", "listview" ];
+}
+
+inputbar {
+    children: [ "textbox-prompt-colon", "entry" ];
+}
+
+prompt { }
+
+textbox-prompt-colon {
+    padding: 5px 0px;
+    str: "";
+}
+
+entry {
+    padding: 5px 0px;
+    cursor: text;
+    placeholder: "…";
+}
+
+num-filtered-rows {
+    enabled: false;
+}
+
+textbox-num-sep {
+    enabled: false;
+}
+num-rows {
+    enabled: false;
+}
+case-indicator {
+    enabled: false;
+}
+
+listview {
+    columns: 2;
+    lines: 6;
+    fixed-columns: false;
+    spacing: 5px;
+}
+
+element {
+    spacing: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+element-icon {
+    size: 24px;
+}
+element-text {
+    vertical-align: 0.5;
+    horizontal-align: 0.0;
+}
+
+mode-switcher{
+    spacing: 10px;
+}
+button {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: @alternate-background;
+    cursor: pointer;
+}
+
+message {
+    enabled: false;
+}
