@@ -49,7 +49,9 @@ conflink kitty
 conflink mimeapps.list
 conflink mutt/muttrc
 conflink ranger/rc.conf
-conflink rofi/config.rasi
+conflink rofi/config
+conflink rofi/themes
+conflink rofi/bin
 conflink tmux/tmux.conf
 conflink vim/vimrc
 conflink vim/colors

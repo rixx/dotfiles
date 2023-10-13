@@ -32,6 +32,7 @@ bindsym $mod+Shift+Z [class=".*"] kill
 
 # Use rofi as application starter and application switcher
 bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode -icon-theme "Papirus" -show-icons
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/bin/powermenu.sh
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
 bindsym $mod+m exec "rofimoji --skin-tone neutral --clipboarder xsel --typer xdotool --action type"
 bindsym $mod+u exec /home/rixx/.config/dotfiles/bin/rofi-filebin
@@ -274,19 +275,6 @@ for_window [class=".*"] title_format " %title"
 for_window [all] title_window_icon padding 5px
 for_window [class="kitty"] title_window_icon off
 
-# Create Log out, Reboot, Poweroff bindings
-mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff" {
-        bindsym r exec reboot
-        bindsym e exit
-        bindsym p exec poweroff
-        bindsym s exec systemctl suspend
-
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-bindsym $mod+Shift+e mode "(L)ock screen, (E)xit X, (S)uspend, (R)eboot, (P)oweroff"
 
 # $mod+current_workspace switches back to last workspace
 workspace_auto_back_and_forth yes

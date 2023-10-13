@@ -1,0 +1,56 @@
+@import "./theme.rasi"
+
+window {
+    width: 800px;
+    border: 0px solid;
+}
+
+mainbox {
+    spacing: 15px;
+    padding: 30px;
+    children: [ "inputbar", "message", "listview" ];
+}
+
+inputbar {
+    enabled: false;
+}
+
+message {
+    enabled: true;
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 0px;
+    background-color: @background-alt;
+}
+
+textbox {
+    background-color: inherit;
+    text-color: inherit;
+}
+
+listview {
+    layout: vertical;
+    fixed-columns: true;
+    spacing: 15px;
+}
+
+element {
+    padding: 30px 10px;
+    border-radius: 12px;
+    orientation: vertical;
+    children: [element-icon];
+}
+element-icon {
+    size: 4em;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: var(background-alt);
+    text-color: var(foreground);
+}
+element selected.normal {
+    border-color: var(selected);
+    background-color: var(background-alt);
+    border: 10px solid;
+}
