@@ -14,7 +14,17 @@ def get_paths(start):
 
 def get_path(current_path):
     rofi = Popen(
-        args=["rofi", "-dmenu", "-i", "-p", "$", "-kb-custom-1", "Alt+c"],
+        args=[
+            "rofi",
+            "-dmenu",
+            "-i",
+            "-p",
+            "$",
+            "-kb-custom-1",
+            "Alt+c",
+            "-config",
+            "~/.config/rofi/config/launcher.rasi",
+        ],
         stdin=PIPE,
         stdout=PIPE,
     )
