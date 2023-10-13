@@ -36,6 +36,7 @@ bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/bin/powermenu.sh
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
 bindsym $mod+m exec "rofimoji --skin-tone neutral --clipboarder xsel --typer xdotool --action type"
 bindsym $mod+u exec /home/rixx/.config/dotfiles/bin/rofi-filebin
+bindsym $mod+z exec /home/rixx/.config/dotfiles/rofi/bin/rofi-zeal
 
 # Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly

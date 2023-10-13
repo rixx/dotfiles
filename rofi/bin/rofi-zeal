@@ -1,0 +1,44 @@
+#!/bin/bash
+# Copyright (c) 2020 Zeioth under the MIT License https://github.com/Zeioth/rofi-zeal/blob/master/rofi-zeal.sh
+# Copyright (c) 2023 Tobias "rixx" Kunze under the MIT License
+
+# Vendored in order to
+# - rip out half the functionality (only one search engine)
+# - use a config file with rofi
+# - allow to pass multiple words to zeal (spaces are magic)
+# - replace the first space with a : for proper Zeal namespaces
+
+files=~/.cache/rofi/rofi-zeal/rofi-zeal_term_list
+
+append_new_term() {
+   # Remove term from history, add to top, and trim to 30 lines
+   sed -i "/$input/d" $files
+   sed -i "1i $input" "$files"
+   sed -i 30d "$files"
+}
+
+if [ ! -s "$files" ]; then
+   echo " " > "$files"
+fi
+input=$(cat $files | rofi -dmenu -p "📚" -config ~/.config/rofi/config/launcher.rasi)
+
+case "$(echo $input | cut -d " " -f 1)" in
+k.)
+   # Search on kagi.com
+   append_new_term
+   # remove leading k., make sure it's only the first word
+   input=${input/k./}
+   exec firefox "https://kagi.com/search?q=$input" &> /dev/null &
+   ;;
+*)
+   # Open zeal only if there's text input
+   if [ -n "$input" ]; then
+      append_new_term
+      # if there is no : in the input, add one
+      if [[ ! $input =~ : ]]; then
+         input="${input// /:}"
+      fi
+      exec zeal "$input"
+   fi
+   ;;
+esac
