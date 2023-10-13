@@ -31,7 +31,7 @@ bindsym $mod+Shift+Q kill
 bindsym $mod+Shift+Z [class=".*"] kill
 
 # Use rofi as application starter and application switcher
-bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode
+bindsym $mod+d exec rofi -show combi -display-combi '> ' -display-drun '$' -sidebar-mode -icon-theme "Papirus" -show-icons
 bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" rofi-pass
 bindsym $mod+m exec "rofimoji --skin-tone neutral --clipboarder xsel --typer xdotool --action type"
 bindsym $mod+u exec /home/rixx/.config/dotfiles/bin/rofi-filebin
@@ -202,13 +202,11 @@ bar {
    i3bar_command i3bar --transparency
 
    font $systemFont
-   # height 35
 
    position top
-   # mode hide
    workspace_buttons yes
    strip_workspace_numbers yes
-   tray_output eDP1
+   tray_output primary
    separator_symbol "┊"
 
    colors {
