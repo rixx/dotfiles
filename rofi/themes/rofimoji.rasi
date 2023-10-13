@@ -1,0 +1,5 @@
+@import "./launcher.rasi"
+
+listview {
+    lines: 8;
+}

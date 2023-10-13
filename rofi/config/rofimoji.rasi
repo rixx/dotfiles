@@ -1,0 +1,6 @@
+@import "./base"
+@import "../themes/rofimoji"
+
+configuration {
+    show-icons: false;
+}

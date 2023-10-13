@@ -67,6 +67,7 @@ link mutt/offlineimap.service .config/systemd/user/offlineimap.service
 link notmuch/notmuch-config .notmuch-config
 link picom/picom.conf .config/picom.conf
 link rofi/rofi-pass.conf .config/rofi-pass/config
+link rofi/rofimoji.rc .config/rofimoji.rc
 link tig/tigrc .tigrc
 link virtualenvs/postactivate .local/share/virtualenvs/postactivate
 link virtualenvs/postdeactivate .local/share/virtualenvs/postdeactivate

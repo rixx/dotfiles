@@ -1,0 +1,5 @@
+skin-tone = neutral
+clipboarder = xsel
+typer = xdotool
+action = type
+selector-args = "-theme ~/.config/rofi/config/rofimoji.rasi"
