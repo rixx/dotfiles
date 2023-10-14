@@ -1,56 +1,89 @@
 #!/bin/bash
 
-# Rotate through three possible screen configurations, "lap", "schreibtisch", "schreibtisch2"
+# Choose screen layout with rofi and autorandr
+# Layouts named <name><number> are grouped together and tried one after another.
+#
+# Origin story: autorandr was buggy and didn't autodetect my screens correctly
+# (you had one job), and so I built an auto-rotator. Later migrated it to rofi
+# to allow for manual profile selection etc.
+
 # This script is called by the keyboard shortcut Super+Shift+A
 
-current=$(autorandr --current)
-
+# get layouts with --list
+layouts="$(autorandr --list)"
+current="$(autorandr --current)"
 # If current is empty, try instead to get the value from /tmp/rixx-autorandr-layout
+# This is a workaround for a bug in autorandr that sometimes causes it to not
+# set the current layout correctly, even after using autorandr to select it. Sigh.
 if [ -z "$current" ]; then
-    current=$(cat /tmp/rixx-autorandr-layout)
+    current="$(cat /tmp/rixx-autorandr-layout)"
 fi
 
-echo "Current configuration: $current"
+# Now generate the layout list for rofi, which should exclude layouts ending in a digit
+rofi_layouts="$(echo "$layouts" | grep -v '[0-9]$' | sed 's/ *$//g')"
+# Remove trailing number from current layout so that it can be shown as active in rofi
+rofi_current="${current%[0-9]}"
+rofi_current_index="$(echo "$rofi_layouts" | grep -n "$rofi_current" | cut -d: -f1)"
 
-# Try to switch to the next possible configuration.
+# Add "detect" as first option
+rofi_layouts="detect"$'\n'"$rofi_layouts"
+config="$HOME/.config/rofi/config/launcher.rasi"
+chosen="$(echo "$rofi_layouts" | rofi \
+    -dmenu \
+    -sep '\n' \
+    -p "Layout" \
+    -mesg "Current: $rofi_current" \
+    -markup-rows \
+    -a "$rofi_current_index" \
+    -config "${config}")"
 
-if [ "$current" == "lap" ]; then
-    new="schreibtisch"
-elif [ "$current" == "schreibtisch" ]; then
-    new="schreibtisch2"
-elif [ "$current" == "schreibtisch2" ]; then
-    new="lap"
-else
-    new="lap"
+# If nothing was chosen, exit
+if [ -z "$chosen" ]; then
+    exit
 fi
 
-autorandr --load $new
-
-# If an error occurs, switch to the one after that. Failing that, switch to the first one.
-
-if [ $? -ne 0 ]; then
-    if [ "$current" == "lap" ]; then
-        new="schreibtisch2"
-    elif [ "$current" == "schreibtisch" ]; then
-        new="lap"
-    elif [ "$current" == "schreibtisch2" ]; then
-        new="schreibtisch"
-    else
-        new="lap"
+# If the user chose "detect", run autorandr --detect and exit
+if [ "$chosen" == "detect" ]; then
+    # Check if autorandr is detecting any profiles (--detected)
+    if [ -z "$(autorandr --detected)" ]; then
+        notify-send "Autorandr" "autorandr isn't matching any profiles"
+        exit
     fi
+    autorandr --cycle 
+    notify-send "Autorandr" "autorandr cycled to next available profile"
+    # We're saving the layout because autorandr will forget it on the next unsuccessful load
+    "$(autorandr --current)" > /tmp/rixx-autorandr-layout
+    exit
 fi
 
-autorandr --load $new
-
-# If an error occurs again, switch to the safe option.
-if [ $? -ne 0 ]; then
-    autorandr --load lap
-    new="lap"
+# If there is only one matching layout, use it
+matching_layouts="$(echo "$layouts" | grep "^$chosen")"
+if [ "$(echo "$matching_layouts" | wc -l)" -eq 1 ]; then
+    if ! autorandr --load "$chosen"; then
+        notify-send "Autorandr" "autorandr failed to load $chosen"
+        exit 1
+    fi
+    notify-send "Autorandr" "autorandr loaded $chosen"
+    echo "$chosen" > /tmp/rixx-autorandr-layout
+    exit
 fi
 
-# If an error occurs again, do nothing.
-if [ $? -ne 0 ]; then
-    echo "Error: Could not switch to any configuration."
-else
-    echo $new > /tmp/rixx-autorandr-layout
+# If there are multiple matching layouts, reorder them so that the current one
+# is the last, as safe fallback, but try all the others first
+if [ "$(echo "$matching_layouts" | grep -c "^$current$")" -eq 1 ]; then
+    reordered_layouts="$(echo "$matching_layouts" | grep -A 1000 "^$current$" | tail -n +2)"
+    reordered_layouts="$reordered_layouts"$'\n'"$(echo "$matching_layouts" | grep -B 1000 "^$current$" | head -n -1)"
+    matching_layouts="$reordered_layouts"$'\n'"$current"
 fi
+
+# Try layouts until one works
+for layout in $matching_layouts; do
+    if ! autorandr --load "$layout"; then
+        notify-send "Autorandr" "autorandr loaded $layout"
+        echo "$layout" > /tmp/rixx-autorandr-layout
+        exit
+    fi
+done
+
+notify-send "Autorandr" "autorandr failed to load any layout matching $chosen"
+exit 1

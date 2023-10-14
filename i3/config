@@ -37,6 +37,7 @@ bindsym $mod+p exec PASSWORD_STORE_DIR="/home/rixx/.local/share/password-store" 
 bindsym $mod+m exec rofimoji
 bindsym $mod+u exec /home/rixx/.config/dotfiles/rofi/bin/rofi-filebin
 bindsym $mod+z exec /home/rixx/.config/dotfiles/rofi/bin/rofi-zeal
+bindsym $mod+Shift+A exec ~/.config/dotfiles/rofi/bin/rofi-autorandr
 
 # Application shortcuts
 bindsym $mod+Shift+F exec firefox-nightly
@@ -48,9 +49,6 @@ bindsym $mod+n exec python ~/.config/dotfiles/bin/switch
 
 bindsym Control+space exec dunstctl close
 bindsym $mod+Control+space exec dunstctl close-all
-
-# Make sure we can always get a monitor running again
-bindsym $mod+Shift+A exec ~/.config/dotfiles/bin/rotate-screens
 
 # Requires i3lock-color
 # Provides a running clock in the lower left corner, and a random image from the wallpapers directory
