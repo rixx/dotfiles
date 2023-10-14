@@ -1,4 +1,6 @@
 EDITOR=nvim
+TERMINAL=kitty
+BROWSER=firefox
 
 PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist

@@ -64,7 +64,9 @@ configuration {
 	/*---------- Keybindings ----------*/
 
     // Select with hover and accept with click rather than double click
-    hover-select: true;
+    // hover-select disabled as it can jump to the point closest to the mouse
+    // instead of staying with the first item until the mouse moves
+    // hover-select: true;
 	me-select-entry: "";
 	me-accept-entry: "MousePrimary";
 

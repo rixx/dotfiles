@@ -440,6 +440,7 @@ set updatetime=100  " Catch updates after 100ms
 
 " remove decoration from context
 let g:context_highlight_tag = '<hide>'
+nnoremap <leader>ct :ContextToggle<CR>
 
 " airline
 let g:airline_powerline_fonts = 1
@@ -514,3 +515,5 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
 nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
 " vim:set ft=vim et sw=2:
+
+set nofixendofline

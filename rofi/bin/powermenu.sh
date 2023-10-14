@@ -37,7 +37,6 @@ icon_no="\0icon\x1fdialog-cancel"
 # Confirm and execute
 confirm_run () {    
     selected="$(echo -e "$yes$icon_yes\n$no$icon_no" | rofi \
-      -hover-select -me-select-entry '' -me-accept-entry MousePrimary \
       -theme-str "listview {columns: 2; lines: 1;}" \
       -theme-str 'window {width: 350px;}' \
       -dmenu \
