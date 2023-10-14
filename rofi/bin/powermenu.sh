@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+# Based on powermenu.sh by Aditya Shakya / @adi1090x
+# Released under GPL-3.0
+# https://github.com/adi1090x/rofi/blob/master/files/powermenu/type-1/powermenu.sh
+
+# Modified by Tobias "rixx" Kunze
+# Relevant changes:
+# - allow to type in action
+# - use icons instead of text (necessary for string matching)
+# - don't ask for confirmation before screen lock
+# Irrelevant changes:
+# - different hostname command
+# - different list of actions / order of items
 
 config="$HOME/.config/rofi/config/powermenu.rasi"
 
