@@ -46,11 +46,10 @@ element-icon {
 
 element normal.normal,
 element alternate.normal {
-    background-color: var(background-alt);
-    text-color: var(foreground);
+    background-color: @background-alt;
 }
 element selected.normal {
-    border-color: var(selected);
-    background-color: var(background-alt);
+    border-color: @selected;
+    background-color: @background-alt;
     border: 10px solid;
 }

@@ -1,41 +1,10 @@
 * {
-    // to override colors, either change an entire color, or just change
-    // a definition like element normal.normal {} in the file importing this file
-
     background: #F5F5F5FF;
     background-alt: #E0E0E0FF;
     foreground: #252525FF;
     selected: #078787ff; 
     urgent: #C30771FF;
     white: #ffffffff;
-
-
-    border-color: var(selected);
-    handle-color: var(selected);
-    background-color: var(background);
-    foreground-color: var(foreground);
-    alternate-background: var(background-alt);
-
-    normal-background: var(background);
-    normal-foreground: var(foreground);
-    urgent-background: var(urgent);
-    urgent-foreground: var(background);
-    active-background: var(background);
-    active-foreground: var(selected);
-
-    selected-normal-background: var(selected);
-    selected-normal-foreground: var(white);
-    selected-urgent-background: var(selected);
-    selected-urgent-foreground: var(urgent);
-    selected-active-background: var(selected);
-    selected-active-foreground: var(urgent);
-
-    alternate-normal-background: var(background-alt);
-    alternate-normal-foreground: var(foreground);
-    alternate-urgent-background: var(background-alt);
-    alternate-urgent-foreground: var(urgent);
-    alternate-active-background: var(selected);
-    alternate-active-foreground: var(background);
 }
 
 window {
@@ -47,7 +16,7 @@ window {
     x-offset: 0px;
     border: 0px;
     border-radius: 10px;
-    text-color: @foreground-color;
+    text-color: @foreground;
     background-color: @background;
     //background-image: url("/path/to/image.png", none);
     //background-image: linear-gradient(red, orange, pink, purple);
@@ -83,42 +52,32 @@ element-icon {
 }
 
 button selected {
-    background-color: var(selected-normal-background);
-    text-color: var(selected-normal-foreground);
+    background-color: var(selected);
+    text-color: var(background);
 }
 
-element normal.normal {
-    background-color: var(normal-background);
+element normal {
+    background-color: var(background);
+    text-color: var(foreground);
 }
-element normal.urgent {
-    background-color: var(urgent-background);
-    text-color: var(urgent-foreground);
+element alternate {
+    background-color: var(background-alt);
 }
-element normal.active {
-    background-color: var(active-background);
-    text-color: var(active-foreground);
+element urgent {
+    border-color: var(urgent);
+    border: 2px dash;
 }
-element selected.normal {
-    text-color: var(selected-normal-foreground);
-    background-color: var(selected-normal-background);
+element urgent, element normal.urgent, element selected.urgent, element alternate.urgent {
+    text-color: var(urgent);
+    border-color: var(urgent);
+    border: 2px dash;
 }
-element selected.urgent {
-    background-color: var(selected-urgent-background);
-    text-color: var(selected-urgent-foreground);
+element active, element active.normal, element selected.active, element alternate.active {
+    text-color: var(selected);
+    border-color: var(selected);
+    border: 2px dash;
 }
-element selected.active {
-    background-color: var(selected-active-background);
-    text-color: var(selected-active-foreground);
-}
-element alternate.normal {
-    text-color: var(alternate-normal-foreground);
-    background-color: var(alternate-normal-background);
-}
-element alternate.urgent {
-    background-color: var(alternate-urgent-background);
-    text-color: var(alternate-urgent-foreground);
-}
-element alternate.active {
-    background-color: var(alternate-active-background);
-    text-color: var(alternate-active-foreground);
+element selected.normal, element selected.active, element selected.urgent {
+    background-color: var(selected);
+    text-color: var(background);
 }

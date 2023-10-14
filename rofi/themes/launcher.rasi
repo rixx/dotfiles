@@ -68,7 +68,7 @@ mode-switcher{
 button {
     padding: 12px;
     border-radius: 4px;
-    background-color: @alternate-background;
+    background-color: @background-alt;
     cursor: pointer;
 }
 
