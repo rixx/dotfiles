@@ -1,7 +1,7 @@
 * {
     background: #F5F5F5FF;
-    background-alt: #E0E0E0FF;
-    foreground: #252525FF;
+    background-alt: #E4E4E4FF;
+    foreground: #404040FF;
     selected: #078787ff; 
     urgent: #C30771FF;
     white: #ffffffff;
@@ -33,6 +33,13 @@ inputbar {
     spacing: 10px;
 }
 
+message {
+    border: 0px;
+    background-color: @background-alt;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
 listview {
     scrollbar: false;
     fixed-height: false;
@@ -52,32 +59,32 @@ element-icon {
 }
 
 button selected {
-    background-color: var(selected);
-    text-color: var(background);
+    background-color: @selected;
+    text-color: @background;
 }
 
 element normal {
-    background-color: var(background);
-    text-color: var(foreground);
+    background-color: @background;
+    text-color: @foreground;
 }
-element alternate {
-    background-color: var(background-alt);
+element alternate.normal, element alternate.urgent, element alternate.active {
+    background-color: @background-alt;
 }
 element urgent {
-    border-color: var(urgent);
+    border-color: @urgent;
     border: 2px dash;
 }
 element urgent, element normal.urgent, element selected.urgent, element alternate.urgent {
-    text-color: var(urgent);
-    border-color: var(urgent);
+    text-color: @urgent;
+    border-color: @urgent;
     border: 2px dash;
 }
 element active, element active.normal, element selected.active, element alternate.active {
-    text-color: var(selected);
-    border-color: var(selected);
+    text-color: @selected;
+    border-color: @selected;
     border: 2px dash;
 }
 element selected.normal, element selected.active, element selected.urgent {
-    background-color: var(selected);
-    text-color: var(background);
+    background-color: @selected;
+    text-color: @background;
 }

@@ -18,6 +18,8 @@ def get_path(current_path):
             "rofi",
             "-dmenu",
             "-i",
+            "-mesg",
+            current_path.as_posix(),
             "-p",
             "$",
             "-kb-custom-1",

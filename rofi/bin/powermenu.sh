@@ -56,7 +56,6 @@ confirm_run () {
 chosen="$(echo -e "$option_1$icon_1\n$option_2$icon_2\n$option_3$icon_3\n$option_4$icon_4\n$option_5$icon_5" | rofi \
     -theme-str "listview {columns: 5; lines: 1;}" \
     -theme-str 'textbox-prompt-colon {str: "";}' \
-    -hover-select -me-select-entry '' -me-accept-entry MousePrimary \
     -dmenu \
     -p "$prompt" \
     -mesg "$mesg" \
