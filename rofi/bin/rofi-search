@@ -18,7 +18,7 @@ d)
       input="${input// /:}"
    fi
    # Now check if the docset indicator (up to ':' is in our list of aliases)
-   # Aliases: py->python, dj->django, jj -> jinja, pg -> postgres, web -> html,css,javascript
+   # Aliases: py->python, dj->django, jj -> jinja, sql -> postgres, web -> html,css,javascript
    prefix=$(echo $input | cut -d ":" -f 1)
    case "$prefix" in
    py)
@@ -30,22 +30,25 @@ d)
    jj)
       input=${input/jj:/jinja:}
       ;;
-   pg)
-      input=${input/pg:/postgres:}
+   sql)
+      input=${input/sql:/psql:}
       ;;
    web)
       input=${input/web:/html,css,javascript:}
       ;;
    esac
-   exec zeal "$input"
+   zeal "$input"
+   i3-msg '[class="Zeal"] focus'
    ;;
-m)
+m|man)
    input=${input/m /}
+   input=${input/man /}
    exec kitty -e man "$input"
    ;;
 *)
    # Search on kagi.com
    # remove leading k., make sure it's only the first word
-   exec firefox "https://kagi.com/search?q=$input" &> /dev/null &
+   firefox "https://kagi.com/search?q=$input" &> /dev/null &
+   i3-msg '[class="firefox"] focus'
    ;;
 esac
