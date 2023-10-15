@@ -1,0 +1,51 @@
+#!/bin/bash
+# Search the web, docs, and man pages
+# - web: with no single-letter prefix, web search opens in firefox
+# - docs: with d prefix, zeal is opened. first
+
+input=$(rofi -dmenu -mesg "[d]ocs: py, dj, sql, web&#x0a;[m]an" -config ~/.config/rofi/config/search.rasi)
+
+# if there is no input, return
+if [ -z "$input" ]; then
+   exit
+fi
+
+case "$(echo $input | cut -d " " -f 1)" in
+d)
+   input=${input/d /}
+   # if there is no : in the input, add one
+   if [[ ! $input =~ : ]]; then
+      input="${input// /:}"
+   fi
+   # Now check if the docset indicator (up to ':' is in our list of aliases)
+   # Aliases: py->python, dj->django, jj -> jinja, pg -> postgres, web -> html,css,javascript
+   prefix=$(echo $input | cut -d ":" -f 1)
+   case "$prefix" in
+   py)
+      input=${input/py:/python:}
+      ;;
+   dj)
+      input=${input/dj:/django:}
+      ;;
+   jj)
+      input=${input/jj:/jinja:}
+      ;;
+   pg)
+      input=${input/pg:/postgres:}
+      ;;
+   web)
+      input=${input/web:/html,css,javascript:}
+      ;;
+   esac
+   exec zeal "$input"
+   ;;
+m)
+   input=${input/m /}
+   exec kitty -e man "$input"
+   ;;
+*)
+   # Search on kagi.com
+   # remove leading k., make sure it's only the first word
+   exec firefox "https://kagi.com/search?q=$input" &> /dev/null &
+   ;;
+esac
