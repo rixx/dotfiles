@@ -29,6 +29,7 @@
 
     # Function aliases
     branches = "!f() { git branch "$@" --sort=authordate --color=always --format='%(if)%(HEAD)%(then)%(color:red) * %(else)   %(end)%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
+    tags = "!f() { git tag "$@" --sort=authordate --color=always --format='%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
     go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
     pushall = "!f() { git remote | xargs -L1 git push "$@"; }; f"
 
