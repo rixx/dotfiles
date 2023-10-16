@@ -3,25 +3,26 @@
 	email = r@rixx.de
 
 [alias]
-    # Shortening aliases
+    # Shorter commands
     a = add -p
     amend = commit --amend
-    c = commit -v
-    ca = commit --all -v
-    co = checkout
     br = branch
+    c = commit -v
+    co = checkout
     d = diff
-    dca = diff --cached
-    f = fetch
-    hard = reset --hard
-	pushf = push --force-with-lease
-    rehead = reset --hard @
 
-    # Option aliases
+    # Easier commands
+	pushf = push --force-with-lease
+	ls-untracked = ls-files --others --exclude-standard
+    ls-tracked = ls-tree
+    ca = commit --all -v
+    delete-remote = push --delete origin
+    rehead = reset --hard @
+    unstage = reset @ --
+
+    # Logging
     lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
     lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
-    delete-remote = push --delete origin
-    unstage = reset @ --
 
     # Function aliases
     go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
