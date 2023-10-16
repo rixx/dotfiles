@@ -33,11 +33,12 @@ if [ -n "$changed_files" ] && [ "$all" = false ]; then
     # $changed_files is a list separated by newlines, so we'll use zsh's array splitting to pass each file as a separate argument
     changed_files=(${(f)changed_files})
 
-    black "$changed_files"
+    # no quoting this variable, we actually *need* the whitespace separation here!
+    black $changed_files
     result=$(($result + $?))
-    isort "$changed_files"
+    isort $changed_files
     result=$(($result + $?))
-    flake8 "$changed_files"
+    flake8 $changed_files
     result=$(($result + $?))
 else
     echo "Running all linters"
@@ -51,8 +52,10 @@ fi
 
 changed_files="$(git diff --name-only --diff-filter=ACMRTUXB --relative | grep -E '\.html$')"
 if [ -n "$changed_files" ]; then
+    # $changed_files is a list separated by newlines, so we'll use zsh's array splitting to pass each file as a separate argument
     changed_files=(${(f)changed_files})
-    djhtml "$changed_files"
+    # no quoting this variable, we actually *need* the whitespace separation here!
+    djhtml $changed_files
     result=$(($result + $?))
 else
     # We're using find + xargs here to exclude all html files in vendored/ and node_modules/
