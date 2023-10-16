@@ -17,6 +17,8 @@ DOMAINS = [
     "ebay.com",
     "kleinanzeigen.de",
     "reddit.com",
+    "www.reddit.com",
+    "old.reddit.com",
     "etsy.com",
     # friends and family
     "forum.berlinscifibook.club",
