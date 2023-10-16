@@ -10,14 +10,17 @@
     c = commit -v
     co = checkout
     d = diff
+    st = status --sort --branch
 
     # Easier commands
-	pushf = push --force-with-lease
 	ls-untracked = ls-files --others --exclude-standard
-    ls-tracked = ls-tree
+	pushf = push --force-with-lease
+    aliases = "config --get-regexp alias"
     ca = commit --all -v
     delete-remote = push --delete origin
+    ls-tracked = ls-tree
     rehead = reset --hard @
+    uncommit = reset --sort @~1
     unstage = reset @ --
 
     # Logging
@@ -25,8 +28,9 @@
     lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
 
     # Function aliases
-    go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
     branches = "!f() { git branch "$@" --sort=authordate --color=always --format='%(if)%(HEAD)%(then)%(color:red) * %(else)   %(end)%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
+    go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
+    pushall = "!f() { git remote | xargs -L1 git push "$@"; }; f"
 
 [checkout]
     workers = 0
