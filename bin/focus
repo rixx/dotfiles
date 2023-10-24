@@ -20,6 +20,8 @@ DOMAINS = [
     "www.reddit.com",
     "old.reddit.com",
     "etsy.com",
+    "amazon.com",
+    "amazon.de",
     # friends and family
     "forum.berlinscifibook.club",
     "photos.rixx.de",
