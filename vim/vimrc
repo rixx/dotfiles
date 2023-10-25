@@ -414,6 +414,7 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'posva/vim-vue'
 Plug 'psf/black'
 Plug 'github/copilot.vim'
+Plug 'vimwiki/vimwiki'
 
 """ Enable copilot always
 let g:copilot_enabled = 1
@@ -512,8 +513,14 @@ let g:fzf_layout = { 'down': '30%' }
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
+""" vimwiki config
+let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': 'md'}]
+" Use vimwiki globally for markdown
+let g:vimwiki_global_ext = 0
+
 nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
 nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
+" open fzf with the wiki directory
+nnoremap <leader>wt :call fzf#run({ 'sink': 'e', 'source': 'fd . /home/rixx/doc/wiki/' })<CR>
 " vim:set ft=vim et sw=2:
-
 set nofixendofline

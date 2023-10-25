@@ -28,6 +28,7 @@ alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
 alias ccat="pygmentize -g"
+alias wiki="vim ~/doc/wiki/index.md"
 
 if [ -x "$(command -v btop)" ]; then
     alias htop="btop"
