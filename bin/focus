@@ -13,7 +13,6 @@ DOMAINS = [
     "tickets-backend.events.ccc.de",
     "tickets.events.ccc.de",
     # dire danger of rabbit holes
-    "feeds.rixx.de",
     "ebay.com",
     "kleinanzeigen.de",
     "reddit.com",
@@ -22,6 +21,14 @@ DOMAINS = [
     "etsy.com",
     "amazon.com",
     "amazon.de",
+    "hexapipes.vercel.app",
+    # twitch and youtube, no others needed
+    "www.youtube.com",
+    "youtube.com",
+    "www.twitch.tv",
+    "twitch.tv",
+    # no news
+    "feeds.rixx.de",
     # friends and family
     "forum.berlinscifibook.club",
     "photos.rixx.de",
