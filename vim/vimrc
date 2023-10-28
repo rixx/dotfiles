@@ -377,6 +377,7 @@ autocmd BufRead /tmp/mutt-* set tw=72
 
 augroup templates
     autocmd BufNewFile *.vue 0r ~/.config/dotfiles/vim/templates/skeleton.vue
+    autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%'
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""
@@ -530,7 +531,7 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 " gqq formats a table (you  can also use tab in insert to navigate etc, which will also format the table)
 "
 " ah is the text object of a header till next header, ih only the contents. aH and iH to include subheadings
-let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': 'md', 'diary_rel_path': 'journal/', 'diary_index': 'journal', 'diary_header': 'Journal', 'diary_frequency': 'weekly', 'auto_diary_index': 1}]
+let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': 'md', 'diary_rel_path': 'journal/', 'diary_index': 'journal', 'diary_header': 'Journal', 'diary_frequency': 'daily', 'auto_diary_index': 1}]
 " Use vimwiki globally for markdown
 let g:vimwiki_global_ext = 1
 " When navigating to a directory, open the index page instead of the directory
