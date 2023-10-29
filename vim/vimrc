@@ -376,8 +376,9 @@ autocmd BufRead /tmp/mutt-* set tw=72
 
 
 augroup templates
+    au!
     autocmd BufNewFile *.vue 0r ~/.config/dotfiles/vim/templates/skeleton.vue
-    autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%'
+    autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%:t'
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""
@@ -541,7 +542,7 @@ let g:vimwiki_diary_months = {
       \ 7: 'Juli', 8: 'August', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'
       \}
 let g:vimwiki_links_header = 'Sitemap'
-let g:vimwiki_auto_header = 1
+let g:vimwiki_auto_header = 0
 " conflicts with tab completion
 imap <C-space> <Plug>VimwikiTableNextCell
 
