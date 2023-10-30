@@ -380,6 +380,10 @@ augroup development
   autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
   " Compute syntax highlighting from beginning of file.
   autocmd BufEnter * :syntax sync fromstart
+
+  autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?' : '?>', '<?php': '?>'})
+  autocmd FileType ruby let b:AutoPairs = AutoPairsDefine({'begin': 'end//n]'})
+  autocmd FileType *html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->', '{%': '%}'})
 augroup end
 
 augroup ft_vim
