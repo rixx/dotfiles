@@ -330,6 +330,22 @@ nnoremap <space>f za
 nnoremap <space>F zA
 
 
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>0 <Plug>AirlineSelectTab0
+" nmap <leader>N <Plug>AirlineSelectPrevTab
+" nmap <leader>n <Plug>AirlineSelectNextTab
+nmap <leader>N :bp<cr>
+nmap <leader>n :bn<cr>
+nmap <leader>d :bd<cr>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""  File type specific settings                           ""
@@ -387,65 +403,28 @@ augroup END
 
 call plug#begin()
 
-""" General plugins
-" Removes search highlight when not needed
+"""""""" Removes search highlight when not needed """"""""
 Plug 'romainl/vim-cool'
-Plug 'junegunn/fzf'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-" Provides zen mode with <space> z
-Plug 'junegunn/goyo.vim'
+
 " Increment/decrement dates
 Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-vinegar'
-""" Code plugins
-" Add gc (gcc, gcap etc) to toggle comments
-Plug 'tpope/vim-commentary'
-" Automatically add closing braces and delete matching ones
-Plug 'jiangmiao/auto-pairs'
-" Auto-set tabs vs spaces
-Plug 'tpope/vim-sleuth'
-" Provides :G[it]
-Plug 'tpope/vim-fugitive'
-" Show git changes/diff indicator in side column
-Plug 'airblade/vim-gitgutter'
-" Provide context when scrolling <3
-Plug 'wellle/context.vim'
-" Language specific plugins
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'posva/vim-vue'
-Plug 'psf/black'
-Plug 'github/copilot.vim'
-Plug 'vimwiki/vimwiki'
 
-""" Enable copilot always
-let g:copilot_enabled = 1
-let g:copilot_autocomplete = 1
-let g:copilot_autocomplete_delay = 0
-" copilot keybindings
-inoremap ^ <Plug>(copilot-next)
-
-""" Completion
-let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
-
-verbose imap <tab>
-
-call plug#end()
-
-"" vim-fugitive is slow with zsh stuff
-set shell=bash
-
-"" gitgutter update speed
-set updatetime=100  " Catch updates after 100ms
-
-" remove decoration from context
-let g:context_highlight_tag = '<hide>'
-nnoremap <leader>ct :ContextToggle<CR>
+Plug 'junegunn/fzf'
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+" Open at bottom of screen
+let g:fzf_layout = { 'down': '30%' }
+" Temporarily hide status line
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
+nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
+" open fzf with the wiki directory
+nnoremap <leader>wt :call fzf#run({ 'sink': 'e', 'source': 'fd . /home/rixx/doc/wiki/' })<CR>
 
 " airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_highlighting_cache = 1
@@ -462,59 +441,97 @@ let g:airline#extensions#tabline#overflow_marker = '…'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 
-nmap <leader>1 <Plug>AirlineSelectTab1
-nmap <leader>2 <Plug>AirlineSelectTab2
-nmap <leader>3 <Plug>AirlineSelectTab3
-nmap <leader>4 <Plug>AirlineSelectTab4
-nmap <leader>5 <Plug>AirlineSelectTab5
-nmap <leader>6 <Plug>AirlineSelectTab6
-nmap <leader>7 <Plug>AirlineSelectTab7
-nmap <leader>8 <Plug>AirlineSelectTab8
-nmap <leader>9 <Plug>AirlineSelectTab9
-nmap <leader>0 <Plug>AirlineSelectTab0
-" nmap <leader>N <Plug>AirlineSelectPrevTab
-" nmap <leader>n <Plug>AirlineSelectNextTab
-nmap <leader>N :bp<cr>
-nmap <leader>n :bn<cr>
-nmap <leader>d :bd<cr>
-
-" Autoformat with black on F9
-nnoremap <F9> :Black<CR>
-
-" Goyo: zen mode
+" zen mode: <leader> z
+Plug 'junegunn/goyo.vim'
 let g:goyo_width = 90
 noremap <leader>z :Goyo<cr>
 
-" Completion
-" Use <TAB> to select the popup menu:
+" Better directory browsing
+Plug 'tpope/vim-vinegar'
+" -       open the directory browser / go up a directory
+" I       show header again
+" gh      toggle hidden files
+" .       add file path to end of cmd
+" y.      yank full file path
+" ~       go to home
+" CTRL-^  go back to file
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" Toggle comments
+Plug 'tpope/vim-commentary'
+" gc      comment out motion
+" gcc     comment out line (takes count)
 
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-" Use gd to go to actual definition
-nmap <silent> gd <Plug>(coc-definition)
-set completeopt=noinsert,menuone,noselect,preview
-" suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
-set shortmess+=c
+" Surround text objects
+Plug 'tpope/vim-surround'
+" cs"'    change surrounding " to '
+" cst"    change surrounding tag to " (matches html)
+" ds"     delete surrounding "
+" ysiw"   surround word with ". ( for with spaces, ) for without
+" yss"    surround line with "
+" in visual mode: S to surround a line
+" Strike through this line
+"" ysss strikes through line, ysiws strikes through word etc, ysiwo bolds word
+let g:surround_{char2nr('s')} = "~~\r~~"
+let g:surround_{char2nr('b')} = "**\r**"
 
-"""" fzf config
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
 
-" Open at bottom of screen
-let g:fzf_layout = { 'down': '30%' }
+" Repeat plugin commands with .
+Plug 'tpope/vim-repeat'
 
-" Temporarily hide status line
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+" Automatically add closing braces and delete matching ones
+Plug 'jiangmiao/auto-pairs'
+" Do **not** jump to the next line when closing a perceived block
+let g:AutoPairsMultilineClose = 0
 
+" Auto-set tabs vs spaces
+Plug 'tpope/vim-sleuth'
+
+" Provides :G[it]
+Plug 'tpope/vim-fugitive'
+" GBrowse opens the current file on GitHub
+" In blame:
+" A    resize to end of author column
+" C    to end of commit column
+" D    to end of date column
+" gq   close blame
+" o    open patch in hsplit (GVsplit also works)
+" -    reblame at commit!!!
+"" vim-fugitive is slow with zsh stuff
+set shell=bash
+
+" Show git changes/diff indicator in side column
+Plug 'airblade/vim-gitgutter'
+" [c           jump to next hunk
+" <leader>hs   stage this hunk, works with visual selection
+" <leader>hu   undo this hunk!!!, works with visual selection
+" <leader>hp   preview this hunk
+" ic           hunk text object
+"" gitgutter update speed
+set updatetime=100  " Catch updates after 100ms
+
+" Provide context when scrolling <3
+Plug 'wellle/context.vim'
+" remove decoration from context
+let g:context_highlight_tag = '<hide>'
+nnoremap <leader>ct :ContextToggle<CR>
+
+" Language specific plugins
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'posva/vim-vue'
+
+" Format Python with F9
+Plug 'psf/black'
+nnoremap <F9> :Black<CR>
+
+Plug 'github/copilot.vim'
+""" Enable copilot always
+let g:copilot_enabled = 1
+let g:copilot_autocomplete = 1
+let g:copilot_autocomplete_delay = 0
+" copilot keybindings
+inoremap ^ <Plug>(copilot-next)
+
+Plug 'vimwiki/vimwiki'
 """ vimwiki config
 " <leader>ww opens index
 " <leader>w<leader>w opens diary
@@ -546,9 +563,34 @@ let g:vimwiki_auto_header = 0
 " conflicts with tab completion
 imap <C-space> <Plug>VimwikiTableNextCell
 
-nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
-nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
-" open fzf with the wiki directory
-nnoremap <leader>wt :call fzf#run({ 'sink': 'e', 'source': 'fd . /home/rixx/doc/wiki/' })<CR>
+
+""" Completion
+let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
+" Use <TAB> to select the popup menu:
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Use gd to go to actual definition
+nmap <silent> gd <Plug>(coc-definition)
+set completeopt=noinsert,menuone,noselect,preview
+" suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
+set shortmess+=c
+
+verbose imap <tab>
+
+call plug#end()
+
+" This one has to go after plug#end()
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
 " vim:set ft=vim et sw=2:
 set nofixendofline
