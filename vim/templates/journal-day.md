@@ -1,7 +1,7 @@
 # {day_str}
 
 [Ganze Woche](/journal/{year}-w{week})
-[Ganzer Monat](/journal/{month})
+[Ganzer Monat](/journal/{year}-{month})
 
 ## Ablauf
 

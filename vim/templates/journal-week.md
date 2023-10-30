@@ -10,15 +10,12 @@
 
 ### pretalx
 
-- [ ]
 
 ### Arbeit
 
-- [ ]
 
 ### Sonst so
 
-- [ ]
 
 ## Abschluss
 
