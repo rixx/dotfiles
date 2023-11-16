@@ -46,11 +46,11 @@ fi
 if [ "$chosen" == "detect" ]; then
     # Check if autorandr is detecting any profiles (--detected)
     if [ -z "$(autorandr --detected)" ]; then
-        notify-send "Autorandr" "autorandr isn't matching any profiles"
+        notify-send "Autorandr" "autorandr isn't matching any profiles" -a 'autorandr' -i randr
         exit
     fi
     autorandr --cycle 
-    notify-send "Autorandr" "autorandr cycled to next available profile"
+    notify-send "Autorandr" "autorandr cycled to next available profile" -a 'autorandr' -i randr
     # We're saving the layout because autorandr will forget it on the next unsuccessful load
     "$(autorandr --current)" > /tmp/rixx-autorandr-layout
     exit
@@ -60,10 +60,10 @@ fi
 matching_layouts="$(echo "$layouts" | grep "^$chosen")"
 if [ "$(echo "$matching_layouts" | wc -l)" -eq 1 ]; then
     if ! autorandr --load "$chosen"; then
-        notify-send "Autorandr" "autorandr failed to load $chosen"
+        notify-send "Autorandr" "autorandr failed to load $chosen" -a 'autorandr' -i randr
         exit 1
     fi
-    notify-send "Autorandr" "autorandr loaded $chosen"
+    notify-send "Autorandr" "autorandr loaded $chosen" -a 'autorandr' -i randr
     echo "$chosen" > /tmp/rixx-autorandr-layout
     exit
 fi
@@ -79,11 +79,11 @@ fi
 # Try layouts until one works
 for layout in $matching_layouts; do
     if ! autorandr --load "$layout"; then
-        notify-send "Autorandr" "autorandr loaded $layout"
+        notify-send "Autorandr" "autorandr loaded $layout" -a 'autorandr' -i randr
         echo "$layout" > /tmp/rixx-autorandr-layout
         exit
     fi
 done
 
-notify-send "Autorandr" "autorandr failed to load any layout matching $chosen"
+notify-send "Autorandr" "autorandr failed to load any layout matching $chosen" -a 'autorandr' -i randr
 exit 1

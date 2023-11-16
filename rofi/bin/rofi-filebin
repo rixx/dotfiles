@@ -49,4 +49,4 @@ def get_path(current_path):
 path = get_path(Path.home() / "tmp")
 if path and path.exists():
     url = check_output(["fb", str(path)]).strip().decode()
-    run(["notify-send", f"Uploaded {path} to {url}", "-a", "notify"])
+    run(["notify-send", f"Uploaded {path} to {url}", "-a", "filebin", "-i", "org.gnome.files"])

@@ -8,5 +8,5 @@ deepin-screenshot -s "$SCREENSHOT_PATH"
 
 if [ -f "$SCREENSHOT_PATH" ]; then
     url=$(fb "$SCREENSHOT_PATH")
-    notify-send "Uploaded $SCREENSHOT_PATH to $url"
+    notify-send "Uploaded $SCREENSHOT_PATH to $url" -i "$SCREENSHOT_PATH" -a filebin
 fi
