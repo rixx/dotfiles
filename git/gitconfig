@@ -107,3 +107,4 @@
 	repo = /home/rixx/.config/dotfiles
 [advice]
 	statusHints = false
+	skippedCherryPicks = false
