@@ -100,6 +100,8 @@ function handleTable(table) {
     if (table.querySelectorAll("tr").length < 3) return;
     // sorting tables with rowspans is a pain, so don't
     if (table.querySelectorAll("[rowspan]").length) return;
+    // RT special: some tables have multiple bodies instead of rows, so don't
+    if (table.querySelectorAll("tbody").length > 1) return;
     if (!getSortableColumns(table).length) return;
 
     // Add a button/icon to turn the table into a sortable table
