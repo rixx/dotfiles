@@ -59,16 +59,47 @@ function handleTableClick(ev) {
     sortTable(table, col, dir === "descending");
 }
 
+function getSortableColumns(table) {
+    // return th elements of columns that can be sorted
+    if (!table) return [];
+    const firstRow = table.querySelector("tr");
+
+    // if the table does not have colspans, then all columns are sortable
+    if (!table.querySelectorAll("[colspan]").length) {
+        return firstRow.querySelectorAll("th");
+    }
+
+    // If the table has colspans, then only columns without them are sortable
+    let excludedColumns = [];
+    table.querySelectorAll("[colspan]").forEach(cell => {
+        const col = Array.from(cell.parentNode.children).indexOf(cell);
+        for (let i = 1; i < cell.getAttribute("colspan"); i++) {
+            excludedColumns.push(col + i);
+        }
+    });
+    excludedColumns = [...new Set(excludedColumns)];
+
+    // Return all columns that are not excluded
+    return Array.from(firstRow.querySelectorAll("th")).filter(
+        (col, i) => !excludedColumns.includes(i)
+    );
+}
+
 function makeSortable(table) {
-    table.querySelectorAll("th").forEach(th => addEventListener("click", handleTableClick));
-    table.classList.add("rixx-sortable-active");
+    getSortableColumns(table).forEach(col => {
+        col.addEventListener("click", handleTableClick)
+        col.classList.add("rixx-sortable-column");
+    });
     table.querySelector(".rixx-sortable-button").remove();
 }
 
 function handleTable(table) {
     if (table.classList.contains("rixx-sortable")) return;
     // check if the table has more than one row
-    if (table.querySelectorAll("tr").length < 2) return;
+    if (table.querySelectorAll("tr").length < 3) return;
+    // sorting tables with rowspans is a pain, so don't
+    if (table.querySelectorAll("[rowspan]").length) return;
+    if (!getSortableColumns(table).length) return;
 
     // Add a button/icon to turn the table into a sortable table
     const button = document.createElement("button");
@@ -76,7 +107,7 @@ function handleTable(table) {
     button.addEventListener("click", () => makeSortable(table));
     table.classList.add("rixx-sortable");
     // prepend the button to the first cell of the first row
-    table.querySelector("tr").querySelector("td, th").prepend(button);
+    table.querySelector("tr").querySelector("th").prepend(button);
 }
 
 function findTables() {
@@ -87,7 +118,7 @@ function findTables() {
 document.addEventListener("DOMContentLoaded", () => {
     const style = document.createElement("style");
     style.textContent = `
-        table.rixx-sortable-active th {
+        th.rixx-sortable-column {
             cursor: pointer;
             padding-right: 20px;
             background-repeat: no-repeat;
@@ -95,13 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
             background-size: 16px 16px;
             background-image: url("${getIcon("unsorted")}");
         }
-        table.rixx-sortable-active th[aria-sort="ascending"] {
+        th.rixx-sortable-column[aria-sort="ascending"] {
             background-image: url("${getIcon("ascending")}");
         }
-        table.rixx-sortable-active th[aria-sort="descending"] {
+        .rixx-sortable-column[aria-sort="descending"] {
             background-image: url("${getIcon("descending")}");
         }
-        table.rixx-sortable .rixx-sortable-button {
+        .rixx-sortable-button {
             width: 20px;
             height: 20px;
             background-image: url("${getIcon("makeSortable")}");
