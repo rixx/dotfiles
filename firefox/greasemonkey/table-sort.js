@@ -47,6 +47,7 @@ function sortTable(table, col, reverse) {
 function handleTableClick(ev) {
     const th = ev.target;
     const table = th.closest("table");
+    if (!table) return;
     const dir = th.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
     th.setAttribute("aria-sort", dir);
     // Reset all other headers
