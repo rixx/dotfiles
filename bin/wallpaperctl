@@ -69,6 +69,11 @@ function get_resolution {
 	xrandr | grep ' primary' | sed -r 's/.* primary [^0-9]*([0-9]+x[0-9]+).*$/\1/'
 }
 
+function get_dimensions {
+	# Use xdpyinfo to get the dimensions of all monitors put together
+	xdpyinfo | grep dimensions | sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/'
+}
+
 function random_wallpaper {
 	# First param is processed / unprocessed. Default to unprocessed.
 	processed=${1:-unprocessed}
@@ -88,7 +93,20 @@ function random_wallpaper {
 }
 
 function set_wallpaper {
-	feh --bg-fill $1
+	# param 1 is the wallpaper. If it is set, use it and exit, don't try to be smart
+	if [[ -n $1 ]]; then
+		feh --bg-fill $1
+		exit 0
+	fi;
+
+	# Otherwise, we'll let feh choose, as it understands it needs to choose one
+	# wallpaper per monitor.
+	wpath=$wallpaper_folder/$(get_resolution)/unprocessed
+	if [[ ! -d $wpath ]]; then
+		echo "No wallpapers for resolution $(get_resolution)"
+		exit 1
+	fi;
+	feh --bg-fill --random $wpath
 }
 
 function usage {
@@ -132,12 +150,7 @@ case $1 in
 		random_wallpaper $process $show
 		;;
 	set)
-		# figure out if a wallpaper was specified
-		if [[ $# -eq 2 ]]; then
-			set_wallpaper $2
-		else
-			set_wallpaper $(random_wallpaper unprocessed)
-		fi;
+		set_wallpaper $2
 		;;
 	*)
 		usage
