@@ -3,15 +3,17 @@ set -e
 
 dunstctl set-paused true
 i3lock \
-        -t -i $(find ~/lib/pics/wallpapers/processed | shuf -n1) \
-        --time-pos='x+110:h-70' \
-        --date-pos='x+43:h-45' \
-        --clock --date-align 1 --date-str "Und Sie sind?" \
+        -t \
+        -i $(wallpaperctl random --processed) \
+        --clock --force-clock \
+        --date-align 1 --time-pos='x+110:h-70' --date-pos='x+43:h-45' \
+        --date-str "Und Sie sind?" --verif-text='…' --wrong-text='' --noinput-text='' \
+        --time-color=ffffffff --date-color=ffffffff --verif-color=ffffffff \
+        --radius=20 --ring-width=4 \
+        --ind-pos='x+280:h-70' \
         --inside-color=00000000 --ring-color=ffffffff --line-uses-inside \
         --keyhl-color=007171ff --bshl-color=007171ff --separator-color=00000000 \
         --insidever-color=00000000 --insidewrong-color=d23c3dff \
-        --ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos='x+280:h-70' \
-        --radius=20 --ring-width=4 --verif-text='' --wrong-text='Nochmaaal!' \
-        --verif-color=ffffffff --time-color=ffffffff --date-color=ffffffff \
-        --noinput-text='' --force-clock --nofork
+        --ringver-color=ffffffff --ringwrong-color=ffffffff \
+        --nofork
 dunstctl set-paused false
