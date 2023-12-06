@@ -4,6 +4,7 @@
 """
 import json
 import subprocess
+from functools import cached_property
 from time import time
 
 import requests
@@ -21,19 +22,31 @@ class Py3status:
     token = ""
     good_threshold = 50
 
+    @cached_property
+    def _api_url(self):
+        if self.url.startswith("https://"):
+            self.url = self.url[len("https://") :]
+        if len(self.url.split("/")) > 4:
+            self.organizer = self.organizer or self.url.split("/")[-4]
+            self.event = self.event or self.url.split("/")[-3]
+            self.quota = self.quota or self.url.split("/")[-2]
+            self.instance = self.instance or self.url.split("/")[0]
+        else:
+            self.instance = self.instance or self.url.split("/")[0]
+        url = "https://{self.instance}/api/v1/organizers/{self.organizer}/events/{self.event}/quotas/{self.quota}/availability/".format(
+            self=self
+        )
+        return url
+
     def check_tickets(self, i3s_output_list, i3s_config):
         response = {"cached_until": time() + self.cache_timeout, "full_text": ""}
 
         try:
-            url = "https://{self.instance}/api/v1/organizers/{self.organizer}/events/{self.event}/quotas/{self.quota}/availability/".format(
-                self=self
-            )
             rsp = requests.get(
-                url,
+                self._api_url,
                 headers={"Authorization": "Token {self.token}".format(self=self)},
                 verify=False,
             )
-
             num = max(0, json.loads(rsp.content.decode()).get("available_number", 0))
 
             if num >= self.good_threshold:
