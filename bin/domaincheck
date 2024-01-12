@@ -14,8 +14,8 @@ if [[ $address =~ ":" ]]; then
         return 0
     fi
     # check if we have an IPv6 address locally or if we have to tunnel
-    # to get to it – just try to ping -6
-    ping6 -c 1 $address > /dev/null 2>&1
+    # to get to it – just try to ping a known good address -6
+    ping6 -c 1 google.com > /dev/null 2>&1
     if [[ $? == 0 ]]; then
         mode=6
     else
