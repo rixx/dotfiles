@@ -1,7 +1,10 @@
 #!/bin/sh
 #
 # ~/.xinitrc
-#
+
+XDG_CONFIG_HOME="$HOME/.config"
+XDG_CACHE_HOME="$HOME/.cache"
+XDG_DATA_HOME="$HOME/.local/share"
 
 #For power saving: turn of screen after five minutes
 xss-lock -- lock -n &
