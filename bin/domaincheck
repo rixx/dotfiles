@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Given an IP address, find out as much as you can.
+
+V6HOST=mycroft
+address=$1
+# Modes: 4 = IPv4, 6 = IPv6 local, 8 = no local IPv6
+mode=4
+
+# find out if the address is v6
+if [[ $address =~ ":" ]]; then
+    if [[ $address =~ ^fe80 ]]; then
+        echo "Link-local address"
+        return 0
+    fi
+    # check if we have an IPv6 address locally or if we have to tunnel
+    # to get to it – just try to ping -6
+    ping6 -c 1 $address > /dev/null 2>&1
+    if [[ $? == 0 ]]; then
+        mode=6
+    else
+        mode=8
+    fi
+fi
+
+# Look up the address
+
+if [[ $mode == 4 ]]; then
+    # IPv4
+    domain=$(host $address)
+elif [[ $mode == 6 ]]; then
+    # IPv6
+    domain=$(host -t aaaa $address)
+else
+    # IPv6 tunnel
+    domain=$(ssh $V6HOST host -t aaaa $address)
+fi
+
+if [[ $? == 0 ]]; then
+    domain=$(echo $domain | sed 's/.*domain name pointer //' | sed 's/\.$//')
+    echo "DNS name: $domain"
+else
+    echo "No DNS name found"
+fi
+
+# Now we'll try to connect to the host and see what we can find out about it.
+# The one-liner is openssl s_client -connect "$@":443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -text | grep -E "DNS|Subject: CN"
+# but we want some error protection etc.
+
+if [[ $mode == 4 ]]; then
+    # IPv4
+    response=$(timeout 2 openssl s_client -connect "$address":443 2>&1)
+elif [[ $mode == 6 ]]; then
+    # IPv6
+    response=$(timeout 2 openssl s_client -connect "[$1]:443" 2>&1)
+else
+    # IPv6 tunnel
+    response=$(timeout 4 ssh $V6HOST openssl s_client -connect "\\[$1\\]:443" 2>&1)
+fi
+
+# if "no peer certificate available" is in the response, there's no certificate without knowing the domain name
+if [[ $response =~ "no peer certificate available" ]]; then
+    echo "Server requires SNI, but no domain name given."
+    exit 0
+fi
+
+if [[ $? != 0 ]]; then
+    echo "No SSL certificate found"
+    exit 0
+fi
+
+# Now we have the certificate, but we need to extract the CN from it.
+# We'll do that by extracting the certificate, then piping it to openssl x509 -text
+
+echo "$response" | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -text | grep -E "DNS|Subject: CN"
