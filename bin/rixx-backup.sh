@@ -30,7 +30,9 @@ info "Starting backup"
     ~/.gnupg                                    \
     ~/.local/share/Anki2                        \
     ~/.local/share/applications/mimeapps.list   \
+    ~/.local/share/fonts                        \
     ~/.local/share/mail/cutebit                 \
+    ~/.local/share/mutt                         \
     ~/.local/share/password-store               \
     ~/.local/share/zsh                          \
     ~/.mozilla                                  \
