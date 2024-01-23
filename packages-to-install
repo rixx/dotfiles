@@ -17,6 +17,7 @@ httpie
 imagemagick
 iproute2
 jless
+klog-time-tracker-bin
 less
 logrotate
 lsof
@@ -68,8 +69,6 @@ rofimoji-git
 simple-scan
 spotify
 sshuttle
-steam
-stepmania-git
 ttc-iosevka
 udiskie
 vlc
