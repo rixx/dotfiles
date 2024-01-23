@@ -30,6 +30,12 @@ alias grep="grep --color=auto"
 alias df="df -h"
 alias ipython='ipython --no-banner'
 
+alias klog="NO_COLOR=1 klog"
+# always pipe klog through sed to fix terminal colours being incompatible with light themes
+#function klog() {
+#  klog "$@" | sed "s/38;5/31;5/g" >&2
+#}
+
 #############################################################
 #                                                           #
 #  Fix all tools not using XDG_CONFIG_HOME or XDG_DATA_HOME #
