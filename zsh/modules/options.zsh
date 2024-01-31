@@ -46,9 +46,10 @@ setopt glob extendedglob
 ###########
 
 HISTFILE="$XDG_DATA_HOME/zsh/histfile"
-HISTSIZE=10000  # This is the amount that is searched inmem
+HISTSIZE=10000000  # This is the amount that is searched inmem
 # This is the histfile length. The histfile will be trimmed once it reaches 20% beyond this value.
-SAVEHIST=100000000
+SAVEHIST=10000000000
+HISTFILESIZE=10000000000
 
 # Save timestamps and duration with history. The format is :<beginning time in epoch>:<elapsed time in seconds>:command
 setopt extendedhistory
@@ -57,10 +58,14 @@ unsetopt hist_beep
 # If entering a duplicate entry to the history, remove the older one.
 # Alternatives are hist_ignore_dups (do not enter duplicates in the first place) and hist_find_no_dups (enter them, but do not find them when searching)
 setopt hist_ignore_all_dups
+# Normalise history
+setopt hist_reduce_blanks
 # Do not store the history command itself
 setopt hist_no_store
 # Use the same history for all sessions. Implies inc_append_history (that is, write to history immediately after a command has been executed, not on shell exit)
 setopt sharehistory
+# Make it easy to exclude commands from history
+setopt hist_ignore_space
 
 
 ################
