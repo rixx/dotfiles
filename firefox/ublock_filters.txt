@@ -1,3 +1,13 @@
+!!!!!!!!!!!!!!!!!!!!!!
+!       STYLES       !
+!!!!!!!!!!!!!!!!!!!!!!
+danluu.com##body:style(max-width: 600px; margin: 0 auto; line-height: 1.8)
+
+
+!!!!!!!!!!!!!!!!!!!!!!!
+!       FILTERS       !
+!!!!!!!!!!!!!!!!!!!!!!!
+
 ! 2021-11-08 https://twitter.com
 twitter.com##div:has(>div>h2>div>span:has-text(Trends for you)) 
 twitter.com##div:has(>div>h2>div>span:has-text(Trends for you)) + div
@@ -53,3 +63,4 @@ www.linkedin.com##.global-nav__app-launcher-trigger.pl3.global-nav__primary-item
 www.linkedin.com##.premium-accent-bar.ember-view.artdeco-card
 www.linkedin.com##.ph5.pv4.job-details-how-you-match-card__upsell
 www.linkedin.com##.flex-column.display-flex.align-items-left.p4.justify-center.artdeco-card
+
