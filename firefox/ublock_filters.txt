@@ -64,3 +64,5 @@ www.linkedin.com##.premium-accent-bar.ember-view.artdeco-card
 www.linkedin.com##.ph5.pv4.job-details-how-you-match-card__upsell
 www.linkedin.com##.flex-column.display-flex.align-items-left.p4.justify-center.artdeco-card
 
+!youtube-shorts row
+youtube.com##.ytd-rich-shelf-renderer#dismissible
