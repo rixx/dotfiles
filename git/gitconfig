@@ -42,7 +42,7 @@
 	ui = true
 
 [commit]
-    verbose = 1
+    verbose = true
 
 [core]
 	excludesfile = /home/rixx/.gitignore
@@ -66,6 +66,7 @@
 
 [pull]
     rebase = true
+    ff = only
 
 [push]
 	default = current
@@ -79,6 +80,7 @@
 [submodule]
     stickyRecursiveClone = true
     fetchJobs = 4
+	recurse = true
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -108,3 +110,16 @@
 [advice]
 	statusHints = false
 	skippedCherryPicks = false
+[rerere]
+	enabled = true
+[branch]
+	autoSetupRebase = always
+[status]
+	submoduleSummary = true
+[diff]
+	submodule = log
+	renames = copies
+[merge]
+	conflictStyle = zdiff3
+[fetch]
+	prune = true
