@@ -1,9 +1,13 @@
-[user]
-    name = Tobias Kunze
-	email = r@rixx.de
+################################
+#        GENERAL OPTIONS       #
+################################
+
+[advice]
+	statusHints = false
+	skippedCherryPicks = false
 
 [alias]
-    # Shorter commands
+    # Short commands
     a = add -p
     amend = commit --amend
     br = branch
@@ -12,7 +16,7 @@
     d = diff
     st = status --sort --branch
 
-    # Easier commands
+    # Commands with default options
 	ls-untracked = ls-files --others --exclude-standard
 	pushf = push --force-with-lease
     aliases = "config --get-regexp alias"
@@ -29,11 +33,15 @@
 
     # Function aliases
     branches = "!f() { git branch "$@" --sort=authordate --color=always --format='%(if)%(HEAD)%(then)%(color:red) * %(else)   %(end)%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
-    tags = "!f() { git tag "$@" --sort=authordate --color=always --format='%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
     go = "!f() { git checkout -b "$1" 2> /dev/null || git checkout "$1"; }; f"  # go to branch, create if it does not exist
     pushall = "!f() { git remote | xargs -L1 git push "$@"; }; f"
     # multi push to all named origins, does NOT permit further config!
     pushm  = "!f() { for remote in "$@"; do git push "$remote"; done; }; f"
+    tags = "!f() { git tag "$@" --sort=authordate --color=always --format='%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
+
+[branch]
+	autoSetupRebase = always
+	sort = -committerdate
 
 [checkout]
     workers = 0
@@ -48,29 +56,37 @@
 	excludesfile = /home/rixx/.gitignore
 	pager = diff-so-fancy | less --tabs=4 -RFX
 
-[add.interactive]
-    # Bug(?) in git 2.37.0 when using diff-so-fancy
-    useBuiltin = false
-
 [credential]
 	helper = cache
 
-[gpg]
-	program = gpg2
+[diff]
+	algorithm = histogram
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
+	renames = copies
+	submodule = log
+
+[fetch]
+	fsckobjects = true
+	prune = true
+	prunetags = true
 
 [help]
-    autocorrect = 1
+    autocorrect = immediate
 
 [init]
 	defaultBranch = main
 
+[log]
+	date = iso
+
 [pull]
-    rebase = true
     ff = only
+    rebase = true
 
 [push]
-	default = current
 	autoSetupRemote = true
+	default = current
     # push tags automatically
 	followtags = true
 
@@ -79,10 +95,42 @@
 	autoStash = true
 	missingCommitsCheck = warn
 
+[receive]
+	fsckobjects = true
+
+[rerere]
+	enabled = true
+
+[status]
+	submoduleSummary = true
+
 [submodule]
-    stickyRecursiveClone = true
-    fetchJobs = 4
 	recurse = true
+    fetchJobs = 4
+    stickyRecursiveClone = true
+
+[tag]
+	sort = -taggerdate
+
+[transfer]
+	fsckobjects = true
+
+################################
+#     REPO SPECIFIC OPTIONS    #
+################################
+[user]
+    name = Tobias Kunze
+	email = r@rixx.de
+
+[url "git@github.com:"]
+    # Always use SSH for github instead of HTTPS
+	insteadOf = "https://github.com/"
+    # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
+    insteadOf = "gh:"
+
+################################
+#     TOOL SPECIFIC OPTIONS    #
+################################
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -105,39 +153,10 @@
 	new = green bold
 	whitespace = red reverse
 
-[diff-so-fancy]
-	markEmptyLines = false
-[advice]
-	statusHints = false
-	skippedCherryPicks = false
-[rerere]
-	enabled = true
-[branch]
-	autoSetupRebase = always
-	sort = -committerdate
-[status]
-	submoduleSummary = true
-[diff]
-	submodule = log
-	renames = copies
-	algorithm = histogram
-	colorMoved = default
-	colorMovedWS = allow-indentation-change
-[fetch]
-	prune = true
-	fsckobjects = true
-	prunetags = true
-
-[url "git@github.com:"]
-    # Always use SSH for github instead of HTTPS
-	insteadOf = "https://github.com/"
-    # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
-    insteadOf = "gh:"
-[transfer]
-	fsckobjects = true
-[receive]
-	fsckobjects = true
-[tag]
-	sort = -taggerdate
-[log]
-	date = iso
+##################################################
+#                    UNSORTED                    #
+#
+#  Options added since sorting this file         #
+#  Please sort into global, repo specific, tool  #
+#  specific, and then order alphabetically.      #
+##################################################
