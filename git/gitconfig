@@ -71,6 +71,8 @@
 [push]
 	default = current
 	autoSetupRemote = true
+    # push tags automatically
+	followtags = true
 
 [rebase]
 	autoSquash = true
@@ -105,8 +107,6 @@
 
 [diff-so-fancy]
 	markEmptyLines = false
-[maintenance]
-	repo = /home/rixx/.config/dotfiles
 [advice]
 	statusHints = false
 	skippedCherryPicks = false
@@ -114,12 +114,30 @@
 	enabled = true
 [branch]
 	autoSetupRebase = always
+	sort = -committerdate
 [status]
 	submoduleSummary = true
 [diff]
 	submodule = log
 	renames = copies
-[merge]
-	conflictStyle = zdiff3
+	algorithm = histogram
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
 [fetch]
 	prune = true
+	fsckobjects = true
+	prunetags = true
+
+[url "git@github.com:"]
+    # Always use SSH for github instead of HTTPS
+	insteadOf = "https://github.com/"
+    # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
+    insteadOf = "gh:"
+[transfer]
+	fsckobjects = true
+[receive]
+	fsckobjects = true
+[tag]
+	sort = -taggerdate
+[log]
+	date = iso
