@@ -94,6 +94,7 @@
 	autoSquash = true
 	autoStash = true
 	missingCommitsCheck = warn
+	updateRefs = true
 
 [receive]
 	fsckobjects = true
