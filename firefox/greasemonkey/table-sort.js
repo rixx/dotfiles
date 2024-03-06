@@ -102,6 +102,9 @@ function handleTable(table) {
     if (table.querySelectorAll("[rowspan]").length) return;
     // RT special: some tables have multiple bodies instead of rows, so don't
     if (table.querySelectorAll("tbody").length > 1) return;
+    // If there isn't a th or if the row contains mixed th/td, it's probably not what we want
+    if (!table.querySelector("tr").querySelector("th") || table.querySelector("tr").querySelector("td")) return;
+
     if (!getSortableColumns(table).length) return;
 
     // Add a button/icon to turn the table into a sortable table
