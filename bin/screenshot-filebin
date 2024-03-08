@@ -4,7 +4,7 @@ set -e
 
 SCREENSHOT_PATH=/home/rixx/tmp/screenshots/$(date --iso-8601=seconds).png
 
-deepin-screenshot -s "$SCREENSHOT_PATH"
+deepin-screen-recorder -s "$SCREENSHOT_PATH"
 
 if [ -f "$SCREENSHOT_PATH" ]; then
     url=$(fb "$SCREENSHOT_PATH")
