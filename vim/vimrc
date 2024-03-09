@@ -229,7 +229,8 @@ if has('mouse')
 endif
 
 "" how to display whitespace characters when set list
-set listchars=tab:▸\ ,trail:-,extends:❯,precedes:❮,trail:·,nbsp:·
+set list
+set listchars=tab:▸\ ,trail:░,extends:❯,precedes:❮,nbsp:·
 
 "" always show status line
 set laststatus=2
