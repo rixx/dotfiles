@@ -180,8 +180,8 @@ if has('syntax') && !exists('g:syntax_on')
   syntax enable
 endif
 
-"" only highlight the first 240 columns
-set synmaxcol=280
+"" only highlight the first 400 columns
+set synmaxcol=400
 
 "" Use instead of colorcolum=120
 "highlight ColorColumn ctermbg=red ctermfg=white
@@ -230,7 +230,7 @@ endif
 
 "" how to display whitespace characters when set list
 set list
-set listchars=tab:▸\ ,trail:░,extends:❯,precedes:❮,nbsp:·
+set listchars=tab:┄┄╴,trail:░,extends:❯,precedes:❮,nbsp:·
 
 "" always show status line
 set laststatus=2
@@ -374,7 +374,7 @@ augroup end
 augroup development
   autocmd!
   autocmd BufNewFile,BufReadPost *.py set foldmethod=indent
-  autocmd BufNewFile,BufReadPost *.py set foldnestmax=2
+  autocmd BufNewFile,BufReadPost *.py set foldnestmax=5
   autocmd FileType python set sw=4 sts=4 et
   " Two-space indents in json
   autocmd! FileType json set sw=2 sts=2 expandtab
