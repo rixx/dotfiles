@@ -67,16 +67,32 @@ class Py3status:
             money_sum += sum((float(line["total_net"]) for line in invoice["lines"]), 0)
 
         money_sum = round(money_sum, 2)
-        response["full_text"] = f"€{money_sum:.2f} ({invoice_count})"
+        self._full_text = f"€{money_sum:.2f} ({invoice_count})"
+        # response["full_text"] = self._full_text
+        response["full_text"] = "€"
         return response
 
     def on_click(self, i3s_output_list, i3s_config, event):
+        # show full text in notification
         subprocess.call(
             [
-                "xdg-open",
-                f"https://{self._base_url}/admin/crmbase/invoice/stats/?costcenter=1",
+                "notify-send",
+                "-t",
+                "5000",
+                "-i",
+                "dialog-information",
+                "Invoices",
+                self._full_text,
             ]
         )
+        if event["button"] != 1:
+            # only non-left click events should open the browser
+            subprocess.call(
+                [
+                    "xdg-open",
+                    f"https://{self._base_url}/admin/crmbase/invoice/stats/?costcenter=1",
+                ]
+            )
 
 
 if __name__ == "__main__":
