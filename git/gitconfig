@@ -49,6 +49,9 @@
 [color]
 	ui = true
 
+[column]
+	ui = auto
+
 [commit]
     verbose = true
 
