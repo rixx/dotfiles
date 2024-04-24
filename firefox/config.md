@@ -98,6 +98,14 @@ browser.link.open_newwindow.override.external 3
 browser.link.open_newwindow.restriction 0
 ```
 
+Make sure a LOT of history is retained, and set the expiry process to run rarely rather than every 180 seconds:
+
+```
+places.history.expiration.interval_seconds 1800
+places.history.expiration.max_pages 9999999
+places.history.expiration.transient_current_max_pages 999999
+```
+
 And finally, we disable tab unloading, because it's hella annoying:
 
 ```
