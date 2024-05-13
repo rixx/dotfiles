@@ -19,3 +19,5 @@ document.addEventListener('keydown', (event) => {
         document.querySelector('li.chapter.previous a').click()
     }
 })
+
+document.querySelector("#workskin").style.maxWidth = "64em"

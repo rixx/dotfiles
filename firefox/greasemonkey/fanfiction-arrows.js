@@ -20,3 +20,5 @@ document.addEventListener('keydown', (event) => {
         document.querySelector('.lc-wrapper + span button:first-of-type').click()
     }
 })
+
+document.querySelector("#storytext").style.maxWidth = "60em"
