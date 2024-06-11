@@ -73,19 +73,20 @@ class Py3status:
         return response
 
     def on_click(self, i3s_output_list, i3s_config, event):
-        # show full text in notification
-        subprocess.call(
-            [
-                "notify-send",
-                "-t",
-                "5000",
-                "-i",
-                "dialog-information",
-                "Invoices",
-                self._full_text,
-            ]
-        )
-        if event["button"] != 1:
+        # show full text on left click
+        if event["button"] == 1:
+            subprocess.call(
+                [
+                    "notify-send",
+                    "-t",
+                    "5000",
+                    "-i",
+                    "dialog-information",
+                    "Invoices",
+                    self._full_text,
+                ]
+            )
+        else:
             # only non-left click events should open the browser
             subprocess.call(
                 [
