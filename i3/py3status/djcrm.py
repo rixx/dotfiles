@@ -4,9 +4,9 @@
 
 import json
 import subprocess
+from datetime import datetime
 from functools import cached_property
 from time import time
-from datetime import datetime
 
 import requests
 
@@ -42,7 +42,6 @@ class Py3status:
             )
             invoices = rsp.json()["results"]
         except Exception:
-            num = ""
             response["color"] = i3s_config["color_bad"]
             response["full_text"] = "€?"
             return response
@@ -55,7 +54,6 @@ class Py3status:
             if current_month not in invoice["date"]:
                 # Invoices are ordered by date, so we can stop here
                 break
-            num = max(0, json.loads(rsp.content.decode()).get("available_number", 0))
 
             if self.match_string:
                 if not any(
