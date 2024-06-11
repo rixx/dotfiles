@@ -1,0 +1,18 @@
+#!/bin/env python3
+import json
+from pathlib import Path
+
+config_path = Path("/opt/discord/resources/build_info.json")
+
+
+def fix_discord():
+    with config_path.open("r") as f:
+        config = json.load(f)
+    version = config["version"].split(".")
+    config["version"] = ".".join([version[0], version[1], str(int(version[2]) + 1)])
+    with config_path.open("w") as f:
+        json.dump(config, f)
+
+
+if __name__ == "__main__":
+    fix_discord()
