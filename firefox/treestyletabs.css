@@ -42,33 +42,13 @@ tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current
   display: none;
 }
 
-/* Count tabs */
-#tabbar {
-  counter-reset: vtabs atabs tabs;
-  /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
+/* move "new tab" button to the bottom */
+#tabbar:not(.overflow) .after-tabs {
+  margin-top: auto;
 }
-tab-item:not(.collapsed):not(.discarded) {
-  counter-increment: vtabs atabs tabs;
-}
-tab-item:not(.collapsed) {
-  counter-increment: vtabs tabs;
-}
-tab-item:not(.discarded) {
-  counter-increment: atabs tabs;
-}
-tab-item {
-  counter-increment: tabs;
+tab-item:last-of-type {
+  margin-bottom: 0;
 }
 .newtab-button {
-  --tab-count-text: counter(tabs) " tabs";
-  height: 38px;
-  border-top: 1px solid #00000055 !important;
-}
-:root.simulate-svg-context-fill .newtab-button::after {
-  content: var(--tab-count-text);
-  pointer-events: none;
-  width: auto;
-  mask: none !important;
-  background: none !important;
-  margin-top: 7px;
+  border-top: 2px solid #00000011 !important;
 }
