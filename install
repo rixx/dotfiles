@@ -72,6 +72,7 @@ link tig/tigrc .tigrc
 link virtualenvs/postactivate .local/share/virtualenvs/postactivate
 link virtualenvs/postdeactivate .local/share/virtualenvs/postdeactivate
 link vim/vimrc .config/nvim/init.vim
+link vim/coc-settings.json .config/nvim/coc-settings.json
 link X/XCompose .XCompose
 link X/xintitrc .xinitrc
 link zsh/zshrc .zshrc
