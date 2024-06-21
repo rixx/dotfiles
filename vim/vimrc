@@ -3,9 +3,9 @@
 " Then run :PlugInstall once, and you should be good to go.
 "
 " Also!
-" Create virtualenv neovim, and install pynvim and jedi (for completion) and
+" Create virtualenv neovim, and install pynvim and pyright (for completion) and
 " black (for F9 formatting)
-" Then run :CocInstall coc-python
+" Then run :CocInstall coc-pyright
 
 """""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
@@ -573,16 +573,19 @@ imap <C-space> <Plug>VimwikiTableNextCell
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
-" Use <TAB> to select the popup menu:
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
 " Use gd to go to actual definition
 nmap <silent> gd <Plug>(coc-definition)
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
 set completeopt=noinsert,menuone,noselect,preview
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
@@ -592,10 +595,12 @@ verbose imap <tab>
 call plug#end()
 
 " This one has to go after plug#end()
+" We use copilot on tab to have seamless tab complete. If a copilot suggestion
+" is shown, just use C-n to use CoC completion instead.
 inoremap <silent><expr> <TAB>
+      \ exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") :
       \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
+      \ CheckBackSpace() ? "\<Tab>" :
       \ coc#refresh()
 
 " vim:set ft=vim et sw=2:
-set nofixendofline
