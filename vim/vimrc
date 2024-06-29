@@ -541,7 +541,7 @@ let g:copilot_enabled = 1
 let g:copilot_autocomplete = 1
 let g:copilot_autocomplete_delay = 0
 " copilot keybindings
-inoremap ^ <Plug>(copilot-next)
+inoremap <c-n> <Plug>(copilot-next)
 
 Plug 'vimwiki/vimwiki'
 """ vimwiki config
@@ -572,20 +572,12 @@ let g:vimwiki_diary_months = {
       \}
 let g:vimwiki_links_header = 'Sitemap'
 let g:vimwiki_auto_header = 0
-" conflicts with tab completion
-imap <C-space> <Plug>VimwikiTableNextCell
 
 
 """ Completion
 let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Use gd to go to actual definition
 nmap <silent> gd <Plug>(coc-definition)
@@ -597,18 +589,26 @@ set completeopt=noinsert,menuone,noselect,preview
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 set shortmess+=c
 
-verbose imap <tab>
-
 call plug#end()
 
 " This one has to go after plug#end()
-" We use copilot on tab to have seamless tab complete. If a copilot suggestion
-" is shown, just use C-n to use CoC completion instead.
+" Configure copilot to complete with <C-j>, and use tab for coc completion (or
+" normal behavior if no completion is active)
+
+imap <silent><script><expr> <C-j> copilot#Accept('\<CR>')
+let g:copilot_no_tab_map = v:true
+
+" Make sure we catch duplicate remaps of <tab>
+verbose imap <tab>
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 inoremap <silent><expr> <TAB>
-      \ exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") :
       \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackSpace() ? "\<Tab>" :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 lua << EOF
 require("hardtime").setup({
