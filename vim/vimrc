@@ -194,6 +194,7 @@ highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 "" show line number of current line and relative line numbers otherwise
+set relativenumber
 set number
 
 "" width of the column at the side of the window indicating folds
