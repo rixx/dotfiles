@@ -457,9 +457,9 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 
 " zen mode: <leader> z
-Plug 'junegunn/goyo.vim'
-let g:goyo_width = 90
-noremap <leader>z :Goyo<cr>
+Plug 'folke/zen-mode.nvim'
+Plug 'folke/twilight.nvim'
+noremap <leader>z :ZenMode<cr>
 
 " Better directory browsing
 Plug 'tpope/vim-vinegar'
@@ -618,6 +618,28 @@ require("hardtime").setup({
   disable_mouse = false,
   --show hints in insert mode too
   showmode = false,
+})
+require('twilight').setup({
+  dimming = {
+    alpha = 0.7,
+    color = { "Normal", "#000000" },
+    term_bg = "#fdf6e3",
+  },
+})
+require('zen-mode').setup({
+  window = {
+    backdrop = 0.5,
+    width = 110,
+  },
+  plugins = {
+    gitsigns = { enabled = false },
+  },
+  on_open = function(win)
+    vim.cmd('ContextToggle')
+  end,
+  on_close = function(win)
+    vim.cmd('ContextToggle')
+  end,
 })
 require('which-key').setup({
   window = {
