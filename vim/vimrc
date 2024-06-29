@@ -409,8 +409,11 @@ augroup END
 
 call plug#begin()
 
-"""""""" Removes search highlight when not needed """"""""
+" Removes search highlight when not needed
 Plug 'romainl/vim-cool'
+
+" Open path:lineno in vim and with gF
+Plug 'wsdjeg/vim-fetch'
 
 " Increment/decrement dates
 Plug 'tpope/vim-speeddating'
