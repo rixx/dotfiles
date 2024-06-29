@@ -6,6 +6,11 @@
   "pyright.inlayHints.parameterTypes": false,
   "pyright.inlayHints.variableTypes": false,
   "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportAttributeAccessIssue": "none",
+    "reportFunctionMemberAccess": "none",
+    "reportArgumentType": "none"
+  },
   "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true
 }
