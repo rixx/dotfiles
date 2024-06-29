@@ -418,6 +418,12 @@ Plug 'wsdjeg/vim-fetch'
 " Increment/decrement dates
 Plug 'tpope/vim-speeddating'
 
+" Show key hints
+Plug 'nvim-lua/plenary.nvim'
+Plug 'm4xshen/hardtime.nvim'
+Plug 'folke/which-key.nvim'
+set noshowmode
+
 Plug 'junegunn/fzf'
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -606,5 +612,18 @@ inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1):
       \ CheckBackSpace() ? "\<Tab>" :
       \ coc#refresh()
+
+lua << EOF
+require("hardtime").setup({
+  disable_mouse = false,
+  --show hints in insert mode too
+  showmode = false,
+})
+require('which-key').setup({
+  window = {
+    border = "shadow",
+  },
+})
+EOF
 
 " vim:set ft=vim et sw=2:
