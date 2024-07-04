@@ -543,6 +543,18 @@ let g:copilot_autocomplete_delay = 0
 " copilot keybindings
 inoremap <c-n> <Plug>(copilot-next)
 
+Plug 'ggandor/leap.nvim'
+" Use s and S to navigate to any two-letter combination
+
+Plug 'RRethy/vim-illuminate'
+" Highlight all instances of the word under the cursor
+
+Plug 'tpope/vim-rsi'
+" Readline in vim
+
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+" Turn relative line numbers off in non-focused window
+
 Plug 'vimwiki/vimwiki'
 """ vimwiki config
 " <leader>ww opens index
@@ -674,11 +686,15 @@ require('gitsigns').setup({
     map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
   end
 })
+
 require('which-key').setup({
   window = {
     border = "shadow",
   },
 })
+
+require('leap').create_default_mappings()
+
 EOF
 
 " vim:set ft=vim et sw=2:
