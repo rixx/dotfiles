@@ -102,6 +102,9 @@ alias agpy='ag --python'
 
 alias host='systemd-resolve'
 
+# Alias the most common sshuttle command
+alias vpn='sshuttle -r tonks 0.0.0.0/0 --dns -x 78.46.142.235'
+
 alias ...='../..'
 alias ....='../../..'
 alias .....='../../../..'
