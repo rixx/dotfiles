@@ -8,7 +8,12 @@ set -e
 
 function get_changed_files {
     extension=$1
-    git diff --name-only --diff-filter=ACMRTUXB --relative . | grep -E "\.$extension$"
+    # if no extension is given, just return all changed files
+    if [ -z "$extension" ]; then
+        git diff --name-only --diff-filter=ACMRTUXB --relative .
+    else
+        git diff --name-only --diff-filter=ACMRTUXB --relative . | grep -E "\.$extension$"
+    fi
 }
 
 function lint_python_files {
@@ -99,7 +104,8 @@ elif [ "$2" = "--all" ]; then
     patharg=$1
 else
     # We also set all=true if there are no changed files at all
-    if [ -n get_changed_files ]; then
+    changed_files=$(get_changed_files)
+    if [ -z "$changed_files" ]; then
         all=true
     else
         all=false
