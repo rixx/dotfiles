@@ -10,7 +10,9 @@ XDG_DATA_HOME="$HOME/.local/share"
 xss-lock -- lock -n &
 xautolock -time 10 -locker lock &
 
-xset dpms 300 600 900 &
+# xset dpms 300 600 900 &
+# No DPMS, as it seems to crash the laptop about once a day
+xset s off -dpms
 xset -b &
 xset +fp /usr/share/fonts/local &
 xset +fp $HOME/.local/share/fonts
