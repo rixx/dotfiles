@@ -61,6 +61,13 @@ class Py3status:
                 ):
                     continue
 
+            if (
+                invoice["status"] == "draft"
+                or invoice["gross_total"] <= 0
+                or invoice["payment_status"] == "canceled"
+            ):
+                continue
+
             invoice_count += len(invoice["lines"])
             money_sum += sum((float(line["total_net"]) for line in invoice["lines"]), 0)
 
