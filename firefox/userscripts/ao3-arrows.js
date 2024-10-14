@@ -1,8 +1,14 @@
 // ==UserScript==
-// @name     ao3-arrows
-// @include https://archiveofourown.org/*
-// @version  1
-// @grant    none
+// @name         AO3 Arrow Navigation
+// @namespace    https://rixx.de
+// @match        https://archiveofourown.org/*
+// @version      1.0.0
+// @description  Adds arrow key navigation to AO3 works
+// @icon         https://archiveofourown.org/images/ao3_logos/logo_42.png
+// @grant        none
+// @author       Tobias 'rixx' Kunze
+// @homepageURL  https://github.com/rixx/dotfiles
+// @downloadURL  https://github.com/rixx/dotfiles/raw/refs/heads/master/firefox/userscripts/ao3-arrows.js
 // ==/UserScript==
 
 // Add global keybinds for arrow-right and arrow-left
