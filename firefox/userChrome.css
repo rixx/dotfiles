@@ -36,20 +36,24 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
 
 .sidebar-splitter {
     border: none !important;
-}   
-    
+}
+
 .customization-target {
-    padding: 6px !important;   
+    padding: 6px !important;
 }
 
 /* userChrome things for TreeStyle Tabs */
-#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar {
-  opacity: 0;
-  pointer-events: none;
-}
-#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
-    visibility: collapse !important;
+#main-window #TabsToolbar {
+    opacity: 0;
+    max-height: 0px;
+    pointer-events: none;
 }
 #sidebar-header {
   display: none;
+}
+
+/* remove the awkward top padding */
+#toolbar-menubar.customization-target[autohide="true"][inactive]:not([customizing]) {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
