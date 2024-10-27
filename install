@@ -46,6 +46,7 @@ conflink dunst
 conflink gtk-3.0
 conflink i3
 conflink kitty
+conflink lsd
 conflink mimeapps.list
 conflink mutt/muttrc
 conflink ranger/rc.conf

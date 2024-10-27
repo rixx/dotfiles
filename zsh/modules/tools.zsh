@@ -21,7 +21,6 @@ export PYTHONDONTWRITEBYTECODE=1
 
 MAKEFLAGS="-j$(nproc)" # Parallel execution for makepkg when possible
 alias vim="vim -O" # Open vim in split mode if multiple files are given
-alias ls="ls --color"
 alias mosh='LANG=en_US.UTF-8 mosh'
 alias feh="feh --conversion-timeout 1"  # makes feh work with svg
 alias diff="diff --color -u"

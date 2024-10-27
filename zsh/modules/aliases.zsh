@@ -23,7 +23,6 @@ certcheck() {
     echo -n | openssl s_client -connect "$@":443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -text | grep -E "DNS|Subject: CN"
 }
 
-alias ll="ls -Ahl --color"
 alias mutt="neomutt"
 alias https='http --default-scheme=https'
 alias ipa='ip -br -c a'
@@ -32,6 +31,13 @@ alias wiki="vim -c VimwikiIndex"
 
 if [ -x "$(command -v btop)" ]; then
     alias htop="btop"
+fi
+if [ -x "$(command -v lsd)" ]; then
+    alias ls="lsd"
+    alias ll="lsd -Alh"
+else
+    alias ls="ls --color"
+    alias ll="ls -Ahl --color"
 fi
 
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'

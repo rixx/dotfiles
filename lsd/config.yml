@@ -1,0 +1,16 @@
+blocks:
+  - permission
+  - user
+  - group
+  - size
+  - date
+  - git
+  - name
+
+color:
+  theme: custom
+
+date: '+%Y-%m-%d %R:%S'
+
+icons:
+  separator: "  "
