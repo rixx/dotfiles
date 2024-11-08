@@ -46,9 +46,6 @@
 [checkout]
     workers = 0
 
-[color]
-	ui = true
-
 [column]
 	ui = auto
 
@@ -110,8 +107,7 @@
 
 [submodule]
 	recurse = true
-    fetchJobs = 4
-    stickyRecursiveClone = true
+	fetchJobs = 4
 
 [tag]
 	sort = -taggerdate
@@ -123,14 +119,14 @@
 #     REPO SPECIFIC OPTIONS    #
 ################################
 [user]
-    name = Tobias Kunze
+	name = Tobias Kunze
 	email = r@rixx.de
 
 [url "git@github.com:"]
-    # Always use SSH for github instead of HTTPS
+	# Always use SSH for github instead of HTTPS
 	insteadOf = "https://github.com/"
-    # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
-    insteadOf = "gh:"
+	# Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
+	insteadOf = "gh:"
 
 ################################
 #     TOOL SPECIFIC OPTIONS    #
