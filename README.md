@@ -18,6 +18,7 @@ Things you might want to look at:
 1. Install the packages listed in ``packages-to-install``.
 2. Run ``./install``.
 3. Install crontabs from ``./crontab``
+4. Install sudoers from ``./sudoers``
 
 ### If on a Desktop system
 

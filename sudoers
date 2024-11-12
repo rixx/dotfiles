@@ -1,0 +1,11 @@
+rixx ALL=(ALL) ALL
+
+rixx ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart offlineimap@rixx
+rixx ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart offlineimap@rixx.service
+rixx ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart netctl-auto@wlp1s0
+rixx ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart netctl-auto@wlp1s0.service
+rixx ALL=(ALL) NOPASSWD: /usr/bin/tailscale up
+rixx ALL=(ALL) NOPASSWD: /usr/bin/tailscale down
+rixx ALL=(ALL) NOPASSWD: /usr/bin/mount
+rixx ALL=(ALL) NOPASSWD: /usr/bin/umount
+rixx ALL=(ALL) NOPASSWD: /usr/bin/updatedb
