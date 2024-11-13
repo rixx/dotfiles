@@ -27,6 +27,7 @@ Things you might want to look at:
 3. If on a Desktop system on a ThinkPad, install ``X/40-thinkpad-keyboard.conf``.
 4. Download [this obsidian fork](https://github.com/rixx/obsidian-local-images), `npm install && npm run build`, ``cp -r
    build ~/doc/wiki/.obsidian/plugins/obsidian-local-images``, be sad.
+5. Update ``/etc/pam.d/login`` as described in [the wiki](https://wiki.archlinux.org/title/GNOME/Keyring#PAM_step)
 
 ## Troubleshooting
 
