@@ -61,11 +61,7 @@ class Py3status:
                 ):
                     continue
 
-            if (
-                invoice["status"] == "draft"
-                or invoice["gross_total"] <= 0
-                or invoice["payment_status"] == "canceled"
-            ):
+            if invoice["status"] == "draft":
                 continue
 
             invoice_count += len(invoice["lines"])
