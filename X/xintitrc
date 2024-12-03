@@ -50,6 +50,6 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 # Secrets handling
 dbus-update-activation-environment --systemd DISPLAY XAUTHORITY
 /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
-export SSH_AUTH_SOCK
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 
 exec i3
