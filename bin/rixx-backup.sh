@@ -38,7 +38,6 @@ info "Starting backup"
     ~/.mozilla                                  \
     ~/.nom                                      \
     ~/.ssh                                      \
-    ~/.stepmania-5.1                            \
     ~/data                                      \
     ~/doc                                       \
     ~/Downloads                                 \
