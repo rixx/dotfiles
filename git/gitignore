@@ -17,3 +17,9 @@
 *.toc
 *.snm
 *.nav
+
+# AI assistants
+*.aider*
+
+# Sanity
+*.secret

@@ -17,8 +17,8 @@
     st = status --sort --branch
 
     # Commands with default options
-	ls-untracked = ls-files --others --exclude-standard
-	pushf = push --force-with-lease
+    ls-untracked = ls-files --others --exclude-standard
+    pushf = push --force-with-lease
     aliases = "config --get-regexp alias"
     ca = commit --all -v
     delete-remote = push --delete origin
