@@ -12,7 +12,7 @@ import requests
 
 class Py3status:
     # available configuration parameters
-    cache_timeout = 60
+    cache_timeout = 10
     # Home Assistant instance URL (e.g. "http://homeassistant.local:8123")
     instance = ""
     token = ""  # Long-lived access token
