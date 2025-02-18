@@ -111,7 +111,7 @@ class Py3status:
 
     def homeassistant(self, i3s_output_list, i3s_config):
         """Return response dict for py3status"""
-        response = {"cached_until": time() + self.cache_timeout, "full_text": ""}
+        response = {"full_text": ""}
 
         # Check if we should be active based on SSID
         if self.ssid and self.device:

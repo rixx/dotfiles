@@ -18,7 +18,7 @@ class Py3status:
     password = ""
 
     def check_rt(self, i3s_output_list, i3s_config):
-        response = {"cached_until": time() + self.cache_timeout, "full_text": ""}
+        response = {"full_text": ""}
 
         try:
             client = requests.session()

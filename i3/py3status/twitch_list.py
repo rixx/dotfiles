@@ -95,13 +95,11 @@ class Py3status:
         if self.streams:
             return {
                 # "color": self.py3.COLOR_GOOD,
-                "cached_until": self.py3.time_in(self.cache_timeout),
                 "full_text": self.py3.safe_format(
                     self.format, {"live_count": len(self.streams)}
                 ),
             }
         return {
-            "cached_until": self.py3.time_in(self.cache_timeout),
             "full_text": "",
         }
 

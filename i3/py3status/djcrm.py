@@ -29,7 +29,6 @@ class Py3status:
 
     def check_invoices(self, i3s_output_list, i3s_config):
         response = {
-            "cached_until": time() + self.cache_timeout,
             "full_text": "",
             "color": i3s_config["color_good"],
         }

@@ -24,7 +24,6 @@ class Py3status:
         self.status = self._get_status()
         return {
             "full_text": "🔥" if self.status else "🌱",
-            "cached_until": self.py3.time_in(self.cache_timeout),
         }
 
     def on_click(self, event):

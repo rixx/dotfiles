@@ -39,7 +39,7 @@ class Py3status:
         return url
 
     def check_tickets(self, i3s_output_list, i3s_config):
-        response = {"cached_until": time() + self.cache_timeout, "full_text": ""}
+        response = {"full_text": ""}
 
         try:
             rsp = requests.get(
