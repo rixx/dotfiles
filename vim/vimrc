@@ -364,7 +364,7 @@ augroup markdown
   autocmd BufNewFile,BufReadPost *.vue set filetype=vue
   autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
 
-  autocmd Filetype cfg,json,mail,txt,text,xml,yaml,yml let b:copilot_enabled = v:false
+  " autocmd Filetype cfg,json,mail,txt,text,xml,yaml,yml let b:copilot_enabled = v:false
 
   " Conceal links in Markdown
   autocmd Filetype markdown syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
@@ -535,13 +535,13 @@ Plug 'posva/vim-vue'
 Plug 'psf/black'
 nnoremap <F9> :Black<CR>
 
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 """ Enable copilot always
-let g:copilot_enabled = 1
-let g:copilot_autocomplete = 1
-let g:copilot_autocomplete_delay = 0
-" copilot keybindings
-inoremap <c-n> <Plug>(copilot-next)
+" let g:copilot_enabled = 1
+" let g:copilot_autocomplete = 1
+" let g:copilot_autocomplete_delay = 0
+" " copilot keybindings
+" inoremap <c-n> <Plug>(copilot-next)
 
 Plug 'ggandor/leap.nvim'
 " Use s and S to navigate to any two-letter combination
@@ -607,8 +607,8 @@ call plug#end()
 " Configure copilot to complete with <C-j>, and use tab for coc completion (or
 " normal behavior if no completion is active)
 
-imap <silent><script><expr> <C-j> copilot#Accept('\<CR>')
-let g:copilot_no_tab_map = v:true
+" imap <silent><script><expr> <C-j> copilot#Accept('\<CR>')
+" let g:copilot_no_tab_map = v:true
 
 " Make sure we catch duplicate remaps of <tab>
 verbose imap <tab>
