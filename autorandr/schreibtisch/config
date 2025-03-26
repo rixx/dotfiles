@@ -1,3 +1,5 @@
+output eDP
+off
 output HDMI-A-0
 off
 output DisplayPort-0
@@ -12,14 +14,13 @@ output DisplayPort-4
 off
 output DisplayPort-5
 off
-output eDP
-off
 output DisplayPort-7
 crtc 0
 mode 1920x1080
 pos 0x0
 primary
 rate 60.00
+x-prop-colorspace Default
 x-prop-max_bpc 8
 x-prop-non_desktop 0
 x-prop-scaling_mode None
@@ -32,6 +33,7 @@ crtc 2
 mode 1920x1080
 pos 1920x0
 rate 60.00
+x-prop-colorspace Default
 x-prop-max_bpc 8
 x-prop-non_desktop 0
 x-prop-scaling_mode None
