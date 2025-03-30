@@ -30,6 +30,9 @@ bind index,pager o sidebar-open
 bind index,pager B sidebar-toggle-visible
 bind index,pager O sort-mailbox
 
+# Skip trash when deleting with the delete key.
+bind index,pager <delete> purge-message
+
 ## Cool things
 bind index,pager r reply
 bind index,pager R group-reply
