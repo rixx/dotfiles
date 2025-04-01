@@ -7,3 +7,4 @@ set $mod Mod4
 include ~/.config/dotfiles/i3/conf.d/keybinds.conf
 include ~/.config/dotfiles/i3/conf.d/display.conf
 include ~/.config/dotfiles/i3/conf.d/workspaces.conf
+include ~/.config/dotfiles/i3/conf.d/startup.conf
