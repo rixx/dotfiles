@@ -1,0 +1,21 @@
+#!/bin/bash
+# This script passes all arguments to mosh, but if mosh fails,
+# it retries every five seconds for a minute before giving up.
+
+max_retries=12
+delay=5
+
+for attempt in $(seq 1 $max_retries); do
+    # Attempt to run mosh with all provided arguments
+    if mosh "$@"; then
+        exit 0  # Success, exit the script
+    else
+        # (No sense in incremental backoff here.)
+        sleep $delay
+        echo "Mosh connection attempt $attempt failed. Retrying in $delay seconds..."
+    fi
+done
+
+# If all retries fail, exit with an error message
+echo "Failed to connect after $max_retries attempts. Giving up."
+exit 1
