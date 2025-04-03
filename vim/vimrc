@@ -75,9 +75,6 @@ endif
 " don't change working directories to files
 set noautochdir
 
-" toggle insert (paste) mode by pressing INS
-set pastetoggle=<INS>
-
 " allow unsaved background buffers and remember marks/undo for them
 set hidden
 
