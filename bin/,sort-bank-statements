@@ -1,0 +1,65 @@
+#!/bin/bash
+set -e
+
+# Configuration
+PROCESSING_DIR="$HOME/src/ynab-bank-imports/budget/incoming"
+DOWNLOADS_DIR="$HOME/tmp/downloads"
+STORAGE_BASE_DIR="$HOME/doc/finance/kontoauszuege"
+
+# Define bank accounts and their storage directories
+# Format: "prefix:storage_dir:pattern_type"
+# Where pattern_type can be:
+# - "prefix" (or omitted): matches files starting with prefix (like prefix*.csv)
+# - "suffix": matches files with date first, then account (like *suffix.csv)
+BANK_ACCOUNTS=(
+  "1505:triodos:prefix"
+  "505:triodos:prefix"
+  "Umsaetze_DE865:triodos:prefix"
+  "15512:bbbank:prefix"
+  "5512:bbbank:prefix"
+  "Umsaetze_DE196:bbbank:prefix"
+  "3694:dkb:suffix"
+)
+
+# Process files
+files_processed=0
+
+for account in "${BANK_ACCOUNTS[@]}"; do
+  IFS=':' read -r pattern storage_dir pattern_type <<< "$account"
+  # Default to standard pattern if not specified
+  pattern_type=${pattern_type:-prefix}
+
+  # Set file pattern based on pattern_type
+  if [ "$pattern_type" = "suffix" ]; then
+    csv_pattern="$DOWNLOADS_DIR/*$pattern.csv"
+    pdf_pattern="$DOWNLOADS_DIR/*$pattern.pdf"
+  else
+    csv_pattern="$DOWNLOADS_DIR/$pattern*.csv"
+    pdf_pattern="$DOWNLOADS_DIR/$pattern*.pdf"
+  fi
+
+  # Process CSV files
+  for csvfile in $csv_pattern; do
+    if [ -f "$csvfile" ]; then
+      cp "$csvfile" "$PROCESSING_DIR/"
+      mv "$csvfile" "$STORAGE_BASE_DIR/$storage_dir/"
+      echo "Processed CSV: $(basename "$csvfile")"
+      files_processed=$((files_processed + 1))
+    fi
+  done
+
+  # Process PDF files
+  for pdffile in $pdf_pattern; do
+    if [ -f "$pdffile" ]; then
+      mv "$pdffile" "$STORAGE_BASE_DIR/$storage_dir/"
+      echo "Processed PDF: $(basename "$pdffile")"
+      files_processed=$((files_processed + 1))
+    fi
+  done
+done
+
+if [ $files_processed -eq 0 ]; then
+  echo "No matching files found in $DOWNLOADS_DIR"
+else
+  echo "Processed $files_processed bank statement files"
+fi
