@@ -1,0 +1,51 @@
+#!/bin/bash
+set -xeuo pipefail
+
+# --- Config ---
+DOWNLOADS_DIR="$HOME/tmp/downloads"
+FINANCE_REPO_DIR="$HOME/src/chaossocial_internal/finance"
+KONTOAUSZUEGE_DIR="$FINANCE_REPO_DIR/kontoauszuege"
+LEDGER_DIR="$FINANCE_REPO_DIR/ledger"
+
+META_REPO_DIR="$HOME/src/meta"
+META_DATA_DIR="$META_REPO_DIR/_data"
+
+LAST_MONTH_YEAR_MONTH=$(date -d "last month" +"%Y-%m")
+COMMIT_MESSAGE="[finance] $LAST_MONTH_YEAR_MONTH"
+
+log() {
+    echo "INFO: $(date +'%Y-%m-%d %H:%M:%S') - $*"
+}
+
+# --- Main Script Starts Here ---
+
+log "Processing finance data for $LAST_MONTH_YEAR_MONTH"
+echo
+
+log "Moving bank statements from '$DOWNLOADS_DIR' to '$KONTOAUSZUEGE_DIR'..."
+# If no files match, 'mv' will error and script will exit due to 'set -e'.
+mv "$DOWNLOADS_DIR"/5279186_202* "$KONTOAUSZUEGE_DIR/"
+mv "$DOWNLOADS_DIR"/Umsaetze_DE64830654080005279186_* "$KONTOAUSZUEGE_DIR/"
+
+echo
+log "Processing data..."
+cd "$LEDGER_DIR"
+python finance.py import
+git add . ../kontoauszuege/
+git commit -m "$COMMIT_MESSAGE"
+git push
+
+log "Generating reports..."
+hledger is -f ./ledger.txt --tree --year --sort-amount -T -O json > "$META_DATA_DIR/money_per_year.json"
+hledger is -f ./ledger.txt --tree --monthly --sort-amount -T -O json > "$META_DATA_DIR/money.json"
+
+log "Updating website..."
+cd "$META_REPO_DIR"
+git add _data/money*
+git commit -m "$COMMIT_MESSAGE"
+git push
+./bin/update.sh
+
+xdg-open https://meta.chaos.social/money
+
+log "Finance data processed successfully."
