@@ -1,0 +1,31 @@
+#!/bin/bash
+# This script waits for network connectivity and then executes a given command,
+# if it is not already running.
+
+set -euo pipefail
+
+check_host="github.com"
+delay=5
+
+if [[ $# -eq 0 ]]; then
+    echo "Usage: $(basename "$0") <command> [args...]" >&2
+    exit 1
+fi
+
+# Loop until the host is reachable.
+while ! ping -c 1 -W 1 "${check_host}" &> /dev/null; do
+    echo "Waiting for network... Retrying in ${delay}s." >&2
+    sleep "${delay}"
+done
+
+echo "Network is up."
+
+# Check if the process is already running.
+command_name=$(basename "$1")
+if pgrep -x "${command_name}" &> /dev/null; then
+    echo "Process matching '${command_name}' is running already. Exiting."
+    exit 0
+fi
+
+echo "Starting: $*"
+exec "$@"
