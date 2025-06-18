@@ -20,6 +20,8 @@
 
 # AI assistants
 *.aider*
+*.claude*
+CLAUDE.md
 
 # Sanity
 *.secret
