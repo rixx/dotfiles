@@ -23,14 +23,13 @@ log "Processing finance data for $LAST_MONTH_YEAR_MONTH"
 echo
 
 log "Moving bank statements from '$DOWNLOADS_DIR' to '$KONTOAUSZUEGE_DIR'..."
-# If no files match, 'mv' will error and script will exit due to 'set -e'.
-mv "$DOWNLOADS_DIR"/5279186_202* "$KONTOAUSZUEGE_DIR/"
-mv "$DOWNLOADS_DIR"/Umsaetze_DE64830654080005279186_* "$KONTOAUSZUEGE_DIR/"
+find "$DOWNLOADS_DIR" -maxdepth 1 -name "5279186_2*" -exec mv {} "$KONTOAUSZUEGE_DIR/" \;
+find "$DOWNLOADS_DIR" -maxdepth 1 -name "Umsaetze_DE64830654080005279186_*" -exec mv {} "$KONTOAUSZUEGE_DIR/" \;
 
 echo
 log "Processing data..."
 cd "$LEDGER_DIR"
-python finance.py import
+/home/rixx/.local/share/virtualenvs/chaossocial_internal/bin/python finance.py import
 git add . ../kontoauszuege/
 git commit -m "$COMMIT_MESSAGE"
 git push
