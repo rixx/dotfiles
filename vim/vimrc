@@ -49,7 +49,10 @@ set listchars=tab:┄┄╴,trail:░,extends:❯,precedes:❮,nbsp:·
 "" Completion
 set wildmode=list:longest,full  " List matches and tab-cycle through them
 set wildignore=*.o,*~,*.pyc,.tox,*.egg-info,.git,.hg,.svn,*.bmp,*.gif,*.jpg,*.jpeg,*.png,*.DS_Store
+set completeopt=noinsert,menuone,noselect,preview
+set shortmess+=c        " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
 
+"" Other settings
 " Show title, set to the default without the trailing "- Nvim"
 set title
 set titlestring=%t%(\ %M%)%(\ \(%{expand(\"%:~:h\")}\)%)%a
@@ -83,10 +86,6 @@ set clipboard+=unnamedplus
 ""  Key mappings                                          ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Make window navigation a little snappier
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
-
 "" set the map leader to ' '
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
@@ -108,22 +107,11 @@ noremap <leader>w <C-w>w
 " remap F6 to breakpoint
 nmap <F6> obreakpoint()<C-c>
 
-"" Other shortcuts
-" paste multiple lines with pppp
-vnoremap <silent> y y`]
-vnoremap <silent> p p`]
-nnoremap <silent> p p`]
-
-" Make jj be the new escape
-inoremap jj <Esc>
-
 " gx, but open paths with xdg-open async
 nnoremap gX :silent :execute "!xdg-open" expand('%:p:h') . "/" . expand("<cfile>") " &"<cr>
 
 " Exit terminal input mode with Escape
 tnoremap <ESC><ESC> <C-\><C-N>
-
-nnoremap <CR> G
 
 " really really save
 cmap w!! w !sudo tee %
@@ -149,13 +137,6 @@ nnoremap <leader>a ggVG
 " Format JSON
 nmap <leader>J :%!python -m json.tool<CR>:%s/\s\+$//g<CR>
 
-" Abbreviations
-noreab @@r r@rixx.de
-inoremap @@tr Tobias<space>Kunze<space><r@rixx.de>
-
-nnoremap <space>f za
-nnoremap <space>F zA
-
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -177,7 +158,7 @@ nmap <leader>d :bd<cr>
 ""  File type specific settings                           ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" assume .md files are markdown, not modula-2
+" assume .md files are markdown, not modula-2, lol
 augroup markdown
   autocmd!
   autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -213,21 +194,33 @@ augroup END
 
 call plug#begin()
 
-" Removes search highlight when not needed
-Plug 'romainl/vim-cool'
+Plug 'ggandor/leap.nvim'                 " Use s and S to navigate to any two-letter combination
+Plug 'jeffkreeftmeijer/vim-numbertoggle' " Turn relative line numbers off in non-focused window
+Plug 'jiangmiao/auto-pairs'              " Automatically add closing braces and delete matching ones
+Plug 'junegunn/fzf'                      " [Buffers] Jump to the existing window if possible
+Plug 'lewis6991/gitsigns.nvim'           " Show git changes/diff indicator in side column
+Plug 'neovim/nvim-lspconfig'             " Sane defaults for LSP
+Plug 'nvim-mini/mini.nvim'               " Completion from LSP
+Plug 'romainl/vim-cool'                  " Removes search highlight when not needed
+Plug 'tpope/vim-commentary'              " Toggle comments
+Plug 'tpope/vim-fugitive'                " Provides :G[it]
+Plug 'tpope/vim-repeat'                  " Repeat plugin commands with .
+Plug 'tpope/vim-rsi'                     " Readline in vim
+Plug 'tpope/vim-sleuth'                  " Auto-set tabs vs spaces
+Plug 'tpope/vim-speeddating'             " Increment/decrement dates
+Plug 'tpope/vim-surround'                " Surround text objects
+Plug 'tpope/vim-vinegar'                 " Better directory browsing
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vimwiki/vimwiki'
+Plug 'wellle/context.vim'                " Provide context when scrolling <3
+Plug 'wsdjeg/vim-fetch'                  " Open path:lineno in vim and with gF
 
-" Open path:lineno in vim and with gF
-Plug 'wsdjeg/vim-fetch'
+call plug#end()
 
-" Increment/decrement dates
-Plug 'tpope/vim-speeddating'
-
-Plug 'junegunn/fzf'
-" [Buffers] Jump to the existing window if possible
+" fzf settings: open at bottom, hide status line
 let g:fzf_buffers_jump = 1
-" Open at bottom of screen
 let g:fzf_layout = { 'down': '30%' }
-" Temporarily hide status line
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 nnoremap <C-T> :call fzf#run({ 'sink': 'vsplit', 'down': '30%' })<CR>
@@ -235,9 +228,7 @@ nnoremap <C-N> :call fzf#run({ 'sink': 'e', 'down': '30%' })<CR>
 " open fzf with the wiki directory
 nnoremap <leader>wt :call fzf#run({ 'sink': 'e', 'source': 'fd . /home/rixx/doc/wiki/' })<CR>
 
-" airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" airline settings
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_highlighting_cache = 1
@@ -254,23 +245,7 @@ let g:airline#extensions#tabline#overflow_marker = '…'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 
-" Better directory browsing
-Plug 'tpope/vim-vinegar'
-" -       open the directory browser / go up a directory
-" I       show header again
-" gh      toggle hidden files
-" .       add file path to end of cmd
-" y.      yank full file path
-" ~       go to home
-" CTRL-^  go back to file
-
-" Toggle comments
-Plug 'tpope/vim-commentary'
-" gc      comment out motion
-" gcc     comment out line (takes count)
-
-" Surround text objects
-Plug 'tpope/vim-surround'
+" vim-surround settings
 " cs"'    change surrounding " to '
 " cst"    change surrounding tag to " (matches html)
 " ds"     delete surrounding "
@@ -282,19 +257,19 @@ Plug 'tpope/vim-surround'
 let g:surround_{char2nr('s')} = "~~\r~~"
 let g:surround_{char2nr('b')} = "**\r**"
 
-" Repeat plugin commands with .
-Plug 'tpope/vim-repeat'
-
-" Automatically add closing braces and delete matching ones
-Plug 'jiangmiao/auto-pairs'
-" Do **not** jump to the next line when closing a perceived block
+" vim-autopairs settings: Do **not** jump to the next line when closing a perceived block
 let g:AutoPairsMultilineClose = 0
 
-" Auto-set tabs vs spaces
-Plug 'tpope/vim-sleuth'
+" vim-vinegar bindings
+" -       open the directory browser / go up a directory
+" I       show header again
+" gh      toggle hidden files
+" .       add file path to end of cmd
+" y.      yank full file path
+" ~       go to home
+" CTRL-^  go back to file
 
-" Provides :G[it]
-Plug 'tpope/vim-fugitive'
+" vim-fugitive settings
 " GBrowse opens the current file on GitHub
 " In blame:
 " A    resize to end of author column
@@ -306,40 +281,16 @@ Plug 'tpope/vim-fugitive'
 "" vim-fugitive is slow with zsh stuff
 set shell=bash
 
-" Show git changes/diff indicator in side column
-Plug 'lewis6991/gitsigns.nvim'
+" gitsigns settings
 " [c           jump to next hunk
 " <leader>hu   undo this hunk!!!, works with visual selection
 " ic           hunk text object
 set timeoutlen=400
 
-" Provide context when scrolling <3
-Plug 'wellle/context.vim'
-" remove decoration from context
+" context settings: remove decoration from context
 let g:context_highlight_tag = '<hide>'
 nnoremap <leader>ct :ContextToggle<CR>
 
-" Language specific plugins
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'posva/vim-vue'
-
-" Format Python with F9
-Plug 'psf/black'
-nnoremap <F9> :Black<CR>
-
-" Use s and S to navigate to any two-letter combination
-Plug 'ggandor/leap.nvim'
-
-Plug 'RRethy/vim-illuminate'
-" Highlight all instances of the word under the cursor
-
-Plug 'tpope/vim-rsi'
-" Readline in vim
-
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
-" Turn relative line numbers off in non-focused window
-
-Plug 'vimwiki/vimwiki'
 """ vimwiki config
 " <leader>ww opens index
 " <leader>w<leader>w opens diary
@@ -368,21 +319,6 @@ let g:vimwiki_diary_months = {
       \}
 let g:vimwiki_links_header = 'Sitemap'
 let g:vimwiki_auto_header = 0
-
-
-""" Completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-mini/mini.nvim'  " Completion from LSP
-" Use gd to go to actual definition
-"nmap <silent> gd <Plug>(coc-definition)
-" Symbol renaming
-"nmap <leader>rn <Plug>(coc-rename)
-
-set completeopt=noinsert,menuone,noselect,preview
-" suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
-set shortmess+=c
-
-call plug#end()
 
 
 lua << EOF
