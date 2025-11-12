@@ -1,135 +1,67 @@
-" This config requires Plug to install plugins.
-" Follow the installation instructions here: https://github.com/junegunn/vim-plug#neovim=
-" Then run :PlugInstall once, and you should be good to go.
-"
-" Also!
-" Create virtualenv neovim, and install pynvim and pyright (for completion) and
-" black (for F9 formatting)
-" Then run :CocInstall coc-pyright
-
 """""""""""""""""""""""""""""""""""""""""""""
 ""  General Settings                       ""
 """""""""""""""""""""""""""""""""""""""""""""
 
-" Use Vim settings (yay), rather than Vi settings (yuck)
-" This must be first, because it changes other options as a side effect.
-set nocompatible
-
-" Show title, then edit indicator, then path, then annoying NVIM indicator
-set title
-
-"" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme at least
+"" Add .config/dotfiles/vim to runtimepath. Necessary for colorscheme
 let &rtp .= ','.expand('~/.config/dotfiles/vim/')
 
-if has('autocmd')
-  filetype plugin indent on  " Load plugins according to detected filetype.
-endif
+"" Base settings
+set autoread          " Read file again if it changes while open and unmodified in vim
+set autowrite         " Write to disk when navigating files
+set hidden            " Allow unsaved background buffers and remember marks/undo for them
+set formatoptions+=j  " Delete comment character when joining comment lines
+set diffopt=vertical  " Make sure diffs get shown side-by-side
+set ignorecase        " Ignore case when searching
+set smartcase         " Do not ignore case when searching for upper-case
+set showmatch         " When typing a bracket, highlight match if visible
+set matchtime=2       " Only highlight the matching bracket for .2s
+set splitbelow        " Split below by default
+set splitright        " Split right by default
+set report=0          " Always report changed lines
+set lazyredraw        " Faster, lazy redrawing when executing macros
 
-"" set history size
+"" Text processing and indentation
+set smartindent       " Smart autoindenting when starting a new line
+set expandtab         " Insert spaces when using tab key and indent shortcuts
+set shiftwidth=4      " Use tabstop value for auto indent
+set softtabstop=-1    " Use tab to go to next soft tabstop
+
+"" Visual settings
+set background=light  " Boo to edgy dark themes
+colorscheme duochrome " Plugin setting
+syntax enable         " Always highlight
+set synmaxcol=400     " But only highlight the first 400 columns
+highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white  " Matching parens
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$' " Highlight VCS conflict markers
+set relativenumber    " Show relative line numbers
+set number            " But also show current number
+set foldcolumn=3      " Fixed side column width
+set nofoldenable      " Imagine knowing how to use folds
+set foldmethod=marker " But if folds are used, use markers
+set cursorline        " Highlight current line
+set scrolloff=999     " Keep cursor centered
+set sidescrolloff=5   " Keep cursor 5 columns from screen edge
+set mouse=a           " Mouse integration in all modes
+set mousehide         " Hide mouse while typing
+set list              " Display whitespace
+set listchars=tab:┄┄╴,trail:░,extends:❯,precedes:❮,nbsp:·
+
+"" Completion
+set wildmode=list:longest,full  " List matches and tab-cycle through them
+set wildignore=*.o,*~,*.pyc,.tox,*.egg-info,.git,.hg,.svn,*.bmp,*.gif,*.jpg,*.jpeg,*.png,*.DS_Store
+
+" Show title, set to the default without the trailing "- Nvim"
+set title
+set titlestring=%t%(\ %M%)%(\ \(%{expand(\"%:~:h\")}\)%)%a
+
+"" Set history size to max and persist undo
 set history=10000
-set tabpagemax=50
 set undolevels=10000
-set undoreload=10000
 set undodir=/home/rixx/.cache/vim/undo
 set undofile
 set backupdir=/home/rixx/.cache/vim/backup
 
-" vim specific options here
-if !has('nvim')
-"" save:
-"  - for 100 files
-"  - buffer info will be saved,
-"  - registers over 100Kbyte will be skipped,
-"  - 1000 lines per register will be remembered,
-"  - don't save highlighted searches,
-"  - don't save marks for /temp
-"  - save in ~/.vim/viminfo
-  set viminfo='100,%,s100,<1000,h,r/temp,n/home/rixx/.cache/vim/viminfo
-
-  if &ttimeoutlen == -1
-    " Time out on keycodes but not mappings
-    set ttimeout
-    set ttimeoutlen=10
-  endif
-endif
-
-"" read file again if it changes while open and unmodified in vim
-set autoread
-" Write to disk when navigating files
-set autowrite
-augroup AutoWrite
-    autocmd! BufLeave * :update
-augroup END
-
-" Anything that is put in a register (mostly by yanking or deleting) is also put in the
-" special + register, which is synced with the system clipboard
-set clipboard+=unnamedplus
-
-"" don't keep a backup file in version control directories
-if has("vms")
-    set nobackup
-else
-    set backup
-endif
-
-" don't change working directories to files
-set noautochdir
-
-" allow unsaved background buffers and remember marks/undo for them
-set hidden
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-set whichwrap+=<,>,h,l
-
-" Delete comment character when joining comment lines
-set formatoptions+=j
-" Insert only one space when joining on punctuation like .
-set nojoinspaces
-
-" Make sure diffs get shown side-by-side
-set diffopt=vertical
-
-"" ignore case when searching, but be smart about it
-set ignorecase
-set smartcase
-
-"" Highlight search results while typing and searching
-set hlsearch
-set incsearch
-set showmatch
-set matchtime=2
-
-"" Always split right and below
-set splitbelow
-set splitright
-
-"" Always report changed lines
-set report=0
-
-"" Faster, lazy redrawing when executing macros
-set ttyfast
-set lazyredraw
-
-"" set utf8 as standard encoding and unix as file type
-set encoding=utf8
-set fileformats=unix,dos,mac
-set shell=/bin/zsh
-
-"" spell check with ,ss
-set spelllang=en
-
-"" regex
-set magic
-
-" don't see 07 as an octal number to be increased to 10
-set nrformats-=octal
-
-" various options copied from vim-sensible
-set sessionoptions-=options
-set viewoptions-=options
-
-" Remember and restore curser position
+" Remember and restore cursor position
 autocmd BufReadPost *
      \ if line("'\"") > 3 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
@@ -139,125 +71,21 @@ autocmd BufReadPost *
 autocmd BufReadPost COMMIT_EDITMSG
   \ exe "normal! gg"
 
+" And in new mails, jump below the header block
 autocmd FileType mail execute "normal /^\\n\<CR>o"
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""  Spacing and indentation                               ""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" intendation
-
-set autoindent
-set smartindent
-set expandtab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set smarttab
-
-"" do wrap, but don't break lines
-set textwidth=0
-set wrap
-set wrapmargin=0
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""  visual stuff                                          ""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set background=light
-colorscheme duochrome
-
-" Allow color schemes to do bright colors without forcing bold.
-if &t_Co == 8 && $TERM !~# '^Eterm'
-  set t_Co=16
-endif
-
-if has('syntax') && !exists('g:syntax_on')
-  syntax enable
-endif
-
-"" only highlight the first 400 columns
-set synmaxcol=400
-
-"" Use instead of colorcolum=120
-"highlight ColorColumn ctermbg=red ctermfg=white
-"call matchadd('Colorcolumn', '\%120v', 100)
-
-"" Matchng parens
-highlight MatchParen cterm=bold ctermbg=cyan ctermfg=white
-
-" Highlight VCS conflict markers
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-
-"" show line number of current line and relative line numbers otherwise
-set relativenumber
-set number
-
-"" width of the column at the side of the window indicating folds
-set foldcolumn=3
-set nofoldenable
-set foldmethod=marker
-
-"" show cursor lines (horizontal and vertical)
-set cursorline
-"set cursorcolumn
-
-"" display incomplete commands
-set showcmd
-
-"" set 7 lines and 5 columns between the cursor and the end of screen
-set scrolloff=999
-set sidescrolloff=5
-
-" Make window navigation a little snappier
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
-
-"" show as much as possible of the last line
-set display+=lastline
-
-"" show current position, bit shorter than normally
-set ruler
-
-"" mouse integration if mouse
-if has('mouse')
-  set mouse=a
-  set mousehide
-endif
-
-"" how to display whitespace characters when set list
-set list
-set listchars=tab:┄┄╴,trail:░,extends:❯,precedes:❮,nbsp:·
-
-"" always show status line
-set laststatus=2
-
-"" enable reading config off modified file
-set modeline
-
-" don't move cursor to beginning of line
-set nostartofline
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""  Completion                                            ""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set complete-=i
-" turn on the WiLd menu
-set wildmenu
-set wildmode=list:longest,full
-
-set wildignore=*.o,*~,*.pyc,.tox,*.egg-info
-set wildignore+=.git,.hg,.svn                            " Version control
-set wildignore+=*.bmp,*.gif,*.jpg,*.jpeg,*.png           " Binary images
-set wildignore+=*.DS_Store                               " OSX
-
-
+" Anything that is put in a register (mostly by yanking or deleting) is also put in the
+" special + register, which is synced with the system clipboard
+set clipboard+=unnamedplus
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""  Key mappings                                          ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Make window navigation a little snappier
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
 
 "" set the map leader to ' '
 let mapleader = "\<Space>"
@@ -328,7 +156,6 @@ inoremap @@tr Tobias<space>Kunze<space><r@rixx.de>
 nnoremap <space>f za
 nnoremap <space>F zA
 
-
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -360,9 +187,6 @@ augroup markdown
   autocmd BufNewFile,BufReadPost Dockerfile set filetype=dockerfile
   autocmd BufNewFile,BufReadPost *.vue set filetype=vue
   autocmd BufNewFile,BufRead /tmp/*mutt* set noautoindent filetype=mail wm=0 tw=78 nonumber digraph nolist nopaste
-
-  " autocmd Filetype cfg,json,mail,txt,text,xml,yaml,yml let b:copilot_enabled = v:false
-
   " Conceal links in Markdown
   autocmd Filetype markdown syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
   autocmd Filetype markdown syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
@@ -371,33 +195,16 @@ augroup end
 
 augroup development
   autocmd!
-  autocmd BufNewFile,BufReadPost *.py set foldmethod=indent
-  autocmd BufNewFile,BufReadPost *.py set foldnestmax=5
-  autocmd FileType python set sw=4 sts=4 et
-  " Two-space indents in json
-  autocmd! FileType json set sw=2 sts=2 expandtab
-  autocmd BufNewFile,BufReadPost *.tsx set filetype=javascript
   " Compute syntax highlighting from beginning of file.
   autocmd BufEnter * :syntax sync fromstart
-
   autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?' : '?>', '<?php': '?>'})
   autocmd FileType ruby let b:AutoPairs = AutoPairsDefine({'begin': 'end//n]'})
   autocmd FileType *html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->', '{%': '%}'})
-augroup end
-
-augroup ft_vim
-    au!
-    " Display help in a vsplit
-    au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-augroup END
-
-autocmd BufRead /tmp/mutt-* set tw=72
-
-
-augroup templates
-    au!
-    autocmd BufNewFile *.vue 0r ~/.config/dotfiles/vim/templates/skeleton.vue
-    autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%:t'
+  " Display help in a vsplit
+  autocmd BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+  autocmd BufRead /tmp/mutt-* set tw=72
+  autocmd BufNewFile *.vue 0r ~/.config/dotfiles/vim/templates/skeleton.vue
+  autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%:t'
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""
@@ -414,12 +221,6 @@ Plug 'wsdjeg/vim-fetch'
 
 " Increment/decrement dates
 Plug 'tpope/vim-speeddating'
-
-" Show key hints
-Plug 'nvim-lua/plenary.nvim'
-Plug 'm4xshen/hardtime.nvim'
-Plug 'folke/which-key.nvim'
-set noshowmode
 
 Plug 'junegunn/fzf'
 " [Buffers] Jump to the existing window if possible
@@ -453,11 +254,6 @@ let g:airline#extensions#tabline#overflow_marker = '…'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 
-" zen mode: <leader> z
-Plug 'folke/zen-mode.nvim'
-Plug 'folke/twilight.nvim'
-noremap <leader>z :ZenMode<cr>
-
 " Better directory browsing
 Plug 'tpope/vim-vinegar'
 " -       open the directory browser / go up a directory
@@ -485,7 +281,6 @@ Plug 'tpope/vim-surround'
 "" ysss strikes through line, ysiws strikes through word etc, ysiwo bolds word
 let g:surround_{char2nr('s')} = "~~\r~~"
 let g:surround_{char2nr('b')} = "**\r**"
-
 
 " Repeat plugin commands with .
 Plug 'tpope/vim-repeat'
@@ -532,16 +327,8 @@ Plug 'posva/vim-vue'
 Plug 'psf/black'
 nnoremap <F9> :Black<CR>
 
-" Plug 'github/copilot.vim'
-""" Enable copilot always
-" let g:copilot_enabled = 1
-" let g:copilot_autocomplete = 1
-" let g:copilot_autocomplete_delay = 0
-" " copilot keybindings
-" inoremap <c-n> <Plug>(copilot-next)
-
-Plug 'ggandor/leap.nvim'
 " Use s and S to navigate to any two-letter combination
+Plug 'ggandor/leap.nvim'
 
 Plug 'RRethy/vim-illuminate'
 " Highlight all instances of the word under the cursor
@@ -600,53 +387,8 @@ set shortmess+=c
 
 call plug#end()
 
-" This one has to go after plug#end()
-" Configure copilot to complete with <C-j>, and use tab for coc completion (or
-" normal behavior if no completion is active)
-
-" imap <silent><script><expr> <C-j> copilot#Accept('\<CR>')
-" let g:copilot_no_tab_map = v:true
-
-" " Make sure we catch duplicate remaps of <tab>
-" verbose imap <tab>
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 lua << EOF
-require("hardtime").setup({
-  disable_mouse = false,
-  --show hints in insert mode too
-  showmode = false,
-})
-require('twilight').setup({
-  dimming = {
-    alpha = 0.7,
-    color = { "Normal", "#000000" },
-    term_bg = "#fdf6e3",
-  },
-})
-require('zen-mode').setup({
-  window = {
-    backdrop = 0.5,
-    width = 110,
-  },
-  plugins = {
-    gitsigns = { enabled = false },
-  },
-  on_open = function(win)
-    vim.cmd('ContextToggle')
-  end,
-  on_close = function(win)
-    vim.cmd('ContextToggle')
-  end,
-})
 require('gitsigns').setup({
   signs = {
     add          = { text = '+' },
@@ -658,13 +400,11 @@ require('gitsigns').setup({
   },
   on_attach = function(bufnr)
     local gitsigns = require('gitsigns')
-    
     local function map(mode, l, r, opts)
       opts = opts or {}
       opts.buffer = bufnr
       vim.keymap.set(mode, l, r, opts)
     end
-
     map('n', ']c', function() gitsigns.nav_hunk('next') end)
     map('n', '[c', function() gitsigns.nav_hunk('prev') end)
     map('n', '<leader>hs', gitsigns.stage_hunk)
@@ -684,14 +424,7 @@ require('gitsigns').setup({
   end
 })
 
-require('which-key').setup({
-  window = {
-    border = "shadow",
-  },
-})
-
 require('leap').create_default_mappings()
-
 EOF
 
 " vim:set ft=vim et sw=2:
