@@ -8,7 +8,7 @@
 }
 
 window {
-    font: "Iosevka 13";
+    font: "Kelmscott Mono 13";
     transparency: "real";
     location: center;
     anchor: north;
