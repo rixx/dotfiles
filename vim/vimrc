@@ -371,15 +371,12 @@ let g:vimwiki_auto_header = 0
 
 
 """ Completion
-let g:python_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-let g:python3_host_prog = '/home/rixx/.local/share/virtualenvs/neovim/bin/python'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-mini/mini.nvim'  " Completion from LSP
 " Use gd to go to actual definition
-nmap <silent> gd <Plug>(coc-definition)
-
+"nmap <silent> gd <Plug>(coc-definition)
 " Symbol renaming
-nmap <leader>rn <Plug>(coc-rename)
+"nmap <leader>rn <Plug>(coc-rename)
 
 set completeopt=noinsert,menuone,noselect,preview
 " suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
@@ -389,6 +386,21 @@ call plug#end()
 
 
 lua << EOF
+require('mini.snippets').setup({})
+require('mini.completion').setup({})
+vim.lsp.enable('pyright')
+
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
+vim.keymap.set('n', 'gr', vim.lsp.buf.references, {})
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
+
+local imap_expr = function(lhs, rhs)
+  vim.keymap.set('i', lhs, rhs, { expr = true })
+end
+imap_expr('<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]])
+imap_expr('<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
+
 require('gitsigns').setup({
   signs = {
     add          = { text = '+' },
