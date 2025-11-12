@@ -87,6 +87,7 @@ layout.css.has-selector.enabled  # required for ublock functioning
 reader.content_width 4
 security.dialog_enable_delay 100  # Remove most of the delay on showing download prompts
 sidebar.position_start false  # sidebar on right side
+dom.text_fragments.create_text_fragment.enabled  # allow copying links to text
 ```
 
 
@@ -205,4 +206,5 @@ devtools.inspector.showUserAgentStyles true
 devtools.inspector.show_pseudo_elements true
 devtools.netmonitor.persistlog true
 devtools.whatsnew.enabled true
+browser.sessionstore.interval 600000
 ```
