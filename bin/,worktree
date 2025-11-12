@@ -1,0 +1,225 @@
+#!/usr/bin/env bash
+# LICENSE: unlicense. This is free and unencumbered software released into the public domain.
+# see unlicense.org for full license
+# Original file: https://github.com/llimllib/personal_code/blob/master/homedir/.local/bin/worktree
+#
+# source this command if you want to have it change directories for you
+
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+CLEAR="\033[0m"
+VERBOSE=
+
+function usage {
+    cat <<EOF
+worktree [-v] <branch name>
+
+create a git worktree with <branch name>. Will create a worktree if one isn't
+found that matches the given name.
+
+Will copy over some untracked files to the new worktree. By default, this includes
+.env, .envrc, .env.local, .tool-versions, and mise.toml files.
+
+To customize the list of untracked files to copy for a particular repository:
+    git config --add worktree.untrackedfiles ".env"
+    git config --add worktree.untrackedfiles "mise.toml"
+
+To set a global configuration for all repositories:
+    git config --global --add worktree.untrackedfiles ".env"
+    git config --global --add worktree.untrackedfiles "mise.toml"
+
+If you have any custom configuration set, it will override the defaults
+completely, so add all files you want copied.
+EOF
+    kill -INT $$
+}
+
+function die {
+    printf '%b%s%b\n' "$RED" "$1" "$CLEAR"
+    # exit the script, but if it was sourced, don't kill the shell
+    kill -INT $$
+}
+
+function warn {
+    printf '%b%s%b\n' "$YELLOW" "$1" "$CLEAR"
+}
+
+# If at all possible, use copy-on-write to copy files. This is especially
+# important to allow us to copy node_modules directories efficiently
+#
+# On mac or bsd: try to use -c
+# see:
+# https://spin.atomicobject.com/2021/02/23/git-worktrees-untracked-files/
+#
+# On gnu: use --reflink
+#
+# Use /bin/cp directly to avoid any of the user's aliases - this script is
+# often eval'ed
+#
+# I tried to figure out how to actually determine the filesystem support for
+# copy-on-write, but did not find any good references, so I'm falling back on
+# "try and see if it fails"
+function cp_cow {
+    if ! /bin/cp -Rc "$1" "$2"; then
+        if ! /bin/cp -R --reflink "$1" "$2"; then
+            if ! /bin/cp -R "$1" "$2"; then
+                warn "Unable to copy file $1 to $2 - folder may not exist"
+            fi
+        fi
+    fi
+}
+
+# Get the list of untracked files to copy from git config. If no config is
+# found, return the default list
+function get_untracked_files_pattern {
+    # Default file patterns
+    local default_patterns="\.env|\.envrc|\.env.local|\.mise.toml|\.tool-versions|mise.toml"
+
+    # Check if we have custom patterns in git config
+    if git config --get-all worktree.untrackedfiles > /dev/null 2>&1; then
+        local custom_patterns=""
+        custom_patterns=$(git config --get-all worktree.untrackedfiles | tr '\n' '|' | sed 's/|$//')
+        echo "^($custom_patterns)$"
+    else
+        echo "^($default_patterns)$"
+    fi
+}
+
+# Create a worktree from a given branchname, in exactly the way I like it.
+function _worktree {
+    if [ -z "$1" ]; then
+        usage
+    fi
+
+    if [ -n "$VERBOSE" ]; then
+        set -x
+    fi
+    branchname="$1"
+
+    # Replace slashes with underscores. If there's no slash, dirname will equal
+    # branchname. So "alu/something-other" becomes "alu_something-other", but
+    # "quick-fix" stays unchanged
+    # https://www.tldp.org/LDP/abs/html/parameter-substitution.html
+    dirname=${branchname//\//_}
+
+    # Find the git repository root and change to it; if you run this command
+    # from a directory within the repository this will make sure it still does
+    # the right thing
+    git_root=$(git rev-parse --show-toplevel)
+    if [ -z "$git_root" ]; then
+        die "Not in a git repository"
+    fi
+
+    # Change to the git root directory
+    cd "$git_root" || die "Failed to change to git root directory"
+
+    # pull the most recent version of the remote
+    if ! git pull; then
+        warn "Unable to run git pull, there may not be an upstream"
+    fi
+
+    # if the branch name already exists, we want to check it out. Otherwise,
+    # create a new branch. I'm sure there's probably a way to do that in one
+    # command, but I'm done fiddling with git at this point
+    #
+    # As far as I can tell, we have to check locally and remotely separately if
+    # we want to be accurate. See https://stackoverflow.com/a/75040377 for the
+    # reasoning here. Also this has some caveats, but probably works well
+    # enough :shrug:
+    #
+    # if the branch exists locally:
+    if git for-each-ref --format='%(refname:lstrip=2)' refs/heads | grep -E "^$branchname$" > /dev/null 2>&1; then
+        if ! git worktree add "../$dirname" "$branchname"; then
+            die "failed to create git worktree $branchname"
+        fi
+    # if the branch exists on a remote:
+    elif git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin | grep -E "^$branchname$" > /dev/null 2>&1; then
+        if ! git worktree add "../$dirname" "$branchname"; then
+            die "failed to create git worktree $branchname"
+        fi
+    else
+        # otherwise, create a new branch
+        if ! git worktree add -b "$branchname" "../$dirname"; then
+            die "failed to create git worktree $branchname"
+        fi
+    fi
+
+    # Find untracked files that we want to copy to the new worktree
+
+    # packages in node_modules packages can have sub-node-modules packages, and
+    # we don't want to copy them; only copy the root node_modules directory
+    #
+    # Because this can be so slow, we launch it as a process in the background,
+    # and we can't use the cp_cow function, so use a similar command
+    #
+    # I tried running `npm i` after copying the packages, but it doesn't seem
+    # to work for reasons that are unclear to me.
+    if [ -d "node_modules" ]; then
+        tmpfile=$(mktemp)
+        cp_node_modules="cp -Rc node_modules ../$dirname/node_modules ||
+            cp -R --reflink node_modules ../$dirname/node_modules"
+
+        warn "copying node_modules in the background"
+        warn "logging to $tmpfile"
+        nohup bash -c "($cp_node_modules)" &> "$tmpfile" &
+    fi
+
+    # get a list of untracked files to copy, either from "git config" or a
+    # default list
+    untracked_file_re=$(get_untracked_files_pattern)
+
+    # this will fail for any files with \n in their names. don't do that.
+    IFS=$'\n'
+
+    # this is the best of a bunch of bad options for reading the files into an
+    # array. We're often executing in bash or zsh, so we're going to let them
+    # use their file splitting rules, with an explicit IFS. We can't use find's
+    # exec because we want to use cp_cow to copy files copy-on-write when
+    # possible.
+    #
+    # Skip any of these files if they're found within node_modules.
+    #
+    # Putting the `-not -path` argument first is a great deal faster than the
+    # other way around
+    #
+    # files_to_copy=( $(find -E . -not -path '*node_modules*' -and \
+    #     -iregex '.*\/\.(envrc|env|env.local|tool-versions|mise.toml)' ) )
+    #
+    # if `fd` is available, this is _much_ faster than the find command above:
+
+    # shellcheck disable=SC2207
+    files_to_copy=( $(fd -u "$untracked_file_re" -E node_modules) )
+    for f in "${files_to_copy[@]}"; do
+        cp_cow "$f" ../"$dirname"/"$f"
+    done
+
+    # return the shell to normal splitting mode
+    unset IFS
+
+    # if there was an envrc file, tell direnv that it's ok to run it
+    if [ -f "../$dirname/.envrc" ]; then
+        direnv allow "../$dirname"
+    fi
+
+    # now change to the new tree and enable the root envrc if present
+    cd "../$dirname" || return
+    printf "%bcreated worktree %s%b\n" "$GREEN" "../$dirname" "$CLEAR"
+}
+
+while true; do
+    case $1 in
+        help | -h | --help)
+            usage
+            ;;
+        -v | --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+_worktree "$@"
