@@ -25,10 +25,12 @@
     ls-tracked = ls-tree
     rehead = reset --hard @
     uncommit = reset --soft @~1
+    cherry-mash = cherry-pick --no-commit
 
     # Logging
     lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
     lgg = log --graph --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
+    logage = log --follow --diff-filter=A --find-renames=40% --format=format:"%as"
 
     # Function aliases
     branches = "!f() { git branch "$@" --sort=authordate --color=always --format='%(if)%(HEAD)%(then)%(color:red) * %(else)   %(end)%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
@@ -37,6 +39,7 @@
     # multi push to all named origins, does NOT permit further config!
     pushm  = "!f() { for remote in "$@"; do git push "$remote"; done; }; f"
     tags = "!f() { git tag "$@" --sort=authordate --color=always --format='%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
+	cherry-mash = "!f() { git cherry-pick \"$1\" && git reset --soft HEAD~1 && git reset; }; f"
 
 [branch]
 	autoSetupRebase = always
