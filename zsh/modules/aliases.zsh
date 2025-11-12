@@ -2,8 +2,6 @@
 # Aliases #
 ###########
 
-alias vi="vim"
-
 # Distribute terminfo via ssh
 alias kssh="kitty +kitten ssh"
 
@@ -43,10 +41,11 @@ fi
 alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
 
+alias py='uv run python'
 function django() {
   # Search for manage.py in current and parent directories and run given command
   if [ -f "manage.py" ]; then
-      python manage.py "$@"
+      uv run python manage.py "$@"
   elif [ "$PWD" = / ]; then
     echo "manage.py not found"
     exit 1
@@ -57,7 +56,7 @@ function django() {
 }
 alias dj='django'
 
-alias pserver="python -m http.server"
+alias pserver="uv run python -m http.server"
 alias pydist="rm -rf dist && python -m build && twine upload dist/*"
 
 alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
@@ -65,38 +64,6 @@ alias av='ansible-vault --vault-password-file=.vault_password.sh'
 
 alias ra='ranger'
 alias dc='docker-compose'
-
-alias work='workon $(basename $(git rev-parse --show-toplevel))'
-
-VENV_CACHE=()
-# We want to activate virtualenvs in some directories, if `workon` is available
-if ! type workon >/dev/null 2>&1; then
-    function cd() {
-	builtin cd "$@"
-
-	# Skip if we are in a venv, no auto-deactivation
-	if [ -n "$VIRTUAL_ENV" ]; then
-	    return
-	fi
-
-	# Skip if we are not in a git repo / get basename
-	local gitdir="$(git rev-parse --show-toplevel 2>/dev/null)"
-	if [ -z "$gitdir" ]; then
-	    return
-	fi
-
-	# Check/update cache to avoid repeated directory lookups
-	basename="$(basename "$gitdir")"
-	if [[ " ${VENV_CACHE[@]} " =~ " ${basename} " ]]; then
-	    return
-	fi
-	if [ ! -d "$WORKON_HOME/$basename" ]; then
-	    VENV_CACHE+=("$basename")
-	    return
-	fi
-	workon "$basename"
-    }
-fi
 
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}

@@ -20,7 +20,13 @@ export PYTHONDONTWRITEBYTECODE=1
 ############################
 
 MAKEFLAGS="-j$(nproc)" # Parallel execution for makepkg when possible
-alias vim="vim -O" # Open vim in split mode if multiple files are given
+if [ -x "$(command -v uv)" ]; then
+  alias vi="uv run vim -O"
+  alias vim="uv run vim -O" # Open vim in split mode if multiple files are given
+else
+  alias vi="vim -O"
+  alias vim="vim -O" # Open vim in split mode if multiple files are given
+fi
 alias mosh='LANG=en_US.UTF-8 mosh'
 alias feh="feh --conversion-timeout 1"  # makes feh work with svg
 alias diff="diff --color -u"
@@ -54,6 +60,3 @@ export ANSIBLE_SSH_CONTROL_PATH_DIR=~/.cache/ansible/cp
 
 alias mycli="mycli --myclirc=~/.config/myclirc --logfile=/home/rixx/.cache/mycli.log"
 export MYCLI_HISTFILE=~/.local/share/mycli.hist
-
-WORKON_HOME=$XDG_DATA_HOME/virtualenvs
-[ -s "/usr/bin/virtualenvwrapper_lazy.sh" ] && source /usr/bin/virtualenvwrapper_lazy.sh

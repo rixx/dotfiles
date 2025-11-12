@@ -29,7 +29,7 @@ find "$DOWNLOADS_DIR" -maxdepth 1 -name "Umsaetze_DE64830654080005279186_*" -exe
 echo
 log "Processing data..."
 cd "$LEDGER_DIR"
-/home/rixx/.local/share/virtualenvs/chaossocial_internal/bin/python finance.py import
+./finance.py import
 git add . ../kontoauszuege/
 git commit -m "$COMMIT_MESSAGE"
 git push
