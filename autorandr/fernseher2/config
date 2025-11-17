@@ -1,4 +1,4 @@
-output DisplayPort-0
+output HDMI-A-0
 off
 output DisplayPort-1
 off
@@ -10,11 +10,16 @@ output DisplayPort-4
 off
 output DisplayPort-5
 off
-output HDMI-A-0
+output DisplayPort-6
+off
+output DisplayPort-7
+off
+output DisplayPort-0
 crtc 1
 mode 1920x1080
 pos 0x0
-rate 50.00
+rate 60.00
+x-prop-broadcast_rgb Automatic
 x-prop-colorspace Default
 x-prop-max_bpc 16
 x-prop-non_desktop 0
