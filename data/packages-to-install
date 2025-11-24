@@ -12,6 +12,7 @@ github-cli
 http-prompt
 httpie
 imagemagick
+inetutils
 iproute2
 less
 logrotate
