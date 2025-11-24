@@ -19,7 +19,7 @@ function link {
     if [[ -L $target ]]; then
         linktarget=$(readlink -f $target)
         if [[ $linktarget == $origin ]]; then
-            echo "# already linked: $origin to $target"
+            #echo "# already linked: $origin to $target"
         else
             doit mv $target $target.$movesuffix
             doit ln -s $origin $target
@@ -62,7 +62,7 @@ conflink jj
 link git/gitconfig .config/git/config
 link git/gitignore .gitignore
 link mimeapps.list .local/share/applications/mimeapps.list
-link ./user-dirs.dirs .config/user-dirs.dirs
+link user-dirs.dirs .config/user-dirs.dirs
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
 link mutt/offlineimap.service .config/systemd/user/offlineimap.service
