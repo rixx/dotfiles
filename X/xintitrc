@@ -18,6 +18,9 @@ xset +fp /usr/share/fonts/local &
 xset +fp $HOME/.local/share/fonts
 xset fp rehash
 
+# Load XResources for scaling
+xrdb -merge ~/.Xresources
+
 #Fix trackpoint speed
 xinput set-prop "TPPS/2 Elan TrackPoint" "libinput Accel Speed" 1
 xinput set-prop "pointer:Lite-On Technology Corp. ThinkPad USB Keyboard with TrackPoint" "libinput Accel Speed" 0

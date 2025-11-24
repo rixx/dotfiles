@@ -42,13 +42,27 @@ tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current
   display: none;
 }
 
-/* move "new tab" button to the bottom */
+:root[color-scheme="system-color"][data-user-agent*="Linux"]
+  tab-item:not(.active):not(.bundled-active):not(.highlighted),
+:root[color-scheme="system-color"][data-user-agent*="Linux"]
+  .after-tabs button,
+:root[color-scheme="system-color"][data-user-agent*="Linux"]
+  .after-tabs [role="button"],
+:root[color-scheme="system-color"][data-user-agent*="Linux"]
+  #subpanel-selector-anchor,
+:root[color-scheme="system-color"][data-user-agent*="Linux"]
+  #background {
+  --toolbar-non-lwt-bgcolor: rgb(245 245 245) /* or something background color */;
+  --toolbar-non-lwt-textcolor: ButtonText /* or something foreground color */;
+}
+
 #tabbar:not(.overflow) .after-tabs {
   margin-top: auto;
 }
 tab-item:last-of-type {
   margin-bottom: 0;
 }
+
 .newtab-button {
   border-top: 2px solid #00000011 !important;
 }

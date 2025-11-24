@@ -17,7 +17,7 @@ Things you might want to look at:
 
 1. Install the packages listed in ``packages-to-install``.
 2. Run ``./install``.
-3. Install crontabs from ``./crontab``
+3. Install user crontabs from ``./crontab``, and start and enable cronie.
 4. Install sudoers from ``./sudoers``
 
 ### If on a Desktop system

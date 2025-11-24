@@ -73,6 +73,7 @@ link tig/tigrc .tigrc
 link vim/vimrc .config/nvim/init.vim
 link vim/coc-settings.json .config/nvim/coc-settings.json
 link X/XCompose .XCompose
+link X/Xresources .Xresources
 link X/xintitrc .xinitrc
 link zsh/zshrc .zshrc
 
