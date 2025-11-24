@@ -20,12 +20,15 @@ export PYTHONDONTWRITEBYTECODE=1
 ############################
 
 MAKEFLAGS="-j$(nproc)" # Parallel execution for makepkg when possible
-if [ -x "$(command -v uv)" ]; then
-  alias vi="uv run vim -O"
-  alias vim="uv run vim -O" # Open vim in split mode if multiple files are given
+if [ -x "$(command -v nvim)" ]; then
+  alias vi="$(which nvim) -O"
+  if [ -x "$(command -v uv)" ]; then
+    alias vim="$(which uv) run nvim -O" # Open vim in split mode if multiple files are given
+  else
+    alias vim="$(which nvim) -O" # Open vim in split mode if multiple files are given
+  fi
 else
-  alias vi="vim -O"
-  alias vim="vim -O" # Open vim in split mode if multiple files are given
+  alias vi="$(which vim) -O"
 fi
 alias mosh='LANG=en_US.UTF-8 mosh'
 alias feh="feh --conversion-timeout 1"  # makes feh work with svg

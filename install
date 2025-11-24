@@ -56,6 +56,7 @@ conflink rofi/bin
 conflink tmux/tmux.conf
 conflink vim/vimrc
 conflink vim/colors
+conflink jj
 
 # Nonstandard links
 link git/gitconfig .config/git/config

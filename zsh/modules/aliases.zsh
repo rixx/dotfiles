@@ -42,6 +42,7 @@ alias asdf='setxkbmap de neo -option && setxkbmap -option compose:prsc'
 alias uiae='setxkbmap de nodeadkeys -option && setxkbmap -option compose:prsc'
 
 alias py='uv run python'
+alias pytest='uv run pytest'
 function django() {
   # Search for manage.py in current and parent directories and run given command
   if [ -f "manage.py" ]; then
@@ -57,13 +58,10 @@ function django() {
 alias dj='django'
 
 alias pserver="uv run python -m http.server"
-alias pydist="rm -rf dist && python -m build && twine upload dist/*"
+alias pydist="rm -rf dist && uv run python -m build && uvx twine upload dist/*"
 
 alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
 alias av='ansible-vault --vault-password-file=.vault_password.sh'
-
-alias ra='ranger'
-alias dc='docker-compose'
 
 function pyclean() {
     ZSH_PYCLEAN_PLACES=${*:-'.'}
@@ -71,9 +69,9 @@ function pyclean() {
     find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
     find ${ZSH_PYCLEAN_PLACES} -type d -name ".mypy_cache" -delete
 }
-alias agpy='ag --python'
 
 alias host='systemd-resolve'
+alias dc='docker-compose'
 
 # Alias the most common sshuttle command
 alias vpn='sshuttle -r tonks 0.0.0.0/0 --dns -x 78.46.142.235'
