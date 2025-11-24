@@ -1,0 +1,15 @@
+#!/bin/bash
+
+HOSTNAME=$(hostname)
+DOTFILES="/home/rixx/.config/dotfiles"
+PACKAGE_FILE="$DOTFILES/data/all-packages-$HOSTNAME"
+
+/usr/bin/pacman -Qe | /usr/bin/cut -d ' ' -f1 > "$PACKAGE_FILE"
+
+cd "$DOTFILES" || exit 1
+
+if ! /usr/bin/git diff --quiet "data/all-packages-$HOSTNAME"; then
+    /usr/bin/git reset
+    /usr/bin/git add "data/all-packages-$HOSTNAME"
+    /usr/bin/git commit -m "[data] Update packages on $HOSTNAME"
+fi

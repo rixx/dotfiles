@@ -1,5 +1,17 @@
+### Frequent jobs
+# Run chaos.social auto moderator
+0,15,30,45 * * * * /home/rixx/src/meta/bin/auto-moderator
+
+### Hourly jobs
+# Update wallpaper
 0 * * * * /home/rixx/.config/dotfiles/bin/wallpaperctl set
 # Move files older than an hour to appropriate subdir in ~/tmp/downloads
 1 * * * * /usr/bin/find /home/rixx/tmp/downloads -maxdepth 1 -type f -mmin +60 -exec /home/rixx/.config/dotfiles/bin/extsort {} \;
+
+### Daily jobs
+# Run backups once a day
 20 20 * * * BORG_PASSPHRASE="REDACTED" /home/rixx/.config/dotfiles/scripts/backup.sh
+# Run updatedb once a day
 21 21 * * * sudo /usr/bin/updatedb
+# Update list of installed packages once a day
+22 22 * * * /home/rixx/.config/dotfiles/bin/,update-package-list
