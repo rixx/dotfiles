@@ -47,6 +47,7 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
     opacity: 0;
     max-height: 0px;
     pointer-events: none;
+    background-color: white;
 }
 #sidebar-header {
   display: none;

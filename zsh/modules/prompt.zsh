@@ -95,7 +95,7 @@ prompt_status() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  prompt_segment $HOST_COLOUR white "%(!.%{%F{yellow}%}.)$(whoami)@%m"
+  prompt_segment $HOST_COLOUR white "%(!.%{%F{yellow}%}.)$HOST_STRING"
 }
 
 # Git: branch/detached head, dirty status

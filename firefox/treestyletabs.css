@@ -13,7 +13,7 @@ tab-item tab-item-substance {
   background-color: #ffffff70 !important;
 }
 tab-item {
-  border: solid 1px #00000010; 
+  border: solid 1px #00000010;
 }
 tab-item:hover tab-item-substance {
   background-color: #00000001 !important;
