@@ -13,7 +13,7 @@ fi
 ZSH="$XDG_CONFIG_HOME/dotfiles/zsh"
 fpath=($ZSH/modules $fpath)  # include functions from modules directory
 
-plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent title tools fzf)
+plugins=(options completion aliases bgnotify colored-man git prompt ssh-agent tools fzf)
 
 for file in $plugins; do
     source "$ZSH/modules/$file.zsh"
