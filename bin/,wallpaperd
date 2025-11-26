@@ -1,0 +1,205 @@
+#!/usr/bin/env -S uv run --script
+"""
+sway workspace-aware wallpaper daemon.
+listens for workspace changes and sets per-output backgrounds
+based on the first visible workspace on each output.
+"""
+
+import json
+import random
+import subprocess
+import hashlib
+import signal
+import sys
+import os
+from pathlib import Path
+from typing import Optional
+
+CONFIG_PATH = Path("~/.config/sway/wallpapers.json").expanduser()
+IMAGE_DIR = Path("~/lib/pics/wallpapers/marginalia").expanduser()
+CACHE_DIR = Path("~/.cache/sway-wallpapers").expanduser()
+PIDFILE = Path("~/.cache/sway-wallpaper-daemon.pid").expanduser()
+BACKGROUND_COLOR = "#fdf6e3"
+ACTIVE_WINDOW_TITLE = "<span size='10pt'>⸻ ❧ ꧁   ⁂   ꧂ ☙ ⸻</span>"
+
+
+def kill_old_instance():
+    if PIDFILE.exists():
+        try:
+            old_pid = int(PIDFILE.read_text().strip())
+            os.kill(old_pid, signal.SIGTERM)
+        except (ValueError, ProcessLookupError, PermissionError):
+            pass  # stale pidfile or already dead
+        PIDFILE.unlink(missing_ok=True)
+
+    # murder any orphaned swaybg processes
+    subprocess.run(["pkill", "-x", "swaybg"], capture_output=True)
+
+    PIDFILE.write_text(str(os.getpid()))
+
+
+class WallpaperDaemon:
+    def __init__(self):
+        self.config = self._load_config()
+        self.swaybg_procs: dict[str, subprocess.Popen] = {}
+        self.current_state: dict[str, tuple[str, Optional[Path]]] = {}  # output -> (workspace, image_path)
+        self.workspace_image_cache: dict[str, dict] = {}  # workspace -> chosen image entry
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+    def _load_config(self) -> dict:
+        if not CONFIG_PATH.exists():
+            raise FileNotFoundError(f"config not found: {CONFIG_PATH}")
+        with open(CONFIG_PATH) as f:
+            return json.load(f)
+
+    def _get_outputs(self) -> list[dict]:
+        result = subprocess.run(
+            ["swaymsg", "-t", "get_outputs", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        return json.loads(result.stdout)
+
+    def _get_workspaces(self) -> list[dict]:
+        result = subprocess.run(
+            ["swaymsg", "-t", "get_workspaces", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        return json.loads(result.stdout)
+
+    def _get_visible_workspace_for_output(self, output_name: str) -> Optional[str]:
+        workspaces = self._get_workspaces()
+        for ws in workspaces:
+            if ws.get("output") == output_name and ws.get("visible"):
+                return ws.get("name")
+        return None
+
+    def _pick_image_for_workspace(self, ws_name: str) -> Optional[dict]:
+        # return cached choice if we've already picked for this workspace
+        if ws_name in self.workspace_image_cache:
+            return self.workspace_image_cache[ws_name]
+
+        ws_config = self.config.get("workspaces", {})
+        images = ws_config.get(ws_name) or ws_config.get("default")
+        if not images:
+            return None
+
+        choice = random.choice(images)
+        self.workspace_image_cache[ws_name] = choice
+        return choice
+
+    def _get_cached_path(self, src: Path | None, canvas_w: int, canvas_h: int, img_width: int | None) -> Path:
+        if src is None:
+            return CACHE_DIR / f"solid_{canvas_w}x{canvas_h}.png"
+        src_hash = hashlib.md5(str(src).encode()).hexdigest()[:12]
+        return CACHE_DIR / f"{src.stem}_{src_hash}_{canvas_w}x{canvas_h}_w{img_width}.png"
+
+    def _generate_letterboxed(self, src: Path, canvas_w: int, canvas_h: int, img_width: int, dest: Path):
+        bg_color = self.config.get("background_color", BACKGROUND_COLOR)
+        subprocess.run([
+            "magick",
+            "-size", f"{canvas_w}x{canvas_h}",
+            f"xc:{bg_color}",
+            "(", str(src), "-resize", f"{img_width}x", ")",
+            "-gravity", "NorthWest",
+            "-composite",
+            str(dest)
+        ], check=True)
+
+    def _ensure_image(self, src: Path, canvas_w: int, canvas_h: int, img_width: int) -> Path:
+        cached = self._get_cached_path(src, canvas_w, canvas_h, img_width)
+        if not cached.exists():
+            self._generate_letterboxed(src, canvas_w, canvas_h, img_width, cached)
+        return cached
+
+    def _set_wallpaper(self, output_name: str, image_path: Optional[Path]):
+        if output_name in self.swaybg_procs:
+            self.swaybg_procs[output_name].terminate()
+            self.swaybg_procs[output_name].wait()
+
+        if image_path is None:
+            proc = subprocess.Popen([
+                "swaybg",
+                "-o", output_name,
+                "-c", BACKGROUND_COLOR.strip("#"),
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            proc = subprocess.Popen([
+                "swaybg",
+                "-o", output_name,
+                "-i", str(image_path),
+                "-m", "fill"
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        self.swaybg_procs[output_name] = proc
+
+    def update_all_outputs(self):
+        outputs = self._get_outputs()
+        for output in outputs:
+            if not output.get("active"):
+                continue
+
+            name = output["name"]
+            mode = output.get("current_mode", {})
+            canvas_w = mode.get("width", 1920)
+            canvas_h = mode.get("height", 1080)
+            scale_factor = output.get("scale", 1.0)
+
+            ws_name = self._get_visible_workspace_for_output(name)
+            if not ws_name:
+                continue
+
+            ws_key = ws_name.split(":")[0]
+            img_entry = self._pick_image_for_workspace(ws_key)
+
+            final_image: Optional[Path] = None
+            if img_entry:
+                img_width = int(img_entry["width"] * scale_factor)
+                src_image = IMAGE_DIR / img_entry["path"]
+                if src_image.exists():
+                    final_image = self._ensure_image(src_image, canvas_w, canvas_h, img_width)
+
+            # only update if state changed
+            new_state = (ws_key, final_image)
+            if self.current_state.get(name) == new_state:
+                continue
+
+            self.current_state[name] = new_state
+            self._set_wallpaper(name, final_image)
+
+    def cleanup(self):
+        for proc in self.swaybg_procs.values():
+            proc.terminate()
+        for proc in self.swaybg_procs.values():
+            proc.wait()
+
+    def run(self):
+        self.update_all_outputs()
+
+        proc = subprocess.Popen(
+            ["swaymsg", "-t", "subscribe", "-m", '["workspace", "output"]'],
+            stdout=subprocess.PIPE, text=True
+        )
+
+        try:
+            for line in proc.stdout:
+                try:
+                    event = json.loads(line)
+                    change = event.get("change")
+                    if change in ("focus", "init", "move", "unspecified"):
+                        self.update_all_outputs()
+                        self.set_active_window_title()
+                except json.JSONDecodeError:
+                    continue
+        except KeyboardInterrupt:
+            pass
+        finally:
+            proc.terminate()
+            self.cleanup()
+
+
+if __name__ == "__main__":
+    kill_old_instance()
+    daemon = WallpaperDaemon()
+    try:
+        daemon.run()
+    finally:
+        PIDFILE.unlink(missing_ok=True)
