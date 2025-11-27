@@ -1,8 +1,10 @@
 acpi
 amd-ucode
+android-file-transfer
 aspell
 aspell-de
 aspell-en
+azote
 base
 base-devel
 blueberry
@@ -55,6 +57,7 @@ less
 libreoffice-fresh
 linux
 linux-firmware
+localsend-bin
 logrotate
 lsof
 lxappearance
