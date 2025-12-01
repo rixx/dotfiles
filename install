@@ -41,8 +41,7 @@ function conflink {
 }
 
 # Straightforward links
-conflink autorandr
-conflink dunst
+conflink swaync
 conflink gtk-3.0
 conflink sway
 conflink py3status
