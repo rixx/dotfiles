@@ -44,7 +44,10 @@ function conflink {
 conflink autorandr
 conflink dunst
 conflink gtk-3.0
-conflink i3
+conflink sway
+conflink py3status
+conflink waybar
+conflink kanshi
 conflink kitty
 conflink lsd
 conflink mimeapps.list
