@@ -1,10 +1,8 @@
 acpi
 amd-ucode
-android-file-transfer
 aspell
 aspell-de
 aspell-en
-azote
 base
 base-devel
 blueberry
@@ -15,7 +13,6 @@ calibre
 cronie
 cups
 cups-pdf
-darktable
 dhcpcd
 dialog
 diff-so-fancy
@@ -61,7 +58,6 @@ localsend-bin
 logrotate
 lsof
 lxappearance
-mailhog-bin
 maim
 man-db
 merkuro
