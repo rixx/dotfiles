@@ -1,8 +1,10 @@
 @define-color clr-background #fdf6e3;
 @define-color clr-text #333333;
 @define-color clr-red #990000;
+@define-color clr-red-transparent rgba(153, 0, 0, 0.1);
 @define-color clr-orange #c18401;
 @define-color clr-turquoise #007171;
+@define-color clr-turquoise-transparent rgba(0, 113, 113, 0.1);
 
 * {
     font-family: FontAwesome, Kelmscott Mono, Iosevka, sans-serif;
@@ -33,9 +35,11 @@ button {
 }
 #workspaces button.focused {
     border-color: @clr-turquoise;
+    background-color: @clr-turquoise-transparent;
 }
 #workspaces button.urgent {
     color: @clr-red;
+    background-color: @clr-red-transparent;
     border-color: @clr-red;
 }
 #workspaces button:hover {

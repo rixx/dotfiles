@@ -99,8 +99,8 @@
         }
     },
     "backlight": {
-        "format": "{icon} {percent}%",
-        "tooltip": false,
+        "format": "{icon}",
+        "tooltip-format": "{percent}%",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
