@@ -20,7 +20,6 @@
   "widgets": [
     "inhibitors",
     "title",
-    "mpris",
     "notifications",
     "dnd"
   ],
@@ -35,9 +34,6 @@
     },
     "title": {
       "text": ""
-    },
-    "mpris": {
-      "autohide": true
     },
     "notifications": {
       "vexpand": true
