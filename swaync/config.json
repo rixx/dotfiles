@@ -8,6 +8,8 @@
   "control-center-margin-right": 16,
   "control-center-margin-left": 8,
   "control-center-layer": "overlay",
+  "control-center-width": 600,
+  "notification-window-width": 600,
 
   "timeout": 30,
   "timeout-low": 10,
