@@ -70,7 +70,7 @@ case ${chosen} in
         confirm_run 'systemctl reboot'
         ;;
     "$option_3")
-        confirm_run 'i3-msg exit'
+        confirm_run 'swaymsg exit'
         ;;
     "$option_4")
         confirm_run 'systemctl hibernate'

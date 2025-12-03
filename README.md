@@ -9,7 +9,7 @@ Things you might want to look at:
 - The vim config is pretty neat. Nothing minimal, but I try to only include plugins that actually help my workflows.
 - I'm not shell coder at all, but my zsh config is really pretty alright and modular.
 - The mutt and tmux configs are alright, but nothing special.
-- Some of the tool configs can get you started easier, maybe: dunst, i3 and rofi, in particular.
+- Some of the tool configs can get you started easier, maybe: dunst, sway and rofi, in particular.
 - I also try to document my firefox extensions and their settings.
 - There are a couple of small helper scripts in `bin`.
 

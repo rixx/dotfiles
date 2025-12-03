@@ -16,4 +16,4 @@ i3lock \
         --insidever-color=00000000 --insidewrong-color=d23c3dff \
         --ringver-color=ffffffff --ringwrong-color=ffffffff \
         --nofork
-dunstctl set-paused false
+swaync-client --inhibitor-remove "lock"
