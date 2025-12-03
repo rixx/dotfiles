@@ -19,6 +19,12 @@ Things you might want to look at:
 2. Run ``./install``.
 3. Install user crontabs from ``./crontab``, and start and enable cronie.
 4. Install sudoers from ``./sudoers``
+5. systemctl enable --start:
+   1. cronie
+   2. reflector.timer
+   3. ufw
+   4. valkey and postgres, probably
+   5. systemd-resolved and bluetooth, probably
 
 ### If on a Desktop system
 
@@ -29,11 +35,3 @@ Things you might want to look at:
    build ~/doc/wiki/.obsidian/plugins/obsidian-local-images``, be sad.
 5. Update ``/etc/pam.d/login`` as described in [the wiki](https://wiki.archlinux.org/title/GNOME/Keyring#PAM_step), and
    then also activate SSH-agent support in gnome-keyring as per https://wiki.archlinux.org/title/GNOME/Keyring#SSH_keys
-
-## Troubleshooting
-
-### All GTK apps take forever to start
-
-```
-systemctl --user mask xdg-desktop-portal-gtk.service 
-```
