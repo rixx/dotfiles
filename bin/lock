@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-dunstctl set-paused true
-i3lock \
+swaync-client --inhibitor-add "lock"
+swaylock \
         -t \
-        -i $(wallpaperctl random --processed) \
+       # -i $(wallpaperctl random --processed) \
         --clock --force-clock \
         --date-align 1 --time-pos='x+110:h-70' --date-pos='x+43:h-45' \
         --date-str "Und Sie sind?" --verif-text='…' --wrong-text='' --noinput-text='' \

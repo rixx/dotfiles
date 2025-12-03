@@ -45,7 +45,7 @@ def start_focus():
     for tool in ["Discord", "signal-desktop", "threema-web"]:
         subprocess.run(["killall", tool])
     # Pause notifications
-    subprocess.run(["dunstctl", "set-paused", "true"])
+    subprocess.run(["swaync-client", "--inhibitor-add", '"lock"'])
     # Disable domains that are distracting via /etc/hosts, set them to 0.0.0.0
     with open("/etc/hosts", "a") as f:
         for domain in DOMAINS:
@@ -62,7 +62,7 @@ def stop_focus():
             if not any(domain in line for domain in DOMAINS):
                 f.write(line)
     # Unpause notifications
-    subprocess.run(["dunstctl", "set-paused", "false"])
+    subprocess.run(["swaync-client", "--inhibitor-remove", '"lock"'])
     save_status("0")
 
 
