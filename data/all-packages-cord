@@ -68,6 +68,7 @@ ncdu
 neomutt
 neovim
 neovim-plug
+nerd-fonts-noto-sans-mono
 netctl
 noto-fonts-emoji
 npm
@@ -87,6 +88,7 @@ pavucontrol
 pcmanfm
 peek
 perl-image-exiftool
+pinentry-rofi
 pipewire-alsa
 pipewire-pulse
 plocate
@@ -107,11 +109,13 @@ rofimoji
 rsync
 ruby-bundler
 rustup
+seahorse
 signal-desktop
 simple-scan
 slack-desktop
 smartgit
 spotdl
+spotify-launcher
 sshfs
 sshuttle
 sway
@@ -150,6 +154,7 @@ xdg-desktop-portal-wlr
 xf86-video-amdgpu
 xf86-video-vesa
 xiccd
+xorg-xwayland
 yay-bin
 ydotool
 yt-dlp
