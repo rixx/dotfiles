@@ -188,6 +188,12 @@ augroup development
   autocmd BufNewFile ~/doc/wiki/journal/*.md :silent 0r !~/.config/dotfiles/vim/scripts/generate_journal_file.py '%:t'
 augroup END
 
+" Detect uv scripts (with uv hashbang) as Python
+augroup uv_scripts
+  autocmd!
+  autocmd BufRead * if getline(1) =~# '^#!.*\<uv\>' | setfiletype python | endif
+augroup END
+
 """""""""""""""""""""""""""""""""""""""""""""
 ""  Plugin Settings                        ""
 """""""""""""""""""""""""""""""""""""""""""""
