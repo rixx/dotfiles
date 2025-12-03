@@ -53,6 +53,7 @@
 
 [commit]
     verbose = true
+	gpgSign = false
 
 [core]
 	excludesfile = /home/rixx/.gitignore
@@ -67,6 +68,9 @@
 	colorMovedWS = allow-indentation-change
 	renames = copies
 	submodule = log
+
+[gui]
+	pruneduringfetch = true
 
 [fetch]
 	fsckobjects = true
@@ -91,6 +95,7 @@
 	default = current
     # push tags automatically
 	followtags = true
+	recurseSubmodules = check
 
 [rebase]
 	autoSquash = true
@@ -154,6 +159,11 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
+[smartgit "submodule"]
+	fetchalways = false
+	update = true
+	initializenew = true
 
 ##################################################
 #                    UNSORTED                    #
