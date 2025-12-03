@@ -55,11 +55,9 @@ function django() {
     (cd .. && django "$@")
   fi
 }
+alias j='just'
 alias dj='django'
-
 alias pserver="uv run python -m http.server"
-alias pydist="rm -rf dist && uv run python -m build && uvx twine upload dist/*"
-
 alias ap='ansible-playbook --vault-password-file=.vault_password.sh'
 alias av='ansible-vault --vault-password-file=.vault_password.sh'
 
