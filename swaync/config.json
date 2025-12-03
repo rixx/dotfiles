@@ -1,0 +1,46 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+
+  "cssPriority": "user",
+
+  "control-center-margin-top": 0,
+  "control-center-margin-bottom": 16,
+  "control-center-margin-right": 16,
+  "control-center-margin-left": 8,
+  "control-center-layer": "overlay",
+
+  "timeout": 30,
+  "timeout-low": 10,
+
+  "hide-on-clear": true,
+  "text-empty": "woop woop",
+
+  "control-center-height": -1,
+
+  "widgets": [
+    "inhibitors",
+    "title",
+    "mpris",
+    "notifications",
+    "dnd"
+  ],
+  "widget-config": {
+    "inhibitors": {
+      "text": "Inhibitors",
+      "button-text": "Clear All",
+      "clear-all-button": true
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    "title": {
+      "text": ""
+    },
+    "mpris": {
+      "autohide": true
+    },
+    "notifications": {
+      "vexpand": true
+    }
+  }
+}
