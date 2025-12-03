@@ -3,6 +3,7 @@
 sway workspace-aware wallpaper daemon.
 listens for workspace changes and sets per-output backgrounds
 based on the first visible workspace on each output.
+also decorates the focused window title.
 """
 
 import json
@@ -12,6 +13,7 @@ import hashlib
 import signal
 import sys
 import os
+import atexit
 from pathlib import Path
 from typing import Optional
 
@@ -21,6 +23,7 @@ CACHE_DIR = Path("~/.cache/sway-wallpapers").expanduser()
 PIDFILE = Path("~/.cache/sway-wallpaper-daemon.pid").expanduser()
 BACKGROUND_COLOR = "#fdf6e3"
 ACTIVE_WINDOW_TITLE = "<span size='10pt'>⸻ ❧ ꧁   ⁂   ꧂ ☙ ⸻</span>"
+DEFAULT_TITLE_FORMAT = "<span size='10pt'>⸻ ❧ ꧁   %title   ꧂ ☙ ⸻</span>"
 
 
 def kill_old_instance():
@@ -44,7 +47,15 @@ class WallpaperDaemon:
         self.swaybg_procs: dict[str, subprocess.Popen] = {}
         self.current_state: dict[str, tuple[str, Optional[Path]]] = {}  # output -> (workspace, image_path)
         self.workspace_image_cache: dict[str, dict] = {}  # workspace -> chosen image entry
+        
+        # focus title management
+        self.modified_windows: set[int] = set()  # con_ids we've touched
+        self.current_focused_id: Optional[int] = None
+        
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        
+        # ensure we restore titles on any exit
+        atexit.register(self._restore_all_titles)
 
     def _load_config(self) -> dict:
         if not CONFIG_PATH.exists():
@@ -65,6 +76,121 @@ class WallpaperDaemon:
             capture_output=True, text=True, check=True
         )
         return json.loads(result.stdout)
+
+    def _get_focused_window(self) -> Optional[dict]:
+        """get the currently focused container from sway tree"""
+        result = subprocess.run(
+            ["swaymsg", "-t", "get_tree", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        tree = json.loads(result.stdout)
+        return self._find_focused(tree)
+
+    def _find_focused(self, node: dict) -> Optional[dict]:
+        """recursively find the focused leaf node"""
+        if node.get("focused") and node.get("type") == "con" and not node.get("nodes"):
+            return node
+        for child in node.get("nodes", []) + node.get("floating_nodes", []):
+            found = self._find_focused(child)
+            if found:
+                return found
+        return None
+
+    def _set_window_title(self, con_id: int, title: str):
+        """set title for a specific container"""
+        # escape for sway command parsing
+        escaped = title.replace('"', '\\"')
+        subprocess.run(
+            ["swaymsg", f'[con_id={con_id}] title_format "{escaped}"'],
+            capture_output=True, check=False  # don't fail if window died
+        )
+
+    def _restore_window_title(self, con_id: int):
+        """restore default title format for a container"""
+        if con_id not in self.modified_windows:
+            return
+        self.modified_windows.discard(con_id)
+        escaped = DEFAULT_TITLE_FORMAT.replace('"', '\\"')
+        subprocess.run(
+            ["swaymsg", f'[con_id={con_id}] title_format "{escaped}"'],
+            capture_output=True, check=False
+        )
+
+    def _restore_all_titles(self):
+        """restore all modified titles - called on exit"""
+        for con_id in list(self.modified_windows):
+            self._restore_window_title(con_id)
+        self.current_focused_id = None
+
+    def _apply_default_title_to_all(self):
+        """apply default title format to all existing windows on startup"""
+        result = subprocess.run(
+            ["swaymsg", "-t", "get_tree", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        tree = json.loads(result.stdout)
+        for con_id in self._collect_leaf_con_ids(tree):
+            escaped = DEFAULT_TITLE_FORMAT.replace('"', '\\"')
+            subprocess.run(
+                ["swaymsg", f'[con_id={con_id}] title_format "{escaped}"'],
+                capture_output=True, check=False
+            )
+            self.modified_windows.add(con_id)
+
+    def _collect_leaf_con_ids(self, node: dict) -> list[int]:
+        """collect con_ids of leaf windows (actual apps, not containers)"""
+        ids = []
+        children = node.get("nodes", []) + node.get("floating_nodes", [])
+        if not children and node.get("type") == "con" and node.get("pid"):
+            # leaf node with a pid = actual window
+            ids.append(node["id"])
+        for child in children:
+            ids.extend(self._collect_leaf_con_ids(child))
+        return ids
+
+    def _prune_dead_windows(self):
+        """remove entries for windows that no longer exist"""
+        result = subprocess.run(
+            ["swaymsg", "-t", "get_tree", "-r"],
+            capture_output=True, text=True, check=True
+        )
+        tree = json.loads(result.stdout)
+        live_ids = set(self._collect_con_ids(tree))
+        self.modified_windows &= live_ids
+
+    def _collect_con_ids(self, node: dict) -> list[int]:
+        """collect all con_ids from tree"""
+        ids = []
+        if "id" in node:
+            ids.append(node["id"])
+        for child in node.get("nodes", []) + node.get("floating_nodes", []):
+            ids.extend(self._collect_con_ids(child))
+        return ids
+
+    def update_focus_title(self):
+        """handle focus change: restore old, decorate new"""
+        focused = self._get_focused_window()
+        
+        new_id = focused["id"] if focused else None
+        
+        # no change
+        if new_id == self.current_focused_id:
+            return
+        
+        # restore previous
+        if self.current_focused_id is not None:
+            self._restore_window_title(self.current_focused_id)
+        
+        # decorate new
+        if focused and new_id is not None:
+            self._set_window_title(new_id, ACTIVE_WINDOW_TITLE)
+            self.modified_windows.add(new_id)
+        
+        self.current_focused_id = new_id
+        
+        # periodic cleanup
+        if len(self.modified_windows) > 50:
+            self._prune_dead_windows()
 
     def _get_visible_workspace_for_output(self, output_name: str) -> Optional[str]:
         workspaces = self._get_workspaces()
@@ -166,6 +292,7 @@ class WallpaperDaemon:
             self._set_wallpaper(name, final_image)
 
     def cleanup(self):
+        self._restore_all_titles()
         for proc in self.swaybg_procs.values():
             proc.terminate()
         for proc in self.swaybg_procs.values():
@@ -173,9 +300,11 @@ class WallpaperDaemon:
 
     def run(self):
         self.update_all_outputs()
+        self._apply_default_title_to_all()
+        self.update_focus_title()
 
         proc = subprocess.Popen(
-            ["swaymsg", "-t", "subscribe", "-m", '["workspace", "output"]'],
+            ["swaymsg", "-t", "subscribe", "-m", '["workspace", "output", "window"]'],
             stdout=subprocess.PIPE, text=True
         )
 
@@ -184,9 +313,15 @@ class WallpaperDaemon:
                 try:
                     event = json.loads(line)
                     change = event.get("change")
+                    
+                    # workspace/output events
                     if change in ("focus", "init", "move", "unspecified"):
                         self.update_all_outputs()
-                        self.set_active_window_title()
+                    
+                    # window events - focus changes
+                    if change in ("focus", "new", "close", "title"):
+                        self.update_focus_title()
+                        
                 except json.JSONDecodeError:
                     continue
         except KeyboardInterrupt:
@@ -199,6 +334,16 @@ class WallpaperDaemon:
 if __name__ == "__main__":
     kill_old_instance()
     daemon = WallpaperDaemon()
+    
+    # handle signals for clean shutdown
+    def handle_signal(signum, frame):
+        daemon.cleanup()
+        PIDFILE.unlink(missing_ok=True)
+        sys.exit(0)
+    
+    signal.signal(signal.SIGTERM, handle_signal)
+    signal.signal(signal.SIGINT, handle_signal)
+    
     try:
         daemon.run()
     finally:
