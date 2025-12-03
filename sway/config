@@ -1,0 +1,7 @@
+# Windows key is $mod
+set $mod Mod4
+
+include ~/.config/dotfiles/sway/conf.d/keybinds.conf
+include ~/.config/dotfiles/sway/conf.d/display.conf
+include ~/.config/dotfiles/sway/conf.d/workspaces.conf
+include ~/.config/dotfiles/sway/conf.d/startup.conf

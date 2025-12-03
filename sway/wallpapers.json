@@ -1,0 +1,23 @@
+{
+  "workspaces": {
+    "1": [
+      {"path":"W79-35.tif", "width": 270, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000035_600.tif"}
+    ],
+    "2": [
+      {"path":"W79-33.tif", "width": 230, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000033_600.tif"}
+    ],
+    "3": [
+      {"path":"W79-32.tif", "width": 130, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000032_600.tif"}
+    ],
+    "4": [
+      {"path": "W79-40.tif", "width": 400, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000040_600.tif"},
+      {"path":"W79.tif", "width": 317}
+    ],
+    "5": [
+      {"path":"W79-36.tif", "width": 170, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000036_600.tif"}
+    ],
+    "6": [
+      {"path": "W79-39.tif", "width": 300, "source": "https://www.thedigitalwalters.org/Data/WaltersManuscripts/W79/data/W.79/master/W79_000039_805.tif"}
+    ]
+  }
+}
