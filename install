@@ -41,24 +41,25 @@ function conflink {
 }
 
 # Straightforward links
-conflink swaync
 conflink gtk-3.0
-conflink sway
-conflink py3status
-conflink waybar
+conflink jj
 conflink kanshi
 conflink kitty
 conflink lsd
 conflink mimeapps.list
 conflink mutt/muttrc
+conflink py3status
 conflink ranger/rc.conf
+conflink rofi/bin
 conflink rofi/config
 conflink rofi/themes
-conflink rofi/bin
+conflink sway
+conflink swaync
+conflink systemd
 conflink tmux/tmux.conf
-conflink vim/vimrc
 conflink vim/colors
-conflink jj
+conflink vim/vimrc
+conflink waybar
 
 # Nonstandard links
 link git/gitconfig .config/git/config
@@ -67,7 +68,6 @@ link mimeapps.list .local/share/applications/mimeapps.list
 link user-dirs.dirs .config/user-dirs.dirs
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
-link mutt/offlineimap.service .config/systemd/user/offlineimap.service
 link notmuch/notmuch-config .notmuch-config
 link picom/picom.conf .config/picom.conf
 link rofi/rofi-pass.conf .config/rofi-pass/config
