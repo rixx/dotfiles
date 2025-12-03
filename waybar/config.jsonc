@@ -1,0 +1,162 @@
+// -*- mode: jsonc -*-
+[
+{
+    "layer": "bottom",
+    "name": "head",
+
+    "position": "top",
+    "height": 36,
+    "margin-top": 0,
+    "margin-bottom": 10,
+    "margin-right": 10,
+    "margin-left": 10,
+
+    "spacing": 4,
+    "modules-left": [
+    ],
+    "modules-center": [
+        "sway/workspaces"
+    ],
+    "modules-right": [
+        "sway/mode",
+        "sway/language",
+        "network",
+        "backlight",
+        "battery",
+        "pulseaudio",
+        "pulseaudio#source",
+        "tray",
+        "clock"
+    ],
+     "sway/workspaces": {
+         "disable-scroll": true,
+         "all-outputs": false,
+         "format": "{icon}",
+         "format-icons": {
+            "1:term": "Ⅰ",
+            "2:web": "Ⅱ",
+            "3:dev": "Ⅲ",
+            "4:mail": "Ⅳ",
+            "5:im": "Ⅴ",
+            "6:rand": "Ⅵ",
+            "7": "Ⅶ",
+            "8": "Ⅷ",
+            "9": "Ⅸ",
+            "10": "Ⅹ",
+             "default": ""
+         }
+     },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "sway/language": {
+        "format": " ",
+        "tooltip-format": "{short}-{variant}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+    },
+    "idle_inhibitor": {  // unused, but keeping it around for the icons
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        "icon-size": 21,
+        "spacing": 15,
+        "icons": {
+          "blueman": "bluetooth",
+          "blueberry": "bluetooth",
+          "udiskie": "device",
+          "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+        }
+    },
+    "clock": {
+        "format-alt": "{:%Y-%m-%d}",
+        "format": "{:%H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode"          : "year",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "left",
+                    "on-scroll"     : 1,
+                    "format": {
+                              "months":     "<span color='#D84315' font='Kelmscott Mono' size='13pt' line_height='2'><b>{}</b></span>",
+                              "days":       "<span color='#ffffff'font='Kelmscott Mono' size='13pt' line_height='1.5'><b>{}</b></span>",
+                              "weeks":      "<span color='#99ffdd' font='Kelmscott Mono' size='13pt'><b>W{}</b></span>",
+                              "weekdays":     "<span color='#cccccc' font='Kelmscott Mono' size='13pt'><b>{}</b></span>",
+                              "today":      "<span color='#D84315' font='Kelmscott Mono' size='13pt'><b><u>{}</u></b></span>"
+                        }
+                    },
+        "actions":  {
+                    "on-click-right": "mode",
+                    "on-scroll-up": "shift_up",
+                    "on-scroll-down": "shift_down"
+                    }
+    },
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "tooltip": false,
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "on-click": "kitty -c 'powertop'",
+        "format": "{icon} {capacity}%",
+        "tooltip-format": "{timeTo}, {power}W",
+        "format-charging": " {capacity}%",
+        "tooltip-format-charging": "{timeTo}",
+        "format-alt": "{time} {icon}",
+        "format-good": "", // An empty format will hide the module
+        "format-full": "",
+        "format-plugged": "",
+        "on-click": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        "format-wifi": "",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+        "format-ethernet": "",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
+        "format-linked": "",
+        "tooltip-format-linked": "{ifname} (No IP)",
+        "format-disconnected": "",
+        "tooltip-format-disconnected": "Disconnected",
+        "tooltip-format": "Left-click to copy",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": " {volume}%",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "phone-muted": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "scroll-step": 1,
+        "on-click": "pamixer -t",
+        "on-click-right": "pavucontrol",
+        "ignored-sinks": ["Easy Effects Sink"]
+    },
+    "pulseaudio#source": {
+        "format": "{format_source}",
+        "format-source": "",
+        "format-source-muted": "",
+        "on-click": "pamixer --default-source -t",
+        "on-click-right": "pavucontrol",
+    }
+},
+]
