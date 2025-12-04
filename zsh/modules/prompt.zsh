@@ -6,7 +6,11 @@ RETVAL=$?
 # have decent contrast to the rest of the prompt, look good with white
 # text, and not look too alarming (no strong reds).
 # Also they spark joy.
-READABLE_COLOURS=(12 18 23 24 29 30 35 36 37 38 43 54 59 67 71 72 73 74 79 90 97 103 107 108 109 125 132 133 138 140 145 168 169 203 205 209 211 241 246)
+# If a new server gets a really bad colour, add one of these fallback
+# colours to the list to shift the hash:
+# 0 1 5 16 17 52 53 64 68 89 90 133 174 202 203 208 209
+# or better: 12 13 31 34 67 70 102 137 168
+READABLE_COLOURS=(9 14 23 30 35 36 37 65 66 71 72 95 96 101 107 109 130 131 132 166 167 172 173 235 236 237 238 244 245)
 COLOUR_AMOUNT=${#READABLE_COLOURS[@]}
 
 # we hash username@hostname, then mod it by the colour count
@@ -14,22 +18,22 @@ HOST_STRING=$(whoami)@$(hostnamectl hostname)
 HOST_STRING_HASH=$(( 0x$(echo $HOST_STRING | sha1sum | cut -d ' ' -f 1 | head -c 10) ))
 HOST_COLOUR_INDEX=$(( $HOST_STRING_HASH % $COLOUR_AMOUNT))
 HOST_COLOUR_INDEX=$((HOST_COLOUR_INDEX+1)) # increase by one as zsh arrays start at 1
-
-#HOST_COLOUR=24
 HOST_COLOUR=${READABLE_COLOURS[$HOST_COLOUR_INDEX]}
+
+PROMPT_COLOUR=6
 
 # show sophisticated git status
 # look wedisagree.zsh-theme for more possible symbols
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}\u272e"
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}\u271a"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}\u2738"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[yellow]%}\u279c"
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[red]%}\u279c"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}\u2716"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[blue]%}\u267b"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%}\u21cc"
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[red]%}\u21cc"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[white]%}\u2b06"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]%}\u2b07"
-ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[yellow]%}\u2646"
+ZSH_THEME_GIT_PROMPT_DIVERGED="%{$fg[red]%}\u2646"
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
@@ -90,7 +94,7 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment blue default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment $PROMPT_COLOUR default "$symbols"
 }
 
 # Context: user@hostname (who am I and where am I)
@@ -107,7 +111,8 @@ prompt_git_dir() {
   INDEX=$(command git status --porcelain --ignore-submodules=dirty --untracked-files=no 2> /dev/null)
 
   if [[ -n $INDEX ]]; then
-    prompt_segment 215 default
+    # Dirty = yellow
+    prompt_segment 222 default
     dirty="$ZSH_THEME_GIT_PROMPT_DIRTY"
     if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
       STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
@@ -151,7 +156,8 @@ prompt_git_dir() {
       STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
     fi
   else
-    prompt_segment 81 default
+    # Clean repo: black on white
+    prompt_segment 7 default
     dirty="$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 
@@ -171,14 +177,14 @@ prompt_git_dir() {
     echo -n " $STATUS"
   fi
 
-  prompt_segment blue white "/`git rev-parse --show-prefix`"
+  prompt_segment $PROMPT_COLOUR white "/`git rev-parse --show-prefix`"
 }
 
 # change into a new line and show an prompt symbol
 prompt_prompt_line(){
   echo -n -e "\n"
   CURRENT_BG='NONE'
-  prompt_segment blue black " "
+  prompt_segment $PROMPT_COLOUR default " "
   prompt_end
   echo -n " "
 }
@@ -194,7 +200,7 @@ build_prompt() {
   echo -n -e "\n"
   prompt_status
   prompt_context
-  prompt_segment blue white
+  prompt_segment $PROMPT_COLOUR white
   if [[ $IS_GIT -eq 1 ]]; then
     prompt_git_dir
   else
@@ -210,7 +216,7 @@ build_prompt2(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black ">"
   else
-    prompt_segment 86 default ">"
+    prompt_segment $HOST_COLOUR white ">"
   fi
   prompt_end
   echo -n " "
@@ -222,13 +228,13 @@ build_prompt3(){
   if [[ `whoami` = "root" ]]; then
     prompt_segment red black "?#"
   else
-    prompt_segment 86 default "?#"
+    prompt_segment $HOST_COLOUR default "?#"
   fi
   prompt_end
   echo -n " "
 }
 
-# set the actual prompt
+# set the actual prompts: standard, PS2 ("need more info"), PS3 (inside a select loop)
 PROMPT='%{%f%b%k%}$(build_prompt)'
 PROMPT2='%{%f%b%k%}$(build_prompt2)'
 PROMPT3='%{%f%b%k%}$(build_prompt3)'
