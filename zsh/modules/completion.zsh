@@ -53,5 +53,3 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 
 # Allow SSH tab completion for mosh hostnames
 compdef mosh=ssh
-compdef rsync-copy=rsync
-compdef rsync-move=rsync
