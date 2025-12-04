@@ -147,18 +147,20 @@
 
 [color "diff-highlight"]
 	oldNormal = red bold
-	oldHighlight = red bold 52
+	oldHighlight = white bold red
 	newNormal = green bold
-	newHighlight = green bold 22
+	newHighlight = white bold green
 
 [color "diff"]
-	meta = 3
-	frag = magenta bold
-	func = 146 bold
-	commit = yellow bold
 	old = red bold
 	new = green bold
+	oldMoved = magenta bold
+	newMoved = blue bold
 	whitespace = red reverse
+	meta = yellow
+	commit = yellow bold
+	frag = yellow bold
+	func = yellow
 
 [smartgit "submodule"]
 	fetchalways = false
