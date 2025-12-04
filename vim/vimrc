@@ -239,7 +239,7 @@ let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline_highlighting_cache = 1
 let g:airline_detect_paste=1
-let g:airline_theme='sol'
+let g:airline_theme='manuscript'
 " Show tabs on top, disable other extensions for performance reasons
 " Mouse integration: click to go, middle click to close, right click to delete file
 let g:airline_extensions = ['tabline']

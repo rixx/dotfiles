@@ -75,6 +75,7 @@ link rofi/rofimoji.rc .config/rofimoji.rc
 link tig/tigrc .tigrc
 link vim/vimrc .config/nvim/init.vim
 link vim/coc-settings.json .config/nvim/coc-settings.json
+link vim/colors/manuscript.vim /home/rixx/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/manuscript.vim
 link X/XCompose .XCompose
 link X/Xresources .Xresources
 link X/xintitrc .xinitrc

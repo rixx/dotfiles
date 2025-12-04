@@ -28,30 +28,28 @@ endif
 
 let g:colors_name='duochrome'
 
-" My black is kinda fucked, so we use default here instead of 0
-let s:black           = {"gui": "#222222", "cterm": "NONE"}
-let s:medium_gray     = { "gui": "#767676", "cterm": "243" }
-let s:white           = { "gui": "#f7f3ee", "cterm": "15"  }  " flatwhite bg
-" My white is kinda equally fucked, so we use default here instead of 0
-let s:bg              = { "gui": "#f7f3ee", "cterm": "NONE" }
-let s:orange          = { "gui": "#c18401", "cterm": "208" }  " one color orange 2
+let s:black           = {"gui": "#18150f", "cterm": "NONE"}
+let s:medium_gray     = { "gui": "#6a6258", "cterm": "243" }
+let s:white           = { "gui": "#fdf6e3", "cterm": "15"  }
+let s:bg              = { "gui": "#fdf6e3", "cterm": "NONE" }
+let s:orange          = { "gui": "#c18401", "cterm": "3" }
 let s:dark_orange     = { "gui": "#ff5f00", "cterm": "202" }
+let s:dark_blue       = { "gui": "#0078b8", "cterm": "4" }
+let s:light_blue      = { "gui": "#d0dce8", "cterm": "153" } " softer for visual
+let s:dark_green      = { "gui": "#187850", "cterm": "2" }   " viridian
+let s:light_green     = { "gui": "#28a068", "cterm": "10" }
+let s:dark_red        = { "gui": "#a82818", "cterm": "1" }   " vermillion
+let s:light_red       = { "gui": "#c84830", "cterm": "9" }
+let s:dark_purple     = { "gui": "#883070", "cterm": "5" }
+let s:light_purple    = { "gui": "#a84890", "cterm": "13" }
+let s:dark_cyan       = { "gui": "#007171", "cterm": "6" }
+let s:light_cyan      = { "gui": "#2a8a8a", "cterm": "14" }
 let s:light_black     = { "gui": "#424242", "cterm": "8"   }
 let s:lighter_black   = { "gui": "#545454", "cterm": "240" }
 let s:subtle_black    = { "gui": "#303030", "cterm": "236" }
 let s:light_gray      = { "gui": "#999999", "cterm": "249" }
 let s:lighter_gray    = { "gui": "#CCCCCC", "cterm": "251" }
 let s:lightest_gray   = { "gui": "#E5E5E5", "cterm": "251" }
-let s:dark_red        = { "gui": "#C30771", "cterm": "1"   }
-let s:light_red       = { "gui": "#E32791", "cterm": "1"   }
-let s:dark_blue       = { "gui": "#008EC4", "cterm": "4"   }
-let s:light_blue      = { "gui": "#B6D6FD", "cterm": "153" }
-let s:dark_cyan       = { "gui": "#20A5BA", "cterm": "6"   }
-let s:light_cyan      = { "gui": "#4FB8CC", "cterm": "14"  }
-let s:dark_green      = { "gui": "#10A778", "cterm": "2"   }
-let s:light_green     = { "gui": "#5FD7A7", "cterm": "10"  }
-let s:dark_purple     = { "gui": "#523C79", "cterm": "5"   }
-let s:light_purple    = { "gui": "#6855DE", "cterm": "13"  }
 let s:light_yellow    = { "gui": "#F3E430", "cterm": "11"  }
 let s:dark_yellow     = { "gui": "#A89C14", "cterm": "3"   }
 let s:iawriter        = { "gui": "#20fccf", "cterm": "51"  }  " iA writer cursor
@@ -78,29 +76,6 @@ let s:selection_fg     = s:black
 let s:ok               = s:light_green
 let s:warning          = s:yellow
 let s:error            = s:dark_red
-
-" unlet s:black
-" unlet s:medium_gray
-" unlet s:white
-" unlet s:orange
-" unlet s:light_black
-" unlet s:lighter_black
-" unlet s:subtle_black
-" unlet s:light_gray
-" unlet s:lighter_gray
-" unlet s:lightest_gray
-" unlet s:dark_red
-" unlet s:light_red
-" unlet s:dark_blue
-" unlet s:light_blue
-" unlet s:dark_cyan
-" unlet s:light_cyan
-" unlet s:dark_green
-" unlet s:light_green
-" unlet s:dark_purple
-" unlet s:light_purple
-" unlet s:light_yellow
-" unlet s:dark_yellow
 
 " https://github.com/noahfrederick/vim-hemisu/
 function! s:h(group, style)
