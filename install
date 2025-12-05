@@ -42,6 +42,7 @@ function conflink {
 
 # Straightforward links
 conflink gtk-3.0
+conflink hypr
 conflink jj
 conflink kanshi
 conflink kitty
@@ -60,7 +61,8 @@ conflink tmux/tmux.conf
 conflink vim/colors
 conflink vim/vimrc
 conflink waybar
-conflink hypr
+conflink xdg-desktop-portal
+conflink xdg-desktop-portal-wlr
 
 # Nonstandard links
 link git/gitconfig .config/git/config
