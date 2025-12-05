@@ -25,8 +25,10 @@ fd
 feh
 ffmpegthumbnailer
 firefox-nightly-bin
+flameshot
 fwupd
 fzf
+gdu
 gimp
 git
 github-cli
@@ -37,6 +39,7 @@ hspell
 http-prompt
 httpie
 hugo
+hyprlock
 imagemagick
 inetutils
 inkscape
@@ -55,6 +58,7 @@ linux
 linux-firmware
 localsend-bin
 logrotate
+lsd
 lsof
 lxappearance
 maim
@@ -88,7 +92,6 @@ pavucontrol
 pcmanfm
 peek
 perl-image-exiftool
-pinentry-rofi
 pipewire-alsa
 pipewire-pulse
 plocate
@@ -103,6 +106,7 @@ qtpass
 r-quick-share-bin
 ranger
 reflector
+riff-client
 rofi
 rofi-pass-wayland-git
 rofimoji
@@ -115,13 +119,11 @@ simple-scan
 slack-desktop
 smartgit
 spotdl
-spotify-launcher
 sshfs
 sshuttle
 sway
 sway-contrib
 swaybg
-swaylock
 swaync
 system-config-printer
 tailscale
@@ -150,6 +152,7 @@ wl-clipboard
 woff2-font-awesome
 wpa_supplicant
 wtype
+xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 xf86-video-amdgpu
 xf86-video-vesa
