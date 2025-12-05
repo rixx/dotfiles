@@ -60,6 +60,7 @@ conflink tmux/tmux.conf
 conflink vim/colors
 conflink vim/vimrc
 conflink waybar
+conflink hypr
 
 # Nonstandard links
 link git/gitconfig .config/git/config

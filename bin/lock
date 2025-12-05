@@ -2,18 +2,5 @@
 set -e
 
 swaync-client --inhibitor-add "lock"
-swaylock \
-        -t \
-       # -i $(wallpaperctl random --processed) \
-        --clock --force-clock \
-        --date-align 1 --time-pos='x+110:h-70' --date-pos='x+43:h-45' \
-        --date-str "Und Sie sind?" --verif-text='…' --wrong-text='' --noinput-text='' \
-        --time-color=ffffffff --date-color=ffffffff --verif-color=ffffffff \
-        --radius=20 --ring-width=4 \
-        --ind-pos='x+280:h-70' \
-        --inside-color=00000000 --ring-color=ffffffff --line-uses-inside \
-        --keyhl-color=007171ff --bshl-color=007171ff --separator-color=00000000 \
-        --insidever-color=00000000 --insidewrong-color=d23c3dff \
-        --ringver-color=ffffffff --ringwrong-color=ffffffff \
-        --nofork
+hyprlock
 swaync-client --inhibitor-remove "lock"
