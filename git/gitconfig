@@ -3,8 +3,8 @@
 ################################
 
 [advice]
-	statusHints = false
-	skippedCherryPicks = false
+    skippedCherryPicks = false
+    statusHints = false
 
 [alias]
     # Short commands
@@ -17,15 +17,15 @@
     st = status --sort --branch
 
     # Commands with default options
-    ls-untracked = ls-files --others --exclude-standard
-    pushf = push --force-with-lease
     aliases = "config --get-regexp alias"
     ca = commit --all -v
+    cherry-mash = cherry-pick --no-commit
     delete-remote = push --delete origin
     ls-tracked = ls-tree
+    ls-untracked = ls-files --others --exclude-standard
+    pushf = push --force-with-lease
     rehead = reset --hard @
     uncommit = reset --soft @~1
-    cherry-mash = cherry-pick --no-commit
 
     # Logging
     lg = log --graph --all --pretty=format:'%C(yellow)%<|(14)%h%Creset %<|(80,trunc)%s  %Cgreen%<(15,trunc)%cr %C(bold blue)%<(20,trunc)%an%Creset %C(red)%D%Creset'
@@ -39,133 +39,133 @@
     # multi push to all named origins, does NOT permit further config!
     pushm  = "!f() { for remote in "$@"; do git push "$remote"; done; }; f"
     tags = "!f() { git tag "$@" --sort=authordate --color=always --format='%(color:bold black)%(refname:short)|%(color:nobold yellow)%(objectname:short)|%(color:default)%(subject)|%(color:nobold green)%(committerdate:relative)|%(color:bold blue)%(authorname)' | column -s '|' -t; }; f"
-	cherry-mash = "!f() { git cherry-pick \"$1\" && git reset --soft HEAD~1 && git reset; }; f"
+    cherry-mash = "!f() { git cherry-pick \"$1\" && git reset --soft HEAD~1 && git reset; }; f"
 
 [branch]
-	autoSetupRebase = always
-	sort = -committerdate
+    autoSetupRebase = always
+    sort = -committerdate
 
 [checkout]
     workers = 0
 
 [column]
-	ui = auto
+    ui = auto
 
 [commit]
     verbose = true
-	gpgSign = false
+    gpgSign = false
 
 [core]
-	excludesfile = /home/rixx/.gitignore
-	pager = diff-so-fancy | less --tabs=4 -RFX
+    excludesfile = /home/rixx/.gitignore
+    pager = diff-so-fancy | less --tabs=4 -RFX
 
 [credential]
-	helper = cache
+    helper = cache
 
 [diff]
-	algorithm = histogram
-	colorMoved = default
-	colorMovedWS = allow-indentation-change
-	renames = copies
-	submodule = log
+    algorithm = histogram
+    colorMoved = default
+    colorMovedWS = allow-indentation-change
+    renames = copies
+    submodule = log
 
 [gui]
-	pruneduringfetch = true
+    pruneduringfetch = true
 
 [fetch]
-	fsckobjects = true
-	prune = true
-	prunetags = true
+    fsckobjects = true
+    prune = true
+    prunetags = true
 
 [help]
     autocorrect = immediate
 
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [log]
-	date = iso
+    date = iso
 
 [pull]
     ff = only
     rebase = true
 
 [push]
-	autoSetupRemote = true
-	default = current
+    autoSetupRemote = true
+    default = current
     # push tags automatically
-	followtags = true
-	recurseSubmodules = check
+    followtags = true
+    recurseSubmodules = check
 
 [rebase]
-	autoSquash = true
-	autoStash = true
-	missingCommitsCheck = warn
-	updateRefs = true
+    autoSquash = true
+    autoStash = true
+    missingCommitsCheck = warn
+    updateRefs = true
 
 [receive]
-	fsckobjects = true
+    fsckobjects = true
 
 [rerere]
-	enabled = true
+    enabled = true
 
 [status]
-	submoduleSummary = true
+    submoduleSummary = true
 
 [submodule]
-	recurse = true
-	fetchJobs = 4
+    recurse = true
+    fetchJobs = 4
 
 [tag]
-	sort = -taggerdate
+    sort = -taggerdate
 
 [transfer]
-	fsckobjects = true
+    fsckobjects = true
 
 ################################
 #     REPO SPECIFIC OPTIONS    #
 ################################
 [user]
-	name = Tobias Kunze
-	email = r@rixx.de
+    name = Tobias Kunze
+    email = r@rixx.de
 
 [url "git@github.com:"]
-	# Always use SSH for github instead of HTTPS
-	insteadOf = "https://github.com/"
-	# Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
-	insteadOf = "gh:"
+    # Always use SSH for github instead of HTTPS
+    insteadOf = "https://github.com/"
+    # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
+    insteadOf = "gh:"
 
 ################################
 #     TOOL SPECIFIC OPTIONS    #
 ################################
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = white bold red
-	newNormal = green bold
-	newHighlight = white bold green
+    oldNormal = red bold
+    oldHighlight = white bold red
+    newNormal = green bold
+    newHighlight = white bold green
 
 [color "diff"]
-	old = red bold
-	new = green bold
-	oldMoved = magenta bold
-	newMoved = blue bold
-	whitespace = red reverse
-	meta = yellow
-	commit = yellow bold
-	frag = yellow bold
-	func = yellow
+    old = red bold
+    new = green bold
+    oldMoved = magenta bold
+    newMoved = blue bold
+    whitespace = red reverse
+    meta = yellow
+    commit = yellow bold
+    frag = yellow bold
+    func = yellow
 
 [smartgit "submodule"]
-	fetchalways = false
-	update = true
-	initializenew = true
+    fetchalways = false
+    update = true
+    initializenew = true
 
 ##################################################
 #                    UNSORTED                    #
