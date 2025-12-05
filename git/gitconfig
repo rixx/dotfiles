@@ -69,6 +69,9 @@
     renames = copies
     submodule = log
 
+[diff "zip"]
+    textconv = unzip -c -a
+
 [gui]
     pruneduringfetch = true
 
@@ -94,7 +97,7 @@
     autoSetupRemote = true
     default = current
     # push tags automatically
-    followtags = true
+    followTags = true
     recurseSubmodules = check
 
 [rebase]
@@ -134,6 +137,9 @@
     insteadOf = "https://github.com/"
     # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
     insteadOf = "gh:"
+
+[github]
+    user = rixx
 
 ################################
 #     TOOL SPECIFIC OPTIONS    #
