@@ -56,7 +56,7 @@
     gpgSign = false
 
 [core]
-    excludesfile = /home/rixx/.gitignore
+    excludesfile = /home/rixx/.config/git/gitignore
     pager = diff-so-fancy | less --tabs=4 -RFX
 
 [credential]
