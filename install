@@ -75,7 +75,6 @@ link notmuch/notmuch-config .notmuch-config
 link picom/picom.conf .config/picom.conf
 link rofi/rofi-pass.conf .config/rofi-pass/config
 link rofi/rofimoji.rc .config/rofimoji.rc
-link tig/tigrc .tigrc
 link vim/vimrc .config/nvim/init.vim
 link vim/coc-settings.json .config/nvim/coc-settings.json
 link vim/colors/manuscript.vim /home/rixx/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/manuscript.vim

@@ -173,6 +173,15 @@
     update = true
     initializenew = true
 
+[tig]
+    line-graphics = utf-8
+    tab-size = 4
+    truncation-delimiter = utf-8
+    ignore-case = smart-case
+    main-view = author:full,maxwidth=24 date:relative,width=18 id commit-title:graph=v2,refs=yes
+    mouse = true
+    start-on-head = true
+
 ##################################################
 #                    UNSORTED                    #
 #
