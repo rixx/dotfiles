@@ -25,7 +25,7 @@ if type fzf > /dev/null; then
     }
     FZF_DEFAULT_OPTS="--inline-info --cycle --border --color=light"
 
-    alias y="yay -Slq | fzf -m --preview 'yay -Si {1}'| xargs -ro yay -S"
+    alias yaay="yay -Slq | fzf -m --preview 'yay -Si {1}'| xargs -ro yay -S"
     alias gitlog="git log --oneline | fzf --multi --preview 'git show {+1}'"
 
     # Key bindings:

@@ -41,6 +41,7 @@ function conflink {
 }
 
 # Straightforward links
+conflink git
 conflink gtk-3.0
 conflink hypr
 conflink jj
@@ -50,7 +51,6 @@ conflink lsd
 conflink mimeapps.list
 conflink mutt/muttrc
 conflink py3status
-conflink ranger/rc.conf
 conflink rofi/bin
 conflink rofi/config
 conflink rofi/themes

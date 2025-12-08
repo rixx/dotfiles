@@ -14,7 +14,6 @@ export PIP_REQUIRE_VIRTUALENV=true
 export PYTHONDONTWRITEBYTECODE=1
 
 
-
 ############################
 #  Default flags for tools #
 ############################
@@ -43,6 +42,14 @@ alias klog="NO_COLOR=1 klog"
 #function klog() {
 #  klog "$@" | sed "s/38;5/31;5/g" >&2
 #}
+
+function y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
+}
 
 #############################################################
 #                                                           #
