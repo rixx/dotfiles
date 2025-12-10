@@ -2,17 +2,29 @@
 
 set -e
 
+UPLOAD=true
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -n|--no-upload)
+            UPLOAD=false
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
 SCREENSHOT_PATH=/home/rixx/tmp/screenshots/$(date --iso-8601=seconds).png
 
-# deepin-screen-recorder --shot -s "$SCREENSHOT_PATH"
-slurp | grim -g - - | tee "$SCREENSHOT_PATH" | wl-copy
+slurp | grim -g - - | tee "$SCREENSHOT_PATH" | wl-copy -t image/png
 
 if [ -f "$SCREENSHOT_PATH" ] && [ ! -s "$SCREENSHOT_PATH" ]; then
     rm "$SCREENSHOT_PATH"
     exit 0
 fi
 
-if [ -f "$SCREENSHOT_PATH" ]; then
+if [ -f "$SCREENSHOT_PATH" ] && [ "$UPLOAD" = true ]; then
     url=$(fb "$SCREENSHOT_PATH")
     notify-send "Uploaded $SCREENSHOT_PATH to $url" -i "$SCREENSHOT_PATH" -a filebin
 fi
