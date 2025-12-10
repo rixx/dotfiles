@@ -61,26 +61,22 @@ conflink tmux/tmux.conf
 conflink vim/colors
 conflink vim/vimrc
 conflink waybar
+conflink X11
 conflink xdg-desktop-portal
 conflink xdg-desktop-portal-wlr
+conflink yazi
 
 # Nonstandard links
-link git/gitconfig .config/git/config
-link git/gitignore .gitignore
+link kde/kdeglobals .config/kdeglobals
 link mimeapps.list .local/share/applications/mimeapps.list
-link user-dirs.dirs .config/user-dirs.dirs
 link mutt/notmuch-mutt .local/bin/notmuch-mutt
 link mutt/offlineimaprc .config/offlineimap/config
-link notmuch/notmuch-config .notmuch-config
-link picom/picom.conf .config/picom.conf
 link rofi/rofi-pass.conf .config/rofi-pass/config
 link rofi/rofimoji.rc .config/rofimoji.rc
-link vim/vimrc .config/nvim/init.vim
+link user-dirs.dirs .config/user-dirs.dirs
 link vim/coc-settings.json .config/nvim/coc-settings.json
 link vim/colors/manuscript.vim /home/rixx/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/manuscript.vim
-link X/XCompose .XCompose
-link X/Xresources .Xresources
-link X/xintitrc .xinitrc
+link vim/vimrc .config/nvim/init.vim
 link zsh/zshrc .zshrc
 
 # Oh firefox. Why.
