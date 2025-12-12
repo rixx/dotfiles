@@ -89,7 +89,7 @@ alias ....='../../..'
 alias .....='../../../..'
 alias ......='../../../../..'
 
-hash -d p=/home/rixx/src/pretalx/src
-hash -d com=/home/rixx/src/pretalx/src/local/pretalx-com/pretalx_com
+hash -d p=/home/rixx/src/pretalx
+hash -d com=/home/rixx/src/pretalx/src/local/pretalx-com
 hash -d dotf=/home/rixx/.config/dotfiles
 hash -d tix=/home/rixx/src/pretix/src/local

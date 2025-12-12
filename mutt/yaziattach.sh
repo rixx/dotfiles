@@ -4,6 +4,7 @@
 tmpfile=.config/mutt/tmpfile
 
 if [ -z "$1" ]; then
+    touch $tmpfile
     yazi --chooser-file=$tmpfile &&
     sed -i 's/ /^V /g' $tmpfile &&
     echo "$(awk 'BEGIN {printf "%s", "push "} {printf "%s", "<attach-file>\""$0"\"<enter>"}'  $tmpfile)" > $tmpfile
