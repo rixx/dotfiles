@@ -5,6 +5,7 @@ aspell-de
 aspell-en
 base
 base-devel
+beets
 bind
 borg
 brightnessctl
@@ -19,6 +20,7 @@ dialog
 diff-so-fancy
 discord
 dolphin
+euphonica
 evince
 expac
 fb-client
@@ -102,7 +104,13 @@ postgresql
 postgresql-old-upgrade
 powertop
 prettier
+puddletag
 pyright
+python-discogs-client
+python-langdetect
+python-librosa
+python-standard-aifc
+python-standard-sunau
 python-uv
 qtpass
 r-quick-share-bin
