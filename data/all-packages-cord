@@ -29,7 +29,7 @@ fd
 feh
 ffmpegthumbnailer
 filelight
-firefox-nightly-bin
+firefox-nightly
 flameshot
 fwupd
 fzf
@@ -37,7 +37,6 @@ gdu
 gimp
 git
 github-cli
-gnome-network-displays
 google-chrome
 gparted
 hledger
@@ -95,7 +94,6 @@ parallel
 pass
 passff-host
 pavucontrol
-peek
 perl-image-exiftool
 pipewire-alsa
 pipewire-pulse
@@ -158,6 +156,7 @@ vlc
 vlc-plugin-ffmpeg
 waybar
 wdisplays
+wf-recorder
 wget
 wl-clipboard
 woff2-font-awesome
