@@ -15,8 +15,8 @@ Things you might want to look at:
 
 ## New PC who dis
 
-1. Install the packages listed in ``packages-to-install``.
-2. Run ``./install``.
+1. Install the packages you want – see data/ for inspiration.
+2. Run ``just install-all``, ``just install-server`` or ``just install-gui``.
 3. Install user crontabs from ``./crontab``, and start and enable cronie.
 4. Install sudoers from ``./sudoers``
 5. systemctl enable --start:
