@@ -138,8 +138,8 @@
   border-color: transparent;
 }
 
-.notification .notification-default-action .notification-content .inline-reply .inline-reply-button:hover {
-  background: var(--clr-background-focus);
+.notification:hover > * {
+  background: var(--clr-background);
 }
 
 .notification .notification-alt-actions {
