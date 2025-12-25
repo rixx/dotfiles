@@ -6,7 +6,7 @@ set -e
 # export BORG_PASSPHRASE='XYZl0ngandsecurepa_55_phrasea&&123'
 
 # export BORG_REPO=ssh://username@example.com:2022/~/backup/main
-export BORG_REPO=/backup/eustace
+export BORG_REPO=/backup/$(hostname)
 
 # some helpers and error handling:
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
@@ -28,7 +28,6 @@ info "Starting backup"
     --exclude '*/vendor/bundle'     \
     ::'{hostname}-{now}'        \
     ~/.gnupg                                    \
-    ~/.local/share/Anki2                        \
     ~/.local/share/applications/mimeapps.list   \
     ~/.local/share/fonts                        \
     ~/.local/share/mail/cutebit                 \
@@ -40,8 +39,8 @@ info "Starting backup"
     ~/.ssh                                      \
     ~/data                                      \
     ~/doc                                       \
-    ~/Downloads                                 \
     ~/lib                                       \
+    ~/eustace                                   \
     ~/src
 
 
