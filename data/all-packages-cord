@@ -51,6 +51,7 @@ hyprlock
 imagemagick
 inetutils
 inkscape
+inotify-tools
 ipython
 jq
 jujutsu
@@ -139,6 +140,18 @@ swaybg
 swaync
 system-config-printer
 tailscale
+texlive-basic
+texlive-fontsextra
+texlive-fontsrecommended
+texlive-langeuropean
+texlive-langgerman
+texlive-latex
+texlive-latexextra
+texlive-latexrecommended
+texlive-luatex
+texlive-mathscience
+texlive-plaingeneric
+texlive-xetex
 the_silver_searcher
 threema-desktop
 ticktick
