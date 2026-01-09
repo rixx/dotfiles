@@ -22,11 +22,11 @@ function lint_python_files {
 
     if [ "$all" = true ]; then
         echo "Running all linters"
-        uv run black .
+        uvx black .
         result=$(($result + $?))
-        uv run isort .
+        uvx isort .
         result=$(($result + $?))
-        uv run flake8 .
+        uvx flake8 .
         result=$(($result + $?))
     else
         changed_files=$(get_changed_files py)
@@ -35,11 +35,11 @@ function lint_python_files {
         changed_files=(${(f)changed_files})
 
         # no quoting this variable, we actually *need* the whitespace separation here!
-        uv run black $changed_files
+        uvx black $changed_files
         result=$(($result + $?))
-        uv run isort $changed_files
+        uvx isort $changed_files
         result=$(($result + $?))
-        uv run flake8 $changed_files
+        uvx flake8 $changed_files
         result=$(($result + $?))
         fi
     fi
@@ -60,7 +60,7 @@ function lint_html_files {
         # $changed_files is a list separated by newlines, so we'll use zsh's array splitting to pass each file as a separate argument
         changed_files=(${(f)changed_files})
         # no quoting this variable, we actually *need* the whitespace separation here!
-        uv run djhtml $changed_files
+        uvx djhtml $changed_files
         result=$(($result + $?))
     fi
     return result
