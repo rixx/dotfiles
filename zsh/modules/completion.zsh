@@ -53,3 +53,10 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 
 # Allow SSH tab completion for mosh hostnames
 compdef mosh=ssh
+
+# Complete ,wifi with netctl-auto profiles
+_wifi_completion() {
+    compadd "${(f)$(find -L /etc/netctl -maxdepth 1 -type f -not -name '.*' -not -name '*~' -not -name '*
+*' -not -name '*.action' -not -name '*.conf' -not -name '*.service' -printf '%f\n')}"
+}
+compdef _wifi_completion ,wifi
