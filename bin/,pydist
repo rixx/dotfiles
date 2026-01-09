@@ -51,7 +51,7 @@ def main():
     run("uv", "run", "python", "-m", "build")
 
     try:
-        run("uvx", "twine", "upload", "dist/*")
+        run("uvx", "twine", "upload", "--config-file", "~/.config/pypirc","dist/*")
     except subprocess.CalledProcessError:
         print(f"\n✗ twine failed, reverting version bump")
         init.write_text(text)
