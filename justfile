@@ -70,6 +70,7 @@ install-gui:
     conflink rofi/themes
     link rofi/rofi-pass.conf .config/rofi-pass/config
     link rofi/rofimoji.rc .config/rofimoji.rc
+    link wireplumber/alsa-config.conf .config/wireplumber/wireplumber.conf.d/alsa-config.conf
     conflink py3status
 
     # Desktop environment settings
