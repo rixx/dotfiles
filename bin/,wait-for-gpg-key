@@ -1,0 +1,21 @@
+#!/bin/bash
+# Waits until GPG can decrypt using a specific key (i.e., passphrase is available)
+
+set -euo pipefail
+
+KEY_ID="${1:?Usage: ,wait-for-gpg-key <key-id>}"
+delay=5
+max_attempts=120  # 10 minutes max
+
+attempt=0
+while ! echo "test" | gpg --encrypt --recipient "${KEY_ID}" 2>/dev/null | gpg --decrypt &>/dev/null; do
+    ((attempt++))
+    if [[ $attempt -ge $max_attempts ]]; then
+        echo "Timeout waiting for GPG key ${KEY_ID}" >&2
+        exit 1
+    fi
+    echo "Waiting for GPG key... (attempt ${attempt})" >&2
+    sleep "${delay}"
+done
+
+echo "GPG key ${KEY_ID} available"

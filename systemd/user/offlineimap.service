@@ -1,13 +1,14 @@
 [Unit]
 Description=Start offlineimap as a daemon
-After=network.target
+After=graphical-session.target network-online.target
 
 [Service]
+ExecStartPre=/home/rixx/.config/dotfiles/bin/,wait-for-gpg-key 0xB6BBFB24B6500EBB
 ExecStart=/usr/bin/offlineimap
 KillSignal=SIGUSR2
 Restart=always
 # restart after 12 hours to avoid memleaking all over the place
-# RuntimeMaxSec=43200
+RuntimeMaxSec=43200
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
