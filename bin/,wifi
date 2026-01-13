@@ -1,0 +1,27 @@
+#!/bin/bash
+# Switch to a wifi network and wait for an IP address to be assigned.
+
+if [ -z "$1" ]; then
+    echo "Usage: ,wifi <network-name>"
+    echo "Available profiles:"
+    netctl-auto list
+    exit 1
+fi
+
+sudo netctl-auto switch-to "$1"
+
+echo "Waiting for IP address on wlp192s0..."
+
+while true; do
+    ip_info=$(ip -br -c address show dev wlp192s0 2>/dev/null)
+    echo -ne "\r\033[K$ip_info"
+
+    # Check if we have an IP (not just link-local)
+    if echo "$ip_info" | grep -qE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'; then
+        echo ""
+        echo "Connected!"
+        exit 0
+    fi
+
+    sleep 1
+done
