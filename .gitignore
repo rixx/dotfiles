@@ -3,3 +3,4 @@
 vim/*.log
 
 autorandr/conf
+systemd/user/default.target.wants/
