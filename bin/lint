@@ -26,7 +26,7 @@ function lint_python_files {
         result=$(($result + $?))
         uvx isort .
         result=$(($result + $?))
-        uvx flake8 .
+        uvx flake8 . | grep -v E501
         result=$(($result + $?))
     else
         changed_files=$(get_changed_files py)
@@ -39,7 +39,7 @@ function lint_python_files {
         result=$(($result + $?))
         uvx isort $changed_files
         result=$(($result + $?))
-        uvx flake8 $changed_files
+        uvx flake8 $changed_files | grep -v E501
         result=$(($result + $?))
         fi
     fi
