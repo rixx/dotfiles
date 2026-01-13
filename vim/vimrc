@@ -220,7 +220,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vimwiki/vimwiki'
 Plug 'wellle/context.vim'                " Provide context when scrolling <3
-Plug 'wsdjeg/vim-fetch'                  " Open path:lineno in vim and with gF
 
 call plug#end()
 
