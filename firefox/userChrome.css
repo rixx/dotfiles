@@ -49,8 +49,11 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
     pointer-events: none;
     background-color: white;
 }
-#sidebar-header {
+#sidebar-header, #sidebar-panel-header, #sidebar-main {
   display: none;
+}
+#sidebar-box {
+    padding-block-end: 0 !important;
 }
 
 /* remove the awkward top padding */
