@@ -1,8 +1,10 @@
 [Unit]
 Description=Start offlineimap as a daemon
 After=graphical-session.target network-online.target
+Wants=network-online.target
 
 [Service]
+ExecStartPre=/home/rixx/.config/dotfiles/bin/,start-on-network --wait-only
 ExecStartPre=/home/rixx/.config/dotfiles/bin/,wait-for-gpg-key 0xB6BBFB24B6500EBB
 ExecStart=/usr/bin/offlineimap
 KillSignal=SIGUSR2

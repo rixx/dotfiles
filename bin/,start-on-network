@@ -7,8 +7,14 @@ set -euo pipefail
 check_host="github.com"
 delay=5
 
-if [[ $# -eq 0 ]]; then
-    echo "Usage: $(basename "$0") <command> [args...]" >&2
+wait_only=false
+if [[ "${1:-}" == "--wait-only" ]]; then
+    wait_only=true
+    shift
+fi
+
+if [[ $# -eq 0 ]] && [[ "$wait_only" == false ]]; then
+    echo "Usage: $(basename "$0") [--wait-only] <command> [args...]" >&2
     exit 1
 fi
 
@@ -19,6 +25,10 @@ while ! ping -c 1 -W 1 "${check_host}" &> /dev/null; do
 done
 
 echo "Network is up."
+
+if [[ "$wait_only" == true ]]; then
+    exit 0
+fi
 
 # Check if the process is already running.
 command_name=$(basename "$1")
