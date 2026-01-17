@@ -23,7 +23,6 @@ dialog
 diff-so-fancy
 discord
 dolphin
-euphonica
 evince
 expac
 fb-client
@@ -32,12 +31,11 @@ fd
 feh
 ffmpegthumbnailer
 filelight
-filezilla
 firefox-nightly
+fish
 flameshot
 fwupd
 fzf
-gamescope
 gdu
 gimp
 git
@@ -64,7 +62,6 @@ kitty
 kitty-terminfo
 kubectl
 less
-libmemcached-awesome
 libreoffice-fresh
 linux
 linux-firmware
