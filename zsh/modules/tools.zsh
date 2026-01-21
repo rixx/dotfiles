@@ -5,11 +5,6 @@ BROWSER=firefox
 PAGER=/usr/bin/less
 LESSHISTFILE="$XDG_CACHE_DIR"/less/lesshist
 
-if type ruby > /dev/null; then
-  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-  [ -s "/usr/bin/rbenv" ] && eval "$(rbenv init - zsh)"
-fi
-
 export PIP_REQUIRE_VIRTUALENV=true
 export PYTHONDONTWRITEBYTECODE=1
 
