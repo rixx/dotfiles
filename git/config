@@ -143,8 +143,8 @@
     email = r@rixx.de
 
 [url "git@github.com:"]
-    # Always use SSH for github instead of HTTPS
-    insteadOf = "https://github.com/"
+    # Always use SSH for github instead of HTTPS – dropped for now because it is a problem on servers without access to my github account, sigh
+    # insteadOf = "https://github.com/"
     # Abbreviate "git@github.com" as "gh:", as in "git remote add origin gh:rixx/dotfiles"
     insteadOf = "gh:"
 
