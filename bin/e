@@ -6,6 +6,11 @@ my $cut;
 
 my @EDITOR = split(' ', $ENV{EDITOR} //"/usr/bin/sensible-editor");
 
+# Use uv to run nvim if uv is available
+if (system("command -v uv >/dev/null 2>&1") == 0) {
+    unshift @EDITOR, "uv", "run";
+}
+
 if (!@ARGV)
     { exec @EDITOR; }
 if ($ARGV[0] eq '-:')
