@@ -283,8 +283,8 @@ let g:AutoPairsMultilineClose = 0
 " gq   close blame
 " o    open patch in hsplit (GVsplit also works)
 " -    reblame at commit!!!
-"" vim-fugitive is slow with zsh stuff
-set shell=bash
+"" vim-fugitive is slow with zsh stuff – disabling for now with fish?
+"set shell=bash
 
 " gitsigns settings
 " [c           jump to next hunk

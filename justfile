@@ -29,6 +29,7 @@ install-server:
 
     # Shell & terminal multiplexer
     link zsh/zshrc .zshrc
+    conflink fish
     conflink tmux/tmux.conf
     conflink lsd
 

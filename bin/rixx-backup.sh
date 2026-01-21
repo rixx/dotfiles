@@ -34,6 +34,7 @@ info "Starting backup"
     ~/.local/share/mutt                         \
     ~/.local/share/password-store               \
     ~/.local/share/zsh                          \
+    ~/.local/share/fish                         \
     ~/.mozilla                                  \
     ~/.nom                                      \
     ~/.ssh                                      \

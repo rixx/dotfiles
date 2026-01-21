@@ -173,7 +173,7 @@ function _worktree {
     IFS=$'\n'
 
     # this is the best of a bunch of bad options for reading the files into an
-    # array. We're often executing in bash or zsh, so we're going to let them
+    # array. We're often executing in bash or fish, so we're going to let them
     # use their file splitting rules, with an explicit IFS. We can't use find's
     # exec because we want to use cp_cow to copy files copy-on-write when
     # possible.
