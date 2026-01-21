@@ -1,7 +1,46 @@
-set shell := ["zsh", "-c"]
+set shell := ["bash", "-c"]
 
 dotfiles := env_var("HOME") / ".config/dotfiles"
 movesuffix := "moved-by-dotfiles-install"
+
+# Helper functions for install recipes (sourced via eval)
+install_lib := '''
+doit() {
+    printf "%s\n" "$*"
+    "$@"
+}
+
+link() {
+    local origin="$DOTFILES/${1:?The origin must be specified.}"
+    local target="${2:?The target must be specified.}"
+    if [[ "${target##/home/}" == "$target" ]]; then
+        target="$HOME/$target"
+    fi
+
+    if [[ -L "$target" ]]; then
+        local linktarget=$(readlink -f "$target")
+        if [[ "$linktarget" == "$origin" ]]; then
+            :
+        else
+            doit mv "$target" "$target.$movesuffix"
+            doit ln -s "$origin" "$target"
+        fi
+    elif [[ -f "$target" || -d "$target" ]]; then
+        doit mv "$target" "$target.$movesuffix"
+        doit ln -s "$origin" "$target"
+    else
+        local parent=$(dirname "$target")
+        if [[ ! -d "$parent" ]]; then
+            doit mkdir -p "$parent"
+        fi
+        doit ln -s "$origin" "$target"
+    fi
+}
+
+conflink() {
+    link "$1" ".config/$1"
+}
+'''
 
 [private]
 default:
@@ -10,11 +49,13 @@ default:
 # Install all dotfiles (server + GUI)
 install-all: install-server install-gui
 
-# Install server/CLI configurations (git, vim, tmux, zsh, mutt, etc.)
+# Install server/CLI configurations (git, vim, tmux, fish, mutt, etc.)
 install-server:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -e
-    source "{{dotfiles}}/zsh/install-lib.zsh"
+    DOTFILES="{{dotfiles}}"
+    movesuffix="{{movesuffix}}"
+    eval '{{install_lib}}'
 
     # Version control
     conflink git
@@ -28,7 +69,6 @@ install-server:
     link vim/vimrc .config/nvim/init.vim
 
     # Shell & terminal multiplexer
-    link zsh/zshrc .zshrc
     conflink fish
     conflink tmux/tmux.conf
     conflink lsd
@@ -41,14 +81,13 @@ install-server:
     # File manager (works in CLI too)
     conflink yazi
 
-    # Ensure directories exist
-    mkdir -p ~/.local/share/zsh
-
 # Install GUI/desktop configurations (sway, waybar, rofi, kitty, etc.)
 install-gui:
-    #!/usr/bin/env zsh
+    #!/usr/bin/env bash
     set -e
-    source "{{dotfiles}}/zsh/install-lib.zsh"
+    DOTFILES="{{dotfiles}}"
+    movesuffix="{{movesuffix}}"
+    eval '{{install_lib}}'
 
     # Wayland/Sway
     conflink sway
@@ -85,8 +124,8 @@ install-gui:
     conflink systemd
 
     # Firefox
-    if [[ -d $HOME/.mozilla ]]; then
-        for profile in $HOME/.mozilla/firefox/*default*; do
-            link firefox/userChrome.css $profile/chrome/userChrome.css
+    if [[ -d "$HOME/.mozilla" ]]; then
+        for profile in "$HOME"/.mozilla/firefox/*default*; do
+            link firefox/userChrome.css "$profile/chrome/userChrome.css"
         done
     fi
