@@ -66,9 +66,8 @@ function fish_prompt
 
         # Git status - get full status once and use it for both dirty check and indicators
         set -l git_index (git status --porcelain -b --ignore-submodules=dirty 2>/dev/null)
-        # Check if dirty (without untracked, matching zsh behavior)
-        set -l is_dirty (echo "$git_index" | string match -rv '^\?\? |^## ')
-        set -l dirty_mark
+        # Check if dirty (any changes including untracked files)
+        set -l is_dirty (string match -rv '^## ' -- $git_index)
 
         if test -n "$is_dirty"
             # Dirty - yellow background (222)
@@ -76,7 +75,6 @@ function fish_prompt
             _fg $current_bg
             echo -n $SEGMENT_SEPARATOR
             _fg 0
-            set dirty_mark " ✘ "
             set current_bg 222
         else
             # Clean - white background (7)
@@ -84,7 +82,6 @@ function fish_prompt
             _fg $current_bg
             echo -n $SEGMENT_SEPARATOR
             _fg 0
-            set dirty_mark " ✔ "
             set current_bg 7
         end
 
@@ -94,51 +91,40 @@ function fish_prompt
         else
             set git_branch (printf " \ue0a0 %s" $git_branch)
         end
-        echo -n "$git_branch$dirty_mark"
+        echo -n "$git_branch "
 
-        # Detailed git status indicators
+        # Git status indicators
         set -l git_indicators ""
         # Untracked
-        if echo "$git_index" | string match -rq '^\?\? '
-            set git_indicators $git_indicators(_fg 6)"✲"
+        if string match -rq '^\?\? ' -- $git_index
+            set git_indicators $git_indicators(_fg 6)"?"
         end
         # Added/Staged
-        if echo "$git_index" | string match -rq '^[AM] '
+        if string match -rq '^[AMRD] ' -- $git_index
             set git_indicators $git_indicators(_fg 2)"✚"
         end
-        # Modified
-        if echo "$git_index" | string match -rq '^.M |^ M '
-            set git_indicators $git_indicators(_fg 4)"✸"
+        # Unmerged/Conflict
+        if string match -rq '^(UU|AA|DD|U.|.U) ' -- $git_index
+            set git_indicators $git_indicators(_fg 1)"!"
         end
-        # Renamed
-        if echo "$git_index" | string match -rq '^R '
-            set git_indicators $git_indicators(_fg 1)"➜"
+        # Ahead (with count)
+        set -l ahead_count (string match -r 'ahead (\d+)' -- $git_index | tail -1)
+        if test -n "$ahead_count"
+            set git_indicators $git_indicators(_fg 15)"⬆$ahead_count"
         end
-        # Deleted
-        if echo "$git_index" | string match -rq '^.D |^ D |^D '
-            set git_indicators $git_indicators(_fg 1)"✖"
-        end
-        # Unmerged
-        if echo "$git_index" | string match -rq '^UU '
-            set git_indicators $git_indicators(_fg 1)"↮"
-        end
-        # Ahead
-        if echo "$git_index" | string match -rq 'ahead'
-            set git_indicators $git_indicators(_fg 15)"⬆"
-        end
-        # Behind
-        if echo "$git_index" | string match -rq 'behind'
-            set git_indicators $git_indicators(_fg 1)"⬇"
+        # Behind (with count)
+        set -l behind_count (string match -r 'behind (\d+)' -- $git_index | tail -1)
+        if test -n "$behind_count"
+            set git_indicators $git_indicators(_fg 1)"⬇$behind_count"
         end
         # Stashed
         if git rev-parse --verify refs/stash >/dev/null 2>&1
-            set git_indicators $git_indicators(_fg 4)"♻"
+            set git_indicators $git_indicators(_fg 4)"≡"
         end
         if test -n "$git_indicators"
             _fg 0
-            echo -n " $git_indicators"
+            echo -n "$git_indicators "
         end
-        echo -n " "
 
         # Current subdirectory within repo (always show / even at root)
         _bg $PROMPT_COLOUR
