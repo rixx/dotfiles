@@ -47,7 +47,7 @@ alias host systemd-resolve
 alias p8 "ping 8.8.8.8 | ts"
 
 # Tool defaults
-alias mosh "LANG=en_US.UTF-8 mosh"
+alias mosh "LANG=en_US.UTF-8 command mosh"
 alias feh "feh --conversion-timeout 1"
 alias diff "diff --color -u"
 alias dd "dd status=progress conv=fsync,fdatasync"
