@@ -23,7 +23,7 @@ function fish_prompt
     if test $last_status -ne 0
         set -a status_icons (_fg 1)"✘"
     end
-    if test (id -u) -eq 0
+    if test $USER_ID -eq 0
         set -a status_icons (_fg 3)"⚡"
     end
     if test (jobs | count) -gt 0
@@ -44,8 +44,8 @@ function fish_prompt
 
     # Context: user@hostname
     _bg $HOST_COLOUR
-    _fg 15
-    echo -n " $HOST_STRING "
+    _fg $HOST_FG
+    echo -n " $USER_NAME@$HOST_STRING "
     set current_bg $HOST_COLOUR
 
     # Directory (with git info if in repo)
