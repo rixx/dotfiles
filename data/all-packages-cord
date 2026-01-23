@@ -6,6 +6,7 @@ aspell-en
 base
 base-devel
 beets
+biber
 bind
 blueman
 bluez-utils
@@ -141,6 +142,8 @@ swaync
 system-config-printer
 tailscale
 texlive-basic
+texlive-bibtexextra
+texlive-binextra
 texlive-fontsextra
 texlive-fontsrecommended
 texlive-langeuropean
