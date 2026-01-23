@@ -93,37 +93,35 @@ function fish_prompt
         end
         echo -n "$git_branch "
 
-        # Git status indicators
-        set -l git_indicators ""
+        # Git status indicators (stored for display at end of line)
+        set -g _prompt_git_indicators ""
         # Untracked
         if string match -rq '^\?\? ' -- $git_index
-            set git_indicators $git_indicators(_fg 6)"?"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 6)"?"
         end
         # Added/Staged
         if string match -rq '^[AMRD] ' -- $git_index
-            set git_indicators $git_indicators(_fg 2)"✚"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 2)"✚"
         end
         # Unmerged/Conflict
         if string match -rq '^(UU|AA|DD|U.|.U) ' -- $git_index
-            set git_indicators $git_indicators(_fg 1)"!"
-        end
-        # Ahead (with count)
-        set -l ahead_count (string match -r 'ahead (\d+)' -- $git_index | tail -1)
-        if test -n "$ahead_count"
-            set git_indicators $git_indicators(_fg 15)"⬆$ahead_count"
-        end
-        # Behind (with count)
-        set -l behind_count (string match -r 'behind (\d+)' -- $git_index | tail -1)
-        if test -n "$behind_count"
-            set git_indicators $git_indicators(_fg 1)"⬇$behind_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 1)"!"
         end
         # Stashed
         if git rev-parse --verify refs/stash >/dev/null 2>&1
-            set git_indicators $git_indicators(_fg 4)"≡"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 4)"≡"
         end
-        if test -n "$git_indicators"
-            _fg 0
-            echo -n "$git_indicators "
+        # Ahead/behind (with leading space to separate from other indicators)
+        set -l ahead_count (string match -r 'ahead (\d+)' -- $git_index | tail -1)
+        set -l behind_count (string match -r 'behind (\d+)' -- $git_index | tail -1)
+        if test -n "$ahead_count" -o -n "$behind_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators "
+        end
+        if test -n "$ahead_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 2)"⬆$ahead_count"
+        end
+        if test -n "$behind_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 1)"⬇$behind_count"
         end
 
         # Current subdirectory within repo (always show / even at root)
@@ -150,6 +148,13 @@ function fish_prompt
     _fg $current_bg
     echo -n $SEGMENT_SEPARATOR
     _reset
+
+    # Git indicators at end of line
+    if test -n "$_prompt_git_indicators"
+        echo -n " $_prompt_git_indicators"
+    end
+    set -e _prompt_git_indicators
+
     echo
 
     # Second line with prompt symbol
