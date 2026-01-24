@@ -1,7 +1,7 @@
 [Added Associations]
 application/epub+zip=calibre-gui.desktop;
 application/octet-stream=calibre-gui.desktop;org.inkscape.Inkscape.desktop;vlc.desktop;
-application/pdf=org.inkscape.Inkscape.desktop;gimp.desktop;libreoffice-draw.desktop;zotero.desktop;mupdf.desktop;
+application/pdf=evince.desktop;org.inkscape.Inkscape.desktop;gimp.desktop;libreoffice-draw.desktop;zotero.desktop;mupdf.desktop;
 application/rss+xml=firefox.desktop;
 application/vnd.openxmlformats-officedocument.wordprocessingml.document=libreoffice-writer.desktop;
 application/x-extension-htm=userapp-Nightly-2QCYVZ.desktop;firefox.desktop;userapp-Nightly-7MYP31.desktop;userapp-Nightly-ZZLIV2.desktop;userapp-Nightly-8GAXG3.desktop;
@@ -26,7 +26,7 @@ x-scheme-handler/https=userapp-Nightly-8GAXG3.desktop;userapp-Nightly-ZZLIV2.des
 x-scheme-handler/mailto=userapp-Thunderbird-OPCK70.desktop;
 
 [Default Applications]
-application/pdf=org.gnome.Evince.desktop
+application/pdf=evince.desktop;
 application/vnd.openxmlformats-officedocument.wordprocessingml.document=libreoffice-writer.desktop
 application/x-extension-htm=userapp-Nightly-8GAXG3.desktop
 application/x-extension-html=userapp-Nightly-8GAXG3.desktop
