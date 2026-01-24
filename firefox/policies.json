@@ -1,0 +1,33 @@
+{
+  "policies": {
+    "DisableFirefoxStudies": true,
+    "DisablePasswordReveal": true,
+    "DisablePocket": true,
+    "DisableSetDesktopBackground": true,
+    "DisableTelemetry": true,
+    "DontCheckDefaultBrowser": true,
+    "FirefoxHome": {
+      "Highlights": false,
+      "Pocket": false,
+      "Search": false,
+      "Snippets": false,
+      "SponsoredPocket": false,
+      "SponsoredStories": false,
+      "SponsoredTopSites": false,
+      "Stories": false,
+      "TopSites": false
+    },
+    "GenerativeAI": {
+      "Enabled": false
+    },
+    "OfferToSaveLoginsDefault": false,
+    "OverridePostUpdatePage": "",
+    "ShowHomeButton": false,
+    "SearchEngines": {
+      "Remove": [
+        "Perplexity"
+      ]
+    },
+    "SkipTermsOfUse": true
+  }
+}

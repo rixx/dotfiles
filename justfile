@@ -111,6 +111,7 @@ install-gui:
     link rofi/rofi-pass.conf .config/rofi-pass/config
     link rofi/rofimoji.rc .config/rofimoji.rc
     link wireplumber/alsa-config.conf .config/wireplumber/wireplumber.conf.d/alsa-config.conf
+    cp firefox/policies.json /etc/firefox/policies/policies.json
     conflink py3status
 
     # Desktop environment settings
