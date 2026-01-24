@@ -57,8 +57,7 @@ end
 
 # Hash hostname to get a consistent color per host
 # Uses separate palettes for root vs non-root users
-set -l hash_hex (echo -n $HOST_STRING | sha1sum | cut -d ' ' -f 1 | head -c 8)
-set -l hash_val (printf '%d' 0x$hash_hex)
+set -l hash_val (echo -n $HOST_STRING | sum -s | cut -d ' ' -f 1)
 
 if test $USER_ID -eq 0
     set -l pair_count (math (count $ROOT_HOST_PAIRS) / 2)
