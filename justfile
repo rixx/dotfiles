@@ -98,11 +98,9 @@ install-gui:
     conflink xdg-desktop-portal
     conflink xdg-desktop-portal-wlr
 
-    # X11 (legacy)
-    conflink X11
-
-    # Terminal emulator
+    # Tools
     conflink kitty
+    conflink discord/settings.json
 
     # Launchers & utilities
     conflink rofi/bin
@@ -112,7 +110,6 @@ install-gui:
     link rofi/rofimoji.rc .config/rofimoji.rc
     link wireplumber/alsa-config.conf .config/wireplumber/wireplumber.conf.d/alsa-config.conf
     cp firefox/policies.json /etc/firefox/policies/policies.json
-    conflink py3status
 
     # Desktop environment settings
     conflink gtk-3.0
