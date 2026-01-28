@@ -62,7 +62,10 @@ nvim-setup:
         echo "vim-plug already installed"
     fi
     echo "Installing neovim plugins..."
-    nvim --headless +PlugInstall +qall
+    # First run installs plugins (lua requires will fail before plugins exist, that's expected)
+    nvim --headless +"PlugInstall --sync" +qa! 2>/dev/null || true
+    # Second run verifies everything loads correctly
+    nvim --headless +qa
 
 # Install server/CLI configurations (git, vim, tmux, fish, mutt, etc.)
 install-server:

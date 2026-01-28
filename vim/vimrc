@@ -200,7 +200,7 @@ augroup END
 
 call plug#begin()
 
-Plug 'ggandor/leap.nvim'                 " Use s and S to navigate to any two-letter combination
+Plug 'https://codeberg.org/andyg/leap.nvim' " Use s and S to navigate to any two-letter combination
 Plug 'jeffkreeftmeijer/vim-numbertoggle' " Turn relative line numbers off in non-focused window
 Plug 'jiangmiao/auto-pairs'              " Automatically add closing braces and delete matching ones
 Plug 'junegunn/fzf'                      " [Buffers] Jump to the existing window if possible
@@ -377,7 +377,10 @@ require('gitsigns').setup({
   end
 })
 
-require('leap').create_default_mappings()
+-- Sneak-style mappings for leap.nvim
+vim.keymap.set({'n', 'x', 'o'}, 's',  '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'S',  '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
 EOF
 
 " vim:set ft=vim et sw=2:
