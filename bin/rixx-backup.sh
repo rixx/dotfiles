@@ -42,6 +42,7 @@ info "Starting backup"
     ~/doc                                       \
     ~/lib                                       \
     ~/eustace                                   \
+    ~/tmp                                       \
     ~/src
 
 
