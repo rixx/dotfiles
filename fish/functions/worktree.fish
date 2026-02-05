@@ -93,15 +93,34 @@ function worktree --description "Create a git worktree and copy/symlink untracke
         set -a symlink_find_args -o -iname $p
     end
 
-    # Symlink files/directories to the new worktree
-    for f in (find . -maxdepth 2 -not -path '*node_modules*' \( $symlink_find_args \))
+    # Find the main branch worktree for symlinking
+    set -l main_worktree
+    set -l _wt_path
+    for line in (command git worktree list --porcelain)
+        if string match -q 'worktree *' -- $line
+            set _wt_path (string replace 'worktree ' '' -- $line)
+        else if string match -q 'branch refs/heads/main' -- $line
+            or string match -q 'branch refs/heads/master' -- $line
+            set main_worktree $_wt_path
+            break
+        end
+    end
+    if test -z "$main_worktree"
+        set_color yellow
+        echo "Could not find main branch worktree, symlinking from current directory"
+        set_color normal
+        set main_worktree (pwd)
+    end
+
+    # Symlink files/directories from main branch worktree
+    for f in (find $main_worktree -maxdepth 2 -not -path '*node_modules*' \( $symlink_find_args \) -printf '%P\n')
         set -l target ../$dirname/$f
         mkdir -p (dirname $target)
         # Remove existing file/directory so ln doesn't symlink *into* it
         if test -e $target; or test -L $target
             rm -rf $target
         end
-        ln -s (realpath $f) $target
+        ln -s $main_worktree/$f $target
         or begin
             set_color yellow
             echo "Unable to symlink $f"
