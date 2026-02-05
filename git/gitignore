@@ -21,6 +21,10 @@
 # AI assistants
 *.aider*
 *.claude*
+.claude/bin/
+.claude/*.local.md
+.claude/*.local.json
+.claude/*.local
 CLAUDE.md
 
 # Sanity
