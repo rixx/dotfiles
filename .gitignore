@@ -5,3 +5,9 @@ vim/*.log
 autorandr/conf
 systemd/user/default.target.wants/
 fish/fish_variables
+
+# claude-reliability managed
+.claude/bin/
+.claude/*.local.md
+.claude/*.local.json
+.claude/*.local
