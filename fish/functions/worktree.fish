@@ -1,6 +1,23 @@
-function worktree --description "Create a git worktree and copy untracked config files"
+function worktree --description "Create a git worktree and copy/symlink untracked config files"
     argparse -n worktree h/help v/verbose -- $argv
     or return
+
+    # ── File patterns to copy to new worktrees ──────────────────────
+    set -l copy_patterns \
+        '.envrc' \
+        '.env' \
+        '.env.local' \
+        '.tool-versions' \
+        '.mise.toml' \
+        'local' \
+        '*.cfg' \
+        'settings.local.json'
+
+    # ── File/directory patterns to symlink into new worktrees ───────
+    set -l symlink_patterns \
+        'CLAUDE.md' \
+        '.claude' \
+        '.bd'
 
     if set -q _flag_help; or test (count $argv) -eq 0
         echo "worktree [-v] <branch name>"
@@ -8,8 +25,9 @@ function worktree --description "Create a git worktree and copy untracked config
         echo "Create a git worktree with <branch name>. Will create a worktree"
         echo "if one isn't found that matches the given name."
         echo
-        echo "Copies .env, .envrc, .tool-versions, .cfg, CLAUDE.md, and"
-        echo "settings.local.json files to the new worktree."
+        echo "Copies and symlinks untracked config files to the new worktree."
+        echo "  Copied:    "(string join ', ' $copy_patterns)
+        echo "  Symlinked: "(string join ', ' $symlink_patterns)
         return 0
     end
 
@@ -49,18 +67,14 @@ function worktree --description "Create a git worktree and copy untracked config
         or set_color yellow; and echo "Unable to copy node_modules"; and set_color normal
     end
 
+    # Build find arguments for copy patterns
+    set -l copy_find_args -iname $copy_patterns[1]
+    for p in $copy_patterns[2..]
+        set -a copy_find_args -o -iname $p
+    end
+
     # Copy untracked config files to the new worktree
-    for f in (find . -not -path '*node_modules*' \( \
-            -name '.envrc' -o \
-            -name '.env' -o \
-            -name '.env.local' -o \
-            -name '.tool-versions' -o \
-            -name '.mise.toml' -o \
-            -name 'local' -o \
-            -name '*.cfg' -o \
-            -iname 'CLAUDE.md' -o \
-            -iname 'settings.local.json' \
-        \))
+    for f in (find . -not -path '*node_modules*' \( $copy_find_args \))
         mkdir -p (dirname ../$dirname/$f)
         /bin/cp -R --reflink=auto $f ../$dirname/$f
         or begin
@@ -70,6 +84,31 @@ function worktree --description "Create a git worktree and copy untracked config
         end
         if set -q _flag_verbose
             echo "Copied $f"
+        end
+    end
+
+    # Build find arguments for symlink patterns
+    set -l symlink_find_args -iname $symlink_patterns[1]
+    for p in $symlink_patterns[2..]
+        set -a symlink_find_args -o -iname $p
+    end
+
+    # Symlink files/directories to the new worktree
+    for f in (find . -maxdepth 2 -not -path '*node_modules*' \( $symlink_find_args \))
+        set -l target ../$dirname/$f
+        mkdir -p (dirname $target)
+        # Remove existing file/directory so ln doesn't symlink *into* it
+        if test -e $target; or test -L $target
+            rm -rf $target
+        end
+        ln -s (realpath $f) $target
+        or begin
+            set_color yellow
+            echo "Unable to symlink $f"
+            set_color normal
+        end
+        if set -q _flag_verbose
+            echo "Symlinked $f"
         end
     end
 
