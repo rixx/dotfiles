@@ -25,6 +25,7 @@
 .claude/*.local.md
 .claude/*.local.json
 .claude/*.local
+.beads
 CLAUDE.md
 
 # Sanity

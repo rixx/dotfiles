@@ -17,7 +17,7 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l symlink_patterns \
         'CLAUDE.md' \
         '.claude' \
-        '.bd'
+        '.beads'
 
     if set -q _flag_help; or test (count $argv) -eq 0
         echo "worktree [-v] <branch name>"
