@@ -6,6 +6,7 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l copy_patterns \
         '.envrc' \
         '.env' \
+        '.secret' \
         '.env.local' \
         '.tool-versions' \
         '.mise.toml' \

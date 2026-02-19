@@ -30,6 +30,7 @@ CLAUDE.md
 
 # Sanity
 *.secret
+todo
 
 # blah
 kubeconfig-*
