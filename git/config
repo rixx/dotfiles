@@ -33,7 +33,7 @@
     hardr = reset --hard HEAD~1
     ls-tracked = ls-tree
     ls-untracked = ls-files --others --exclude-standard
-    pullall = "!find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \\;"
+    pullall = "!f() { cd -- \"${GIT_PREFIX:-.}\" && for d in */; do [ -d \"$d/.git\" ] && printf '\\n>>> %s\\n' \"$d\" && git -C \"$d\" pull; done; }; f"
     pushf = push --force-with-lease
     rehead = reset --hard @
     uncommit = reset --soft @~1
