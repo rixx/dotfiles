@@ -15,6 +15,7 @@ brightnessctl
 brother-mfc-l2700dw
 btop
 calibre
+claude-cowork-service
 claude-desktop-bin
 cronie
 cups
@@ -67,6 +68,7 @@ kitty-terminfo
 kubectl
 less
 libreoffice-fresh
+libvoikko
 linux
 linux-firmware
 localsend-bin
@@ -92,6 +94,7 @@ netbird-bin
 netctl
 noto-fonts-emoji
 npm
+nuspell
 nwg-displays
 obsidian
 offlineimap
