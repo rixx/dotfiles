@@ -10,13 +10,13 @@ function worktree --description "Create a git worktree and copy/symlink untracke
         '.env.local' \
         '.tool-versions' \
         '.mise.toml' \
-        'local' \
         '*.cfg' \
         'settings.local.json'
 
     # ── File/directory patterns to symlink into new worktrees ───────
     set -l symlink_patterns \
         'CLAUDE.md' \
+        'local' \
         '.claude' \
         '.beads'
 
