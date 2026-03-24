@@ -44,4 +44,5 @@ x-scheme-handler/ftp=userapp-Nightly-2QCYVZ.desktop
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/obsidian=obsidian.desktop
-x-scheme-handler/sgnl=signal-desktop.desktop
+x-scheme-handler/sgnl=signal.desktop
+x-scheme-handler/signalcaptcha=signal.desktop

@@ -5,5 +5,7 @@
   "chromiumSwitches": {},
   "IS_MAXIMIZED": true,
   "IS_MINIMIZED": false,
-  "SKIP_HOST_UPDATE": true
+  "SKIP_HOST_UPDATE": true,
+  "enableLibOpenH264Electron": false,
+  "openH264Enabled": true
 }
