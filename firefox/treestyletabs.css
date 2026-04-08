@@ -25,10 +25,12 @@ tab-item.active tab-item-substance {
 /* add gap between favicon and text */
 tab-item .label-content {
   margin-left: 4px;
+  font-size: 13px;
+  color: black;
 }
 
 /* make unloaded tabs favicons fairly transparent */
-tab-item.discarded tab-favicon {
+tab-item.discarded tab-favicon, tab-item.discarded .label-content {
   opacity: 0.5 !important;
 }
 
