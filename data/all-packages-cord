@@ -24,6 +24,8 @@ dhcpcd
 dialog
 diff-so-fancy
 discord
+docker
+docker-compose
 dolphin
 earlyoom
 evince
@@ -37,6 +39,7 @@ filelight
 firefox
 fish
 flameshot
+fontforge
 fuse2fs
 fwupd
 fzf
