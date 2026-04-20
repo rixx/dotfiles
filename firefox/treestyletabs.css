@@ -1,25 +1,27 @@
-/* don't display tooltips on hover */
-#aHTMLTooltip,
-#remoteBrowserTooltip {
-  display: none !important
+/* tabbar layout */
+#tabbar:not(.overflow) .after-tabs {
+  margin-top: auto;
+}
+tab-item:last-of-type {
+  margin-bottom: 0;
+}
+.newtab-button {
+  border-top: 2px solid #00000011 !important;
 }
 
-/* Add private browsing indicator per tab */
-tab-item.private-browsing tab-label:before {
-  content: "🕶";
-}
-/* different color */
-tab-item tab-item-substance {
-  background-color: #ffffff70 !important;
-}
+/* different colours */
 tab-item {
   border: solid 1px #00000010;
+  --shift-tabs-for-scrollbar-distance: 0px;
+}
+tab-item tab-item-substance {
+  background-color: #ffffff70 !important;
 }
 tab-item:hover tab-item-substance {
   background-color: #00000001 !important;
 }
 tab-item.active tab-item-substance {
-  background-color: #99c6e490 !important
+  background-color: #99c6e490 !important;
 }
 
 /* add gap between favicon and text */
@@ -30,7 +32,7 @@ tab-item .label-content {
 }
 
 /* make unloaded tabs favicons fairly transparent */
-tab-item.discarded tab-favicon, tab-item.discarded .label-content {
+tab-item.discarded tab-favicon, tab-item.discarded tab-item-substance {
   opacity: 0.5 !important;
 }
 
@@ -39,10 +41,6 @@ tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current
   visibility: hidden;
 }
 
-/* only show "close tab" button on hover */
-#tabbar tab-item tab-item-substance:not(:hover) tab-closebox {
-  display: none;
-}
 
 :root[color-scheme="system-color"][data-user-agent*="Linux"]
   tab-item:not(.active):not(.bundled-active):not(.highlighted),
@@ -58,13 +56,30 @@ tab-item:not(.loading):-moz-any([data-current-uri="about:newtab"], [data-current
   --toolbar-non-lwt-textcolor: ButtonText /* or something foreground color */;
 }
 
-#tabbar:not(.overflow) .after-tabs {
-  margin-top: auto;
+/* fix look of expand indicator */
+tab-item tab-twisty {
+  margin-right: 4px
 }
-tab-item:last-of-type {
-  margin-bottom: 0;
+tab-item tab-twisty::before {
+  background: #000000 !important;
 }
 
-.newtab-button {
-  border-top: 2px solid #00000011 !important;
+/* fix border glow of active tab */
+tab-item.active tab-item-substance {
+  border: none !important;
+  border-radius: 5px !important;
+}
+tab-item.active tab-item-substance .background {
+  border-radius: 4px !important;
+}
+
+/* don't display tooltips on hover */
+#aHTMLTooltip,
+#remoteBrowserTooltip {
+  display: none !important
+}
+
+/* Add private browsing indicator per tab */
+tab-item.private-browsing tab-label:before {
+  content: "🕶";
 }
