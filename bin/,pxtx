@@ -1,0 +1,22 @@
+#!/usr/bin/env fish
+
+if test (count $argv) -lt 1; or test (count $argv) -gt 2
+    echo "usage: ,pxtx <number> [branch-name]"
+    exit 1
+end
+
+set -l number $argv[1]
+set -l branchname
+
+if test (count $argv) -eq 2
+    set branchname $argv[2]
+else
+    set branchname "px-$number"
+end
+
+worktree $branchname
+or exit 1
+
+just install-all
+and just run compilemessages
+and claude "Work on PX-$number"
