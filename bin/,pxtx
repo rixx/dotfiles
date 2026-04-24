@@ -1,7 +1,13 @@
 #!/usr/bin/env fish
 
-if test (count $argv) -lt 1; or test (count $argv) -gt 2
-    echo "usage: ,pxtx <number> [branch-name]"
+argparse -n ',pxtx' h/help 'p/prompt=' -- $argv
+or exit 1
+
+if set -q _flag_help; or test (count $argv) -lt 1; or test (count $argv) -gt 2
+    echo "usage: ,pxtx [--prompt <extra>] <number> [branch-name]"
+    if set -q _flag_help
+        exit 0
+    end
     exit 1
 end
 
@@ -14,9 +20,14 @@ else
     set branchname "px-$number"
 end
 
+set -l prompt "Work on PX-$number"
+if set -q _flag_prompt
+    set prompt "$prompt. $_flag_prompt"
+end
+
 worktree $branchname
 or exit 1
 
 just install-all
 and just run compilemessages
-and claude "Work on PX-$number"
+and claude $prompt
