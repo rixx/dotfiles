@@ -11,6 +11,11 @@ if set -q _flag_help; or test (count $argv) -lt 1; or test (count $argv) -gt 2
     exit 1
 end
 
+if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
+    cd ~/src/pretalx/main
+    or exit 1
+end
+
 set -l number $argv[1]
 set -l branchname
 
