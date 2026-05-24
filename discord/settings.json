@@ -7,5 +7,6 @@
   "IS_MINIMIZED": false,
   "SKIP_HOST_UPDATE": true,
   "enableLibOpenH264Electron": false,
-  "openH264Enabled": true
+  "openH264Enabled": true,
+  "DESKTOP_TTI_DNSTCP_WARMUP": true
 }
