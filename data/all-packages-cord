@@ -1,6 +1,7 @@
 7zip
 acpi
 amd-ucode
+android-tools
 aspell
 aspell-de
 aspell-en
@@ -36,6 +37,7 @@ fbreader
 fd
 feh
 ffmpegthumbnailer
+ffsclient-bin
 filelight
 firefox
 fish
@@ -95,6 +97,7 @@ neovim-plug
 nerd-fonts-noto-sans-mono
 netbird-bin
 netctl
+nmap
 noto-fonts-emoji
 npm
 nuspell
