@@ -25,9 +25,9 @@ else
     set branchname "px-$number"
 end
 
-set -l prompt "Work on PX-$number"
+set -l prompt "Use the pxtx-dev skill to work on PX-$number end to end, from implementation through review."
 if set -q _flag_prompt
-    set prompt "$prompt. $_flag_prompt"
+    set prompt "$prompt Additional context: $_flag_prompt"
 end
 
 worktree $branchname
@@ -35,4 +35,4 @@ or exit 1
 
 just install-all
 and just run compilemessages
-and claude $prompt
+and claude --chrome $prompt
