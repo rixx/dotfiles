@@ -19,6 +19,7 @@ the cookiecutter template is skipped by default (it isn't a releasable plugin);
 pass -c/--cookiecutter before the subcommand to include it.
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -115,15 +116,26 @@ def cmd_list(argv, cookiecutter=False):
 def cmd_all(argv, cookiecutter=False):
     if not argv:
         die("usage: ,pplugin all <command...>")
+    # our shebang runs this under `uv run`, which exports VIRTUAL_ENV (and a
+    # recursion guard) pointing at this script's own throwaway env. strip them
+    # so child `just`/`uv` commands use each plugin's real .venv instead of
+    # warning about the mismatch.
+    env = {
+        k: v for k, v in os.environ.items()
+        if k not in ("VIRTUAL_ENV", "UV_RUN_RECURSION_DEPTH")
+    }
     repos = plugin_repos(cookiecutter)
     failures = []
     for repo in repos:
-        proc = subprocess.run(argv, cwd=repo, capture_output=True, text=True)
+        proc = subprocess.run(
+            argv, cwd=repo, env=env, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        )
         ok = proc.returncode == 0
         mark = "{G}✓{R}" if ok else "{r}✗{R}"
         suffix = "" if ok else out(f"  {{D}}(exit {proc.returncode}){{R}}")
         print(out(f"{mark} {{B}}{repo.name}{{R}}") + suffix)
-        body = (proc.stdout + proc.stderr).rstrip()
+        body = proc.stdout.rstrip()
         if body:
             for line in body.splitlines():
                 print(f"    {line}")
