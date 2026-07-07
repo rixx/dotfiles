@@ -10,6 +10,7 @@ this tool owns the canonical list of maintained plugins and their locations
 
 subcommands:
   list           print each maintained plugin and its location
+  go <plugin>    print a named plugin's dir to cd into (the fish wrapper cds)
   all <cmd...>   run a command in every plugin repo, report success per repo
   status         git status for every plugin: clean/dirty, push state, HEAD
   next           print the next plugin dir to cd into; if not currently in a
@@ -111,6 +112,31 @@ def cmd_list(argv, cookiecutter=False):
     for rel in rels:
         name = pad(f"{{B}}{Path(rel).name}{{R}}", width)
         print(out(f"{name}  {{D}}{PRETALX / rel}{{R}}"))
+
+
+def cmd_go(argv, cookiecutter=False):
+    if len(argv) != 1:
+        die("usage: ,pplugin go <plugin>")
+    query = argv[0]
+    by_name = {Path(rel).name: rel for rel in plugin_paths(cookiecutter=True)}
+    names = list(by_name)
+    if query in names:
+        match = query
+    elif f"pretalx-{query}" in names:
+        match = f"pretalx-{query}"
+    else:
+        hits = [n for n in names if n.startswith(query)] or [n for n in names if query in n]
+        if len(hits) == 1:
+            match = hits[0]
+        elif not hits:
+            die(f"no plugin matches: {query}")
+        else:
+            die(f"ambiguous: {query} matches {', '.join(hits)}")
+    target = PRETALX / by_name[match]
+    if not target.is_dir():
+        die(f"plugin dir missing: {target}")
+    print(out(f"{{D}}→ {match}{{R}}"), file=sys.stderr)
+    print(target)
 
 
 def cmd_all(argv, cookiecutter=False):
@@ -228,15 +254,18 @@ def main():
         cookiecutter = True
         args = args[1:]
     if not args:
-        die("usage: ,pplugin [-c] {list|all <cmd...>|status|next}")
+        die("usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next}")
     cmd, rest = args[0], args[1:]
     if cmd in ("-h", "--help", "help"):
         print(__doc__.strip())
         return
-    handlers = {"list": cmd_list, "all": cmd_all, "status": cmd_status, "next": cmd_next}
+    handlers = {
+        "list": cmd_list, "go": cmd_go, "all": cmd_all,
+        "status": cmd_status, "next": cmd_next,
+    }
     handler = handlers.get(cmd)
     if handler is None:
-        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|all <cmd...>|status|next}}")
+        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|go <plugin>|all <cmd...>|status|next}}")
     handler(rest, cookiecutter)
 
 
