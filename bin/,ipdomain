@@ -1,0 +1,440 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["cryptography"]
+# ///
+"""
+best-effort resolve an IP (v4 or v6) to the domain(s) behind it.
+
+combines several independent signals, none authoritative on its own and none
+allowed to hang:
+  - reverse DNS (PTR)        what the IP claims to be right now
+  - TLS certificate on :443  what the IP serves right now (CN + SANs)
+  - ip.thc.org               passive DNS (historical, may be stale/shared)
+  - censys                   passive DNS/cert intel (needs credentials)
+  - ip-api.com               owner/ASN context to help identify the host
+
+PTR and the served certificate describe the IP as it is now, so they feed the
+consolidated "best guess"; the rest is historical or contextual.
+"""
+
+import argparse
+import ipaddress
+import json
+import os
+import re
+import socket
+import ssl
+import subprocess
+import sys
+import threading
+import urllib.error
+import urllib.request
+
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+UA = "ipdomain/1.0 (+dotfiles)"
+
+
+def out(s):
+    tty = sys.stdout.isatty()
+    b, d, r = ("\033[1m", "\033[2m", "\033[0m") if tty else ("", "", "")
+    return s.replace("{B}", b).replace("{D}", d).replace("{R}", r)
+
+
+def header(title):
+    print(out(f"\n{{B}}▸ {title}{{R}}"))
+
+
+def indent(lines):
+    for line in lines:
+        print(f"  {line}")
+
+
+def http_get(url, timeout=10, headers=None, auth=None):
+    req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+    if auth:
+        import base64
+
+        token = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
+        req.add_header("Authorization", f"Basic {token}")
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.status, resp.read().decode("utf-8", "replace")
+
+
+def reverse_dns(ip):
+    """PTR record(s) via the system resolver."""
+    socket.setdefaulttimeout(5)
+    try:
+        primary, aliases, _ = socket.gethostbyaddr(ip)
+    except (socket.herror, socket.gaierror, OSError):
+        return []
+    finally:
+        socket.setdefaulttimeout(None)
+    names = [primary, *aliases]
+    return list(dict.fromkeys(n.rstrip(".") for n in names if n))
+
+
+def tls_names(ip, port):
+    """(cn, [san_dns]) from the default cert served on ip:port, or (None, reason)."""
+    from cryptography import x509
+    from cryptography.x509.oid import NameOID
+
+    ctx = ssl._create_unverified_context()
+    try:
+        # No SNI on a bare IP (SNI must be a hostname): we want the default cert.
+        with socket.create_connection((ip, port), timeout=8) as sock:
+            with ctx.wrap_socket(sock, server_hostname=None) as tls:
+                der = tls.getpeercert(binary_form=True)
+    except (socket.timeout, TimeoutError):
+        return None, "timed out"
+    except (ConnectionResetError, ssl.SSLError, OSError) as exc:
+        return None, f"no TLS ({type(exc).__name__})"
+    cert = x509.load_der_x509_certificate(der)
+    cn = None
+    attrs = cert.subject.get_attributes_for_oid(NameOID.COMMON_NAME)
+    if attrs:
+        cn = attrs[0].value
+    san = []
+    try:
+        ext = cert.extensions.get_extension_for_class(x509.SubjectAlternativeName)
+        san = ext.value.get_values_for_type(x509.DNSName)
+    except x509.ExtensionNotFound:
+        pass
+    return cn, san
+
+
+def thc(ip):
+    """(entries_str, [hosts], note) from ip.thc.org passive DNS."""
+    try:
+        _, body = http_get(f"https://ip.thc.org/{ip}", timeout=12)
+    except (urllib.error.URLError, TimeoutError, OSError):
+        return None, [], "unreachable"
+    body = ANSI.sub("", body)
+    stripped = body.lstrip()
+    if stripped.startswith("{"):
+        try:
+            err = json.loads(stripped).get("error", "no data")
+        except json.JSONDecodeError:
+            err = "no data"
+        return None, [], f"no data ({err})"
+    entries = None
+    hosts = []
+    for line in body.splitlines():
+        m = re.match(r";;Entries:\s*([0-9]+/[0-9]+)", line)
+        if m:
+            entries = m.group(1)
+        elif line and not line.startswith(";") and line.strip():
+            hosts.append(line.strip())
+    hosts = list(dict.fromkeys(hosts))  # dedup, preserve order
+    note = ""
+    total = int(entries.split("/")[1]) if entries else 0
+    if total > 1000:
+        # A huge total capped at 100 usually means THC has no IP-specific data
+        # and is returning a firehose — flag it rather than trust it.
+        note = f"{entries} — large set, likely shared/stale, treat with care"
+    elif entries:
+        note = f"entries: {entries}"
+    return entries, hosts, note
+
+
+def _collect_names(obj):
+    """Recursively pull every value under a 'names' key from Censys JSON."""
+    found = set()
+    if isinstance(obj, dict):
+        for key, val in obj.items():
+            if key == "names" and isinstance(val, list):
+                found.update(str(v) for v in val if isinstance(v, str))
+            else:
+                found |= _collect_names(val)
+    elif isinstance(obj, list):
+        for item in obj:
+            found |= _collect_names(item)
+    return found
+
+
+def censys(ip):
+    """([names], note) — needs credentials (anon lookups 401). None → skip section."""
+    token = os.environ.get("CENSYS_TOKEN")
+    api_id = os.environ.get("CENSYS_API_ID")
+    secret = os.environ.get("CENSYS_API_SECRET")
+    try:
+        if token:
+            url = f"https://api.platform.censys.io/v3/global/asset/host/{ip}"
+            _, body = http_get(url, timeout=12, headers={"Authorization": f"Bearer {token}"})
+        elif api_id and secret:
+            url = f"https://search.censys.io/api/v2/hosts/{ip}"
+            _, body = http_get(url, timeout=12, auth=(api_id, secret))
+        else:
+            return None  # no credentials → omit entirely
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403):
+            return [], "credentials rejected"
+        if exc.code == 429:
+            return [], "rate limited"
+        return [], f"error (HTTP {exc.code})"
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return [], f"unreachable ({type(exc).__name__})"
+    try:
+        names = _collect_names(json.loads(body))
+    except json.JSONDecodeError:
+        return [], "unexpected response"
+    return sorted(n for n in names if "." in n), ("" if names else "no names returned")
+
+
+def hackertarget(ip):
+    """([hosts], note) — plaintext reverse-IP, no auth (~50/day per source IP)."""
+    try:
+        _, body = http_get(f"https://api.hackertarget.com/reverseiplookup/?q={ip}", timeout=12)
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return [], f"unreachable ({type(exc).__name__})"
+    body = body.strip()
+    low = body.lower()
+    if "api count exceeded" in low:
+        return [], "rate limited (~50/day per source IP)"
+    if body.startswith("error") or "no records" in low or "no dns" in low:
+        return [], "no records"
+    hosts = [line.strip() for line in body.splitlines() if "." in line]
+    return list(dict.fromkeys(hosts)), ""
+
+
+def mnemonic(ip):
+    """([(host, lastseen)], count, note) — passive DNS with first/last-seen dates."""
+    from datetime import datetime, timezone
+
+    try:
+        _, body = http_get(f"https://api.mnemonic.no/pdns/v3/{ip}", timeout=12)
+        data = json.loads(body)
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        return [], 0, f"unreachable ({type(exc).__name__})"
+    if data.get("responseCode") != 200:
+        return [], 0, "no data"
+    latest = {}  # host -> newest lastSeen (ms)
+    for rec in data.get("data", []):
+        host = rec.get("query")
+        if not host or "." not in host:
+            continue
+        seen = rec.get("lastSeenTimestamp", 0)
+        if seen >= latest.get(host, -1):
+            latest[host] = seen
+    rows = []
+    for host, ms in sorted(latest.items(), key=lambda kv: kv[1], reverse=True):
+        date = datetime.fromtimestamp(ms / 1000, timezone.utc).strftime("%Y-%m-%d") if ms else "?"
+        rows.append((host, date))
+    return rows, data.get("count", len(rows)), ""
+
+
+def otx_key():
+    """OTX API key from $OTX_API_KEY, else from `pass show web/alienvault.com`."""
+    key = os.environ.get("OTX_API_KEY")
+    if key:
+        return key.strip()
+    try:
+        proc = subprocess.run(
+            ["pass", "show", "web/alienvault.com"],
+            capture_output=True, text=True, timeout=10,
+        )
+    except (FileNotFoundError, subprocess.SubprocessError):
+        return None
+    if proc.returncode != 0:
+        return None
+    m = re.search(r"api key:\s*([0-9a-fA-F]{32,})", proc.stdout, re.IGNORECASE)
+    return m.group(1) if m else None
+
+
+def otx(ip, version):
+    """([hosts], note) — AlienVault OTX passive DNS. None → skip section."""
+    key = otx_key()
+    if not key:
+        return None  # no key → omit entirely
+    kind = "IPv6" if version == 6 else "IPv4"
+    url = f"https://otx.alienvault.com/api/v1/indicators/{kind}/{ip}/passive_dns"
+    try:
+        _, body = http_get(url, timeout=12, headers={"X-OTX-API-KEY": key})
+        data = json.loads(body)
+    except urllib.error.HTTPError as exc:
+        return [], ("key rejected" if exc.code in (401, 403) else f"error (HTTP {exc.code})")
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        return [], f"unreachable ({type(exc).__name__})"
+    hosts = [r.get("hostname") for r in data.get("passive_dns", []) if r.get("hostname")]
+    return list(dict.fromkeys(hosts)), ("" if hosts else "no records")
+
+
+def ip_api(ip):
+    """owner/ASN context from ip-api.com (borrowed from ip-toolkit)."""
+    fields = "status,message,country,city,isp,org,as,asname,reverse"
+    try:
+        _, body = http_get(f"http://ip-api.com/json/{ip}?fields={fields}", timeout=8)
+        data = json.loads(body)
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
+        return {}
+    if data.get("status") != "success":
+        return {}
+    return data
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog=",ipdomain",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="best-effort resolve an IPv4/IPv6 address to the domain(s) behind it.",
+        epilog=(
+            "optional credentials (unlock extra sources):\n"
+            "  OTX_API_KEY                        AlienVault OTX; else read from\n"
+            "                                     `pass show web/alienvault.com`\n"
+            "  CENSYS_TOKEN                       Censys Platform token, or\n"
+            "  CENSYS_API_ID + CENSYS_API_SECRET  legacy Censys Search API"
+        ),
+    )
+    parser.add_argument("ip", help="IPv4 or IPv6 address")
+    parser.add_argument("-p", "--port", type=int, default=443, help="TLS port for the cert (default 443)")
+    parser.add_argument("-a", "--all", action="store_true", help="show every passive-DNS hostname")
+    args = parser.parse_args()
+
+    try:
+        addr = ipaddress.ip_address(args.ip)
+    except ValueError:
+        parser.error(f"not a valid IPv4 or IPv6 address: {args.ip}")
+
+    ip = str(addr)
+
+    # Every hostname any source proposes, with which sources back it and the
+    # most recent date we have — this drives the final best guess.
+    candidates = {}
+
+    def add(host, source, date=None):
+        h = (host or "").lstrip("*.").rstrip(".").strip().lower()
+        if "." not in h:
+            return
+        entry = candidates.setdefault(h, {"sources": set(), "date": None})
+        entry["sources"].add(source)
+        if date and (entry["date"] is None or date > entry["date"]):
+            entry["date"] = date
+
+    print(out(f"{{B}}IP:{{R}} {ip}  {{D}}(IPv{addr.version}){{R}}"))
+
+    # The cert check is the one step that can block for seconds (TLS timeout),
+    # so run it in the background while everything else prints, and present it
+    # last — right before the best guess, which depends on its SANs.
+    cert = {}
+    cert_thread = threading.Thread(target=lambda: cert.update(r=tls_names(ip, args.port)), daemon=True)
+    cert_thread.start()
+
+    # --- reverse DNS --------------------------------------------------------
+    header("Reverse DNS (PTR)")
+    ptr = reverse_dns(ip)
+    if ptr:
+        indent(ptr)
+        for n in ptr:
+            add(n, "PTR")
+    else:
+        print("  none")
+
+    # --- passive DNS sources -----------------------------------------------
+    def section(title, lines, note, cap=25):
+        """Render a passive-DNS section, capping the list unless --all."""
+        header(title)
+        if note:
+            print(out(f"  {{D}}{note}{{R}}"))
+        if not args.all and len(lines) > cap:
+            print(out(f"  {{D}}(first {cap} of {len(lines)}; --all for the rest){{R}}"))
+            lines = lines[:cap]
+        if lines:
+            indent(lines)
+        elif not note:
+            print("  none")
+
+    _, hosts, note = thc(ip)
+    for h in hosts:
+        add(h, "THC")
+    section("ip.thc.org passive DNS", hosts, note)
+
+    hosts, note = hackertarget(ip)
+    for h in hosts:
+        add(h, "HackerTarget")
+    section("HackerTarget reverse IP", hosts, note)
+
+    rows, count, note = mnemonic(ip)
+    for host, date in rows:
+        add(host, "Mnemonic", date)
+    if not note and count and count > len(rows):
+        note = f"{len(rows)} of {count} records (most recent first)"
+    lines = [out(f"{host}  {{D}}(seen {date}){{R}}") for host, date in rows]
+    section("Mnemonic passive DNS", lines, note)
+
+    result = censys(ip)  # None → no credentials, omit section entirely
+    if result is not None:
+        names, note = result
+        for n in names:
+            add(n, "Censys")
+        section("Censys", names, note)
+
+    result = otx(ip, addr.version)  # None → no key, omit section entirely
+    if result is not None:
+        names, note = result
+        for n in names:
+            add(n, "OTX")
+        section("AlienVault OTX passive DNS", names, note)
+
+    # --- ip-api.com owner/ASN context --------------------------------------
+    header("Network context (ip-api.com)")
+    info = ip_api(ip)
+    if info:
+        for label, key in (("Org", "org"), ("ISP", "isp"), ("ASN", "as"), ("Location", None), ("PTR", "reverse")):
+            if key is None:
+                loc = ", ".join(v for v in (info.get("city"), info.get("country")) if v)
+                if loc:
+                    print(f"  {label:9}{loc}")
+            elif info.get(key):
+                print(f"  {label:9}{info[key]}")
+        if info.get("reverse"):
+            add(info["reverse"], "PTR")
+    else:
+        print("  unavailable")
+
+    # --- served TLS certificate (started earlier, joined here) -------------
+    cert_thread.join()
+    cn, san = cert.get("r", (None, "unavailable"))
+    header(f"TLS certificate on :{args.port}")
+    if cn is None and isinstance(san, str):
+        print(f"  {san}")
+    else:
+        if cn:
+            print(f"  CN:   {cn}")
+            add(cn, "cert")
+        if san:
+            print(f"  SANs: {' '.join(san)}")
+            for s in san:
+                add(s, "cert")
+        if not cn and not san:
+            print("  certificate served but no hostnames in it")
+
+    # --- best guess ---------------------------------------------------------
+    # PTR and the served cert describe the IP right now, so if either named a
+    # host, that IS the answer. Otherwise fall back to the passive-DNS signals,
+    # ranked by how many sources agree and how recently the name was seen.
+    header("Best guess")
+    present = {h: e for h, e in candidates.items() if e["sources"] & {"PTR", "cert"}}
+    pool = present or candidates
+    ranked = sorted(
+        pool.items(),
+        key=lambda kv: (len(kv[1]["sources"]), kv[1]["date"] or ""),
+        reverse=True,
+    )
+    if not ranked:
+        print("  no hostname could be associated with this IP")
+    else:
+        # When falling back to passive data, keep the strongest tier only.
+        if not present:
+            top = len(ranked[0][1]["sources"])
+            ranked = [r for r in ranked if len(r[1]["sources"]) == top][:5]
+        for host, entry in ranked:
+            tags = ", ".join(sorted(entry["sources"], key=str.lower))
+            # Recency only matters for passive guesses; a live PTR/cert host is
+            # confirmed now, so its historical last-seen date would just mislead.
+            live = entry["sources"] & {"PTR", "cert"}
+            date = f" · seen {entry['date']}" if entry["date"] and not live else ""
+            print(out(f"  {host}  {{D}}({tags}{date}){{R}}"))
+
+
+if __name__ == "__main__":
+    main()
