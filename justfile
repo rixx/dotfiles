@@ -1,4 +1,5 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
+set fallback := true
 
 dotfiles := env_var("HOME") / ".config/dotfiles"
 movesuffix := "moved-by-dotfiles-install"
