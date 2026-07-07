@@ -1,0 +1,232 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""
+manage the pretalx plugins I maintain.
+
+this tool owns the canonical list of maintained plugins and their locations
+(PLUGIN_PATHS below).
+
+subcommands:
+  list           print each maintained plugin and its location
+  all <cmd...>   run a command in every plugin repo, report success per repo
+  status         git status for every plugin: clean/dirty, push state, HEAD
+  next           print the next plugin dir to cd into; if not currently in a
+                 plugin, print the first one (the fish wrapper does the cd)
+
+the cookiecutter template is skipped by default (it isn't a releasable plugin);
+pass -c/--cookiecutter before the subcommand to include it.
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+PRETALX = Path.home() / "src" / "pretalx" / "main"
+
+PLUGIN_PATHS = [
+    "src/local/pretalx-com",
+    "src/local/pretalx-downstream",
+    "src/local/pretalx-friendlycaptcha",
+    "src/local/pretalx-fontpack-free",
+    "src/local/pretalx-media-ccc-de",
+    "src/local/pretalx-pages",
+    "src/local/pretalx-public-voting",
+    "src/local/pretalx-salesforce",
+    "src/local/pretalx-venueless",
+    "src/local/pretalx-vimeo",
+    "src/local/pretalx-youtube",
+    "src/local/pretalx-broadcast-tools",
+]
+COOKIECUTTER_PATH = "src/local/pretalx-plugin-cookiecutter"
+
+
+CODES = {
+    "{B}": "\033[1m", "{D}": "\033[2m", "{R}": "\033[0m",
+    "{G}": "\033[32m", "{Y}": "\033[33m", "{r}": "\033[31m",
+}
+
+
+def out(s):
+    tty = sys.stdout.isatty()
+    for k, v in CODES.items():
+        s = s.replace(k, v if tty else "")
+    return s
+
+
+def vis(s):
+    for k in CODES:
+        s = s.replace(k, "")
+    return len(s)
+
+
+def pad(s, width):
+    return s + " " * max(0, width - vis(s))
+
+
+def warn(msg):
+    print(out(f"{{Y}}warning:{{R}} {msg}"), file=sys.stderr)
+
+
+def die(msg, code=1):
+    print(out(f"{{r}}error:{{R}} {msg}"), file=sys.stderr)
+    sys.exit(code)
+
+
+def git(repo, *args):
+    proc = subprocess.run(
+        ["git", "-C", str(repo), *args],
+        capture_output=True, text=True,
+    )
+    return proc.returncode, proc.stdout
+
+
+def git_toplevel(path):
+    code, top = git(path, "rev-parse", "--show-toplevel")
+    return Path(top.strip()) if code == 0 and top.strip() else None
+
+
+def plugin_paths(cookiecutter=False):
+    return PLUGIN_PATHS + ([COOKIECUTTER_PATH] if cookiecutter else [])
+
+
+def plugin_repos(cookiecutter=False):
+    repos = []
+    for rel in plugin_paths(cookiecutter):
+        top = git_toplevel(PRETALX / rel)
+        if top is None:
+            warn(f"not a git repo, skipping: {rel}")
+            continue
+        repos.append(top)
+    if not repos:
+        die("none of the maintained plugin repos were found")
+    return repos
+
+
+def cmd_list(argv, cookiecutter=False):
+    rels = plugin_paths(cookiecutter)
+    width = max(len(Path(rel).name) for rel in rels)
+    for rel in rels:
+        name = pad(f"{{B}}{Path(rel).name}{{R}}", width)
+        print(out(f"{name}  {{D}}{PRETALX / rel}{{R}}"))
+
+
+def cmd_all(argv, cookiecutter=False):
+    if not argv:
+        die("usage: ,pplugin all <command...>")
+    repos = plugin_repos(cookiecutter)
+    failures = []
+    for repo in repos:
+        proc = subprocess.run(argv, cwd=repo, capture_output=True, text=True)
+        ok = proc.returncode == 0
+        mark = "{G}✓{R}" if ok else "{r}✗{R}"
+        suffix = "" if ok else out(f"  {{D}}(exit {proc.returncode}){{R}}")
+        print(out(f"{mark} {{B}}{repo.name}{{R}}") + suffix)
+        body = (proc.stdout + proc.stderr).rstrip()
+        if body:
+            for line in body.splitlines():
+                print(f"    {line}")
+        if not ok:
+            failures.append(repo.name)
+    total = len(repos)
+    if failures:
+        print(out(f"\n{{r}}{len(failures)}/{total} failed:{{R}} {', '.join(failures)}"))
+        sys.exit(1)
+    print(out(f"\n{{G}}all {total} ok{{R}}"))
+
+
+def repo_status(repo):
+    _, porcelain = git(repo, "status", "--porcelain=2", "--branch")
+    head = upstream = None
+    ahead = behind = 0
+    changes = 0
+    for line in porcelain.splitlines():
+        if line.startswith("# branch.head "):
+            head = line.split(" ", 2)[2]
+        elif line.startswith("# branch.upstream "):
+            upstream = line.split(" ", 2)[2]
+        elif line.startswith("# branch.ab "):
+            parts = line.split(" ", 2)[2].split()
+            ahead, behind = int(parts[0]), int(parts[1])
+        elif line and not line.startswith("#"):
+            changes += 1
+    sep = "\x1f"
+    _, log = git(repo, "log", "-1", f"--format=%h{sep}%D{sep}%s")
+    short, decor, subject = (log.strip().split(sep) + ["", "", ""])[:3]
+    return {
+        "head": head, "upstream": upstream, "ahead": ahead, "behind": behind,
+        "changes": changes, "short": short, "decor": decor, "subject": subject,
+    }
+
+
+def cmd_status(argv, cookiecutter=False):
+    repos = plugin_repos(cookiecutter)
+    width = max(len(r.name) for r in repos)
+    for repo in repos:
+        s = repo_status(repo)
+
+        if s["changes"]:
+            dot = "{Y}●{R}"
+            state = f"{{Y}}dirty ({s['changes']}){{R}}"
+        else:
+            dot = "{G}○{R}"
+            state = "{G}clean{R}"
+
+        if not s["upstream"]:
+            push = "{Y}no upstream{R}"
+        elif not s["ahead"] and not s["behind"]:
+            push = "{D}up to date{R}"
+        else:
+            bits = []
+            if s["ahead"]:
+                bits.append(f"↑{s['ahead']}")
+            if s["behind"]:
+                bits.append(f"{{r}}↓{s['behind']}{{R}}")
+            push = " ".join(bits)
+
+        tags = [t[5:] for t in s["decor"].split(", ") if t.startswith("tag: ")]
+        tag_str = f" {{G}}[{', '.join(tags)}]{{R}}" if tags else ""
+        head = f"{{D}}{s['short']}{{R}}{tag_str} {s['subject']}"
+
+        name = pad(f"{{B}}{repo.name}{{R}}", width)
+        line = f"{dot} {name}  {pad(state, 12)}  {pad(push, 14)}  {head}"
+        print(out(line))
+
+
+def cmd_next(argv, cookiecutter=False):
+    repos = plugin_repos(cookiecutter)
+    here = git_toplevel(Path.cwd())
+    idx = None
+    if here is not None:
+        for i, repo in enumerate(repos):
+            if repo == here:
+                idx = i
+                break
+    target = repos[0] if idx is None else repos[(idx + 1) % len(repos)]
+    where = "first" if idx is None else "next"
+    print(out(f"{{D}}→ {where}: {target.name}{{R}}"), file=sys.stderr)
+    print(target)
+
+
+def main():
+    args = sys.argv[1:]
+    cookiecutter = False
+    while args and args[0] in ("-c", "--cookiecutter"):
+        cookiecutter = True
+        args = args[1:]
+    if not args:
+        die("usage: ,pplugin [-c] {list|all <cmd...>|status|next}")
+    cmd, rest = args[0], args[1:]
+    if cmd in ("-h", "--help", "help"):
+        print(__doc__.strip())
+        return
+    handlers = {"list": cmd_list, "all": cmd_all, "status": cmd_status, "next": cmd_next}
+    handler = handlers.get(cmd)
+    if handler is None:
+        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|all <cmd...>|status|next}}")
+    handler(rest, cookiecutter)
+
+
+if __name__ == "__main__":
+    main()
