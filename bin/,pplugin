@@ -1,6 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.11"
+# dependencies = ["inquirer"]
 # ///
 """
 manage the pretalx plugins I maintain.
@@ -9,21 +10,25 @@ this tool owns the canonical list of maintained plugins and their locations
 (PLUGIN_PATHS below).
 
 subcommands:
-  list           print each maintained plugin and its location
-  go <plugin>    print a named plugin's dir to cd into (the fish wrapper cds)
-  all <cmd...>   run a command in every plugin repo, report success per repo
-  status         git status for every plugin: clean/dirty, push state, HEAD
-  next           print the next plugin dir to cd into; if not currently in a
-                 plugin, print the first one (the fish wrapper does the cd)
-  install        install every plugin into pretalx via `just install-plugin`
+  list             print each maintained plugin and its location
+  go <plugin>      print a named plugin's dir to cd into (the fish wrapper cds)
+  all <cmd...>     run a command in every plugin repo, report success per repo
+  status           git status for every plugin: clean/dirty, push state, HEAD
+  next             print the next plugin dir to cd into; if not currently in a
+                   plugin, print the first one (the fish wrapper does the cd)
+  install          install every plugin into pretalx via `just install-plugin`
+  release [plugin] interactive per-plugin PyPI release loop (via ,pydist),
+                   keeping pretalx-com's plugin_versions.py in sync
 
 the cookiecutter template is skipped by default (it isn't a releasable plugin);
 pass -c/--cookiecutter before the subcommand to include it.
 """
 
 import os
+import re
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 PRETALX = Path.home() / "src" / "pretalx" / "main"
@@ -115,11 +120,8 @@ def cmd_list(argv, cookiecutter=False):
         print(out(f"{name}  {{D}}{PRETALX / rel}{{R}}"))
 
 
-def cmd_go(argv, cookiecutter=False):
-    if len(argv) != 1:
-        die("usage: ,pplugin go <plugin>")
-    query = argv[0]
-    by_name = {Path(rel).name: rel for rel in plugin_paths(cookiecutter=True)}
+def resolve_plugin(query, cookiecutter=True):
+    by_name = {Path(rel).name: rel for rel in plugin_paths(cookiecutter=cookiecutter)}
     names = list(by_name)
     if query in names:
         match = query
@@ -133,7 +135,14 @@ def cmd_go(argv, cookiecutter=False):
             die(f"no plugin matches: {query}")
         else:
             die(f"ambiguous: {query} matches {', '.join(hits)}")
-    target = PRETALX / by_name[match]
+    return match, by_name[match]
+
+
+def cmd_go(argv, cookiecutter=False):
+    if len(argv) != 1:
+        die("usage: ,pplugin go <plugin>")
+    match, rel = resolve_plugin(argv[0])
+    target = PRETALX / rel
     if not target.is_dir():
         die(f"plugin dir missing: {target}")
     print(out(f"{{D}}→ {match}{{R}}"), file=sys.stderr)
@@ -285,14 +294,182 @@ def cmd_next(argv, cookiecutter=False):
     print(target)
 
 
+PLUGIN_VERSIONS = PRETALX / "src/local/pretalx-com/pretalx_com/plugin_versions.py"
+
+VERSION_RE = re.compile(r'__version__\s*=\s*["\']([^"\']+)["\']')
+ENTRY_RE = re.compile(r'^(\s*)"([^"]+)"\s*:\s*"[^"]*",\s*$')
+
+
+def find_init(repo):
+    # same discovery as ,pydist's find_init(): every __init__.py mentioning
+    # __version__, shallowest wins. the plugin's own package sits far above the
+    # .venv site-packages copies, so depth alone picks the right one.
+    candidates = [
+        p for p in repo.rglob("__init__.py")
+        if "__version__" in p.read_text(errors="ignore")
+    ]
+    if not candidates:
+        return None
+    return min(candidates, key=lambda p: (len(p.relative_to(repo).parts), str(p)))
+
+
+def read_version(repo):
+    init = find_init(repo)
+    if init is None:
+        return None
+    m = VERSION_RE.search(init.read_text(errors="ignore"))
+    return m.group(1) if m else None
+
+
+def read_module_name(repo):
+    try:
+        data = tomllib.loads((repo / "pyproject.toml").read_text())
+        entry_points = data["project"]["entry-points"]["pretalx.plugin"]
+    except (OSError, tomllib.TOMLDecodeError, KeyError):
+        return None
+    if not entry_points:
+        return None
+    return next(iter(entry_points))
+
+
+def update_plugin_versions(module, version):
+    text = PLUGIN_VERSIONS.read_text()
+    lines = text.splitlines(keepends=True)
+
+    for i, line in enumerate(lines):
+        m = ENTRY_RE.match(line)
+        if m and m.group(2) == module:
+            lines[i] = f'{m.group(1)}"{module}": "{version}",\n'
+            PLUGIN_VERSIONS.write_text("".join(lines))
+            return
+
+    # no entry yet: insert in sorted position, matching surrounding indent.
+    indent, insert_at, last_entry = "    ", None, None
+    for i, line in enumerate(lines):
+        m = ENTRY_RE.match(line)
+        if m:
+            indent, last_entry = m.group(1), i
+            if insert_at is None and m.group(2) > module:
+                insert_at = i
+    if insert_at is None:
+        insert_at = last_entry + 1 if last_entry is not None else len(lines)
+    lines.insert(insert_at, f'{indent}"{module}": "{version}",\n')
+    PLUGIN_VERSIONS.write_text("".join(lines))
+
+
+def cmd_release(argv, cookiecutter=False):
+    # imported lazily so the hot go/next/status paths (used by fish cd
+    # wrappers) don't pay inquirer's import cost.
+    import inquirer
+
+    pydist = Path(__file__).resolve().parent / ",pydist"
+    if argv:
+        _, rel = resolve_plugin(argv[0])
+        rels = [rel]
+    else:
+        rels = plugin_paths(cookiecutter=False)
+    env = clean_env()
+
+    released, skipped, failed = [], [], []
+    try:
+        for rel in rels:
+            name = Path(rel).name
+            repo = git_toplevel(PRETALX / rel)
+            if repo is None:
+                warn(f"not a git repo, skipping: {rel}")
+                skipped.append((name, "not a git repo"))
+                continue
+
+            version = read_version(repo)
+            if version is None:
+                print(out(f"{{r}}✗ {name}: no __init__.py with __version__ found{{R}}"))
+                failed.append((name, "no __version__"))
+                continue
+            if version == "0.0.0":
+                print(out(f"{{D}}○ {name}: no public package, skipping{{R}}"))
+                skipped.append((name, "no public package"))
+                continue
+
+            code, tag_out = git(repo, "describe", "--tags", "--abbrev=0")
+            tag = tag_out.strip() if code == 0 else None
+            if tag:
+                _, log_out = git(repo, "log", f"{tag}..HEAD", "--oneline")
+            else:
+                _, log_out = git(repo, "log", "--oneline")
+            commits = log_out.strip()
+            if not commits:
+                print(out(f"{{D}}○ {name}: no changes since v{version}, skipping{{R}}"))
+                skipped.append((name, f"no changes since v{version}"))
+                continue
+
+            print()
+            last = tag or "none"
+            print(out(f"{{B}}{name}{{R}}  {{D}}v{version}  (last tag: {last}){{R}}"))
+            for line in commits.splitlines():
+                print(out(f"  {{D}}{line}{{R}}"))
+
+            ans = inquirer.list_input(
+                f"Bump {name} (v{version})",
+                choices=["major", "minor", "patch", "skip"],
+                default="skip",
+            )
+
+            if ans in (None, "skip"):
+                print(out(f"{{D}}○ {name}: skipped{{R}}"))
+                skipped.append((name, "manual skip"))
+                continue
+
+            proc = subprocess.run([str(pydist), ans], cwd=repo, env=env)
+            if proc.returncode != 0:
+                print(out(f"{{r}}✗ {name}: release failed{{R}}"))
+                failed.append((name, "release failed"))
+                continue
+
+            # source of truth for the released version is the bumped
+            # __init__.py, not ,pydist's stdout — re-read it, don't parse output.
+            new_version = read_version(repo)
+            module = read_module_name(repo)
+            if module is None:
+                print(out(
+                    f"{{r}}✗ {name}: could not read module name from pyproject.toml, "
+                    f'fix its [project.entry-points."pretalx.plugin"] section — '
+                    f"plugin_versions.py NOT updated{{R}}"
+                ))
+                failed.append((name, "released, plugin_versions.py not updated"))
+                continue
+
+            update_plugin_versions(module, new_version)
+            print(out(f"{{G}}✓ {name}: released v{new_version}{{R}}"))
+            released.append((name, new_version))
+    except KeyboardInterrupt:
+        print(out("\n{Y}interrupted{R}"))
+
+    print(out("\n{B}release summary{R}"))
+    for name, ver in released:
+        print(out(f"  {{G}}✓{{R}} {name}: released v{ver}"))
+    for name, reason in skipped:
+        print(out(f"  {{D}}○ {name}: skipped ({reason}){{R}}"))
+    for name, reason in failed:
+        print(out(f"  {{r}}✗{{R}} {name}: {reason}"))
+    if not (released or skipped or failed):
+        print(out("  {D}nothing to do{R}"))
+    if released:
+        rel = "src/local/pretalx-com/pretalx_com/plugin_versions.py"
+        print(out(
+            f"\n{{Y}}reminder:{{R}} {rel} has pending uncommitted changes — "
+            f"review them before the next pretalx-com deploy."
+        ))
+
+
 def main():
     args = sys.argv[1:]
     cookiecutter = False
     while args and args[0] in ("-c", "--cookiecutter"):
         cookiecutter = True
         args = args[1:]
+    usage = "usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next|install|release [plugin]}"
     if not args:
-        die("usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next|install}")
+        die(usage)
     cmd, rest = args[0], args[1:]
     if cmd in ("-h", "--help", "help"):
         print(__doc__.strip())
@@ -300,10 +477,11 @@ def main():
     handlers = {
         "list": cmd_list, "go": cmd_go, "all": cmd_all,
         "status": cmd_status, "next": cmd_next, "install": cmd_install,
+        "release": cmd_release,
     }
     handler = handlers.get(cmd)
     if handler is None:
-        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|go <plugin>|all <cmd...>|status|next|install}}")
+        die(f"unknown subcommand: {cmd}\n{usage}")
     handler(rest, cookiecutter)
 
 

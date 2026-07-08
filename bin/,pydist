@@ -15,8 +15,11 @@ def find_init():
 
 def bump(version: str, part: str) -> str:
     major, minor, patch = map(int, version.split("."))
+    # a major >2000 means calver (year.release.patch): a major bump rolls to the
+    # next year, whose first release is .1, not .0 (2025.1.0 -> 2026.1.0).
+    calver = major > 2000
     match part:
-        case "major": return f"{major + 1}.0.0"
+        case "major": return f"{major + 1}.{1 if calver else 0}.0"
         case "minor": return f"{major}.{minor + 1}.0"
         case "patch": return f"{major}.{minor}.{patch + 1}"
         case _: raise ValueError(f"unknown bump type: {part}")
