@@ -1,5 +1,7 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
-set fallback := true
+set quiet
+set fallback
+set default-list
 
 dotfiles := env_var("HOME") / ".config/dotfiles"
 movesuffix := "moved-by-dotfiles-install"
@@ -43,16 +45,12 @@ conflink() {
 }
 '''
 
-[private]
-default:
-    @just --list
-
 # Install all dotfiles (server + GUI)
 install-all: install-server install-gui
 
 # Install vim-plug and neovim plugins
+[script('bash')]
 nvim-setup:
-    #!/usr/bin/env bash
     set -e
     plug_path="$HOME/.local/share/nvim/site/autoload/plug.vim"
     if [[ ! -f "$plug_path" ]]; then
@@ -69,12 +67,12 @@ nvim-setup:
     nvim --headless +qa
 
 # Install server/CLI configurations (git, vim, tmux, fish, mutt, etc.)
+[script('bash')]
 install-server:
-    #!/usr/bin/env bash
     set -e
-    DOTFILES="{{dotfiles}}"
-    movesuffix="{{movesuffix}}"
-    eval '{{install_lib}}'
+    DOTFILES="{{ dotfiles }}"
+    movesuffix="{{ movesuffix }}"
+    eval '{{ install_lib }}'
 
     # Version control
     conflink git
@@ -104,12 +102,12 @@ install-server:
     just nvim-setup
 
 # Install GUI/desktop configurations (sway, waybar, rofi, kitty, etc.)
+[script('bash')]
 install-gui:
-    #!/usr/bin/env bash
     set -e
-    DOTFILES="{{dotfiles}}"
-    movesuffix="{{movesuffix}}"
-    eval '{{install_lib}}'
+    DOTFILES="{{ dotfiles }}"
+    movesuffix="{{ movesuffix }}"
+    eval '{{ install_lib }}'
 
     # Wayland/Sway
     conflink sway
