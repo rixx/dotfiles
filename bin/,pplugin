@@ -15,6 +15,7 @@ subcommands:
   status         git status for every plugin: clean/dirty, push state, HEAD
   next           print the next plugin dir to cd into; if not currently in a
                  plugin, print the first one (the fish wrapper does the cd)
+  install        install every plugin into pretalx via `just install-plugin`
 
 the cookiecutter template is skipped by default (it isn't a releasable plugin);
 pass -c/--cookiecutter before the subcommand to include it.
@@ -139,17 +140,21 @@ def cmd_go(argv, cookiecutter=False):
     print(target)
 
 
-def cmd_all(argv, cookiecutter=False):
-    if not argv:
-        die("usage: ,pplugin all <command...>")
+def clean_env():
     # our shebang runs this under `uv run`, which exports VIRTUAL_ENV (and a
     # recursion guard) pointing at this script's own throwaway env. strip them
     # so child `just`/`uv` commands use each plugin's real .venv instead of
     # warning about the mismatch.
-    env = {
+    return {
         k: v for k, v in os.environ.items()
         if k not in ("VIRTUAL_ENV", "UV_RUN_RECURSION_DEPTH")
     }
+
+
+def cmd_all(argv, cookiecutter=False):
+    if not argv:
+        die("usage: ,pplugin all <command...>")
+    env = clean_env()
     repos = plugin_repos(cookiecutter)
     failures = []
     for repo in repos:
@@ -172,6 +177,39 @@ def cmd_all(argv, cookiecutter=False):
         print(out(f"\n{{r}}{len(failures)}/{total} failed:{{R}} {', '.join(failures)}"))
         sys.exit(1)
     print(out(f"\n{{G}}all {total} ok{{R}}"))
+
+
+def cmd_install(argv, cookiecutter=False):
+    env = clean_env()
+    rels = plugin_paths(cookiecutter=False)
+    failures = []
+    for rel in rels:
+        path = PRETALX / rel
+        name = Path(rel).name
+        if not path.is_dir():
+            warn(f"plugin dir missing, skipping: {rel}")
+            failures.append(name)
+            continue
+        proc = subprocess.run(
+            ["just", "install-plugin", str(path)],
+            cwd=PRETALX, env=env, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        )
+        ok = proc.returncode == 0
+        mark = "{G}✓{R}" if ok else "{r}✗{R}"
+        suffix = "" if ok else out(f"  {{D}}(exit {proc.returncode}){{R}}")
+        print(out(f"{mark} {{B}}{name}{{R}}") + suffix)
+        body = proc.stdout.rstrip()
+        if body:
+            for line in body.splitlines():
+                print(f"    {line}")
+        if not ok:
+            failures.append(name)
+    total = len(rels)
+    if failures:
+        print(out(f"\n{{r}}{len(failures)}/{total} failed:{{R}} {', '.join(failures)}"))
+        sys.exit(1)
+    print(out(f"\n{{G}}all {total} installed{{R}}"))
 
 
 def repo_status(repo):
@@ -254,18 +292,18 @@ def main():
         cookiecutter = True
         args = args[1:]
     if not args:
-        die("usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next}")
+        die("usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next|install}")
     cmd, rest = args[0], args[1:]
     if cmd in ("-h", "--help", "help"):
         print(__doc__.strip())
         return
     handlers = {
         "list": cmd_list, "go": cmd_go, "all": cmd_all,
-        "status": cmd_status, "next": cmd_next,
+        "status": cmd_status, "next": cmd_next, "install": cmd_install,
     }
     handler = handlers.get(cmd)
     if handler is None:
-        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|go <plugin>|all <cmd...>|status|next}}")
+        die(f"unknown subcommand: {cmd}\nusage: ,pplugin [-c] {{list|go <plugin>|all <cmd...>|status|next|install}}")
     handler(rest, cookiecutter)
 
 

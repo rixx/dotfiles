@@ -12,4 +12,5 @@ complete -c ',pplugin' -n '__fish_use_subcommand' -a go -d 'cd to a named plugin
 complete -c ',pplugin' -n '__fish_use_subcommand' -a all -d 'run a command in every plugin repo'
 complete -c ',pplugin' -n '__fish_use_subcommand' -a status -d 'git status for every plugin'
 complete -c ',pplugin' -n '__fish_use_subcommand' -a next -d 'cd to the next plugin repo'
+complete -c ',pplugin' -n '__fish_use_subcommand' -a install -d 'install every plugin into pretalx'
 complete -c ',pplugin' -n '__fish_seen_subcommand_from go' -a '(__pplugin_names)'
