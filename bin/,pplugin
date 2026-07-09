@@ -35,9 +35,11 @@ PRETALX = Path.home() / "src" / "pretalx" / "main"
 
 PLUGIN_PATHS = [
     "src/local/pretalx-com",
+    "src/local/pretalx-broadcast-tools",
     "src/local/pretalx-downstream",
-    "src/local/pretalx-friendlycaptcha",
     "src/local/pretalx-fontpack-free",
+    "src/local/pretalx-friendlycaptcha",
+    "src/local/pretalx-halfnarp",
     "src/local/pretalx-media-ccc-de",
     "src/local/pretalx-pages",
     "src/local/pretalx-public-voting",
@@ -45,7 +47,6 @@ PLUGIN_PATHS = [
     "src/local/pretalx-venueless",
     "src/local/pretalx-vimeo",
     "src/local/pretalx-youtube",
-    "src/local/pretalx-broadcast-tools",
 ]
 COOKIECUTTER_PATH = "src/local/pretalx-plugin-cookiecutter"
 
