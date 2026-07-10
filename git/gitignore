@@ -19,14 +19,13 @@
 *.nav
 
 # AI assistants
-*.aider*
 *.claude*
 .claude/bin/
 .claude/*.local.md
 .claude/*.local.json
 .claude/*.local
-.beads
 CLAUDE.md
+openspec/
 
 # Sanity
 *.secret
