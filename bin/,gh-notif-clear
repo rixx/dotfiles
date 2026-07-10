@@ -1,0 +1,257 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""
+Selectively mark one repo's github notifications as done.
+
+Available roles:
+  open-prs    clear pull requests that are still open (or draft)
+  unresolved  clear that isn't a merged PR or a completed issue
+
+Regardless of role, PRs opened by bots in the ignore bot list are always
+cleared.
+
+usage:
+  ,gh-notif-clear pretix/pretix open-prs [--apply] [--quiet] [--all]
+
+Pass --apply to do the thing, otherwise it's just a dry-run. Additionally,
+notifications are dumped to a timestamped backup file before anything is marked
+as done.
+"""
+
+import argparse
+import concurrent.futures
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+BACKUP_DIR = Path.home() / ".cache" / "gh-notif-clear"
+MAX_WORKERS = 8
+
+KEEP = "keep"
+CLEAR = "clear"
+
+IGNORED_BOT_LOGINS = frozenset(
+    {
+        "dependabot[bot]",
+        "dependabot-preview[bot]",
+        "pretix-translations",
+        "weblate",
+    }
+)
+
+
+def gh_api(*args):
+    result = subprocess.run(
+        ["gh", "api", *args], capture_output=True, text=True, check=False
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"gh api {' '.join(args)}: {result.stderr.strip()}")
+    if not result.stdout.strip():
+        return None
+    return json.loads(result.stdout)
+
+
+def fetch_notifications(repo, include_read=False):
+    query = "all=true&per_page=100" if include_read else "per_page=100"
+    pages = gh_api("--paginate", "--slurp", f"/repos/{repo}/notifications?{query}") or []
+    return [notification for page in pages for notification in page]
+
+
+def fetch_subject(url):
+    try:
+        return gh_api(url)
+    except RuntimeError as error:
+        return {"_error": str(error)}
+
+
+def fetch_subjects(notifications):
+    urls = sorted(
+        {
+            notification["subject"]["url"]
+            for notification in notifications
+            if notification["subject"].get("url")
+        }
+    )
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        return dict(zip(urls, pool.map(fetch_subject, urls)))
+
+
+def open_pr_state(subject):
+    return "draft PR" if subject.get("draft") else "open PR"
+
+
+def role_open_prs(kind, subject):
+    if kind != "PullRequest":
+        return KEEP, f"{kind.lower()}, not a pull request"
+    if subject["state"] == "open":
+        return CLEAR, f"{open_pr_state(subject)}"
+    return KEEP, "closed PR"
+
+
+def role_unresolved(kind, subject):
+    if kind == "Issue":
+        if subject["state"] == "open":
+            return CLEAR, "open issue"
+        if subject.get("state_reason") == "not_planned":
+            return CLEAR, "issue closed not planned"
+        return KEEP, "issue closed completed"
+    if kind == "PullRequest":
+        if subject["state"] == "open":
+            return CLEAR, f"{open_pr_state(subject)}"
+        if subject.get("merged") or subject.get("merged_at"):
+            return KEEP, "merged PR"
+        return CLEAR, "PR closed unmerged"
+    return KEEP, f"{kind.lower()}, neither issue nor PR"
+
+
+ROLES = {
+    "open-prs": role_open_prs,
+    "unresolved": role_unresolved,
+}
+
+
+def classify(notification, role, subjects):
+    kind = notification["subject"]["type"]
+    url = notification["subject"].get("url")
+    if not url:
+        return KEEP, f"{kind.lower()} has no API url to check"
+
+    subject = subjects.get(url) or {}
+    if "_error" in subject:
+        return KEEP, "could not fetch subject, leaving it alone"
+    if "state" not in subject:
+        return KEEP, "subject has no state field, leaving it alone"
+
+    author = (subject.get("user") or {}).get("login")
+    if kind == "PullRequest" and author in IGNORED_BOT_LOGINS:
+        return CLEAR, f"{author} PR"
+
+    return ROLES[role](kind, subject)
+
+
+def mark_done(thread_id):
+    try:
+        gh_api("-X", "DELETE", f"/notifications/threads/{thread_id}")
+        return None
+    except RuntimeError as error:
+        return str(error)
+
+
+def write_backup(repo, notifications):
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    path = BACKUP_DIR / f"{repo.replace('/', '-')}-{stamp}.json"
+    path.write_text(json.dumps(notifications, indent=2))
+    return path
+
+
+def describe(notification):
+    subject = notification["subject"]
+    url = subject.get("url") or ""
+    number = url.rsplit("/", 1)[-1] if url else "?"
+    return f"#{number} {subject['title']}"
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="mark a repo's resolved-enough github notifications as done",
+    )
+    parser.add_argument("repo", help="repository as owner/name")
+    parser.add_argument(
+        "role",
+        choices=sorted(ROLES),
+        help="which notifications count as noise in this repo",
+    )
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="actually mark the matched threads as done (default: dry run)",
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="repair mode: also consider read threads. counts will include "
+        "threads that are already done, which the API cannot distinguish",
+    )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="also list the notifications that are being kept",
+    )
+    parser.add_argument(
+        "--quiet",
+        "-q",
+        action="store_true",
+        help="say nothing unless something goes wrong, for cron",
+    )
+    args = parser.parse_args()
+
+    if args.repo.count("/") != 1:
+        parser.error(f"repo must look like owner/name, got {args.repo!r}")
+    if args.quiet and args.verbose:
+        parser.error("--quiet and --verbose contradict each other")
+
+    def say(message=""):
+        if not args.quiet:
+            print(message)
+
+    notifications = fetch_notifications(args.repo, include_read=args.all)
+    if not notifications:
+        say(f"no notifications for {args.repo}")
+        return 0
+
+    backup = write_backup(args.repo, notifications)
+    scope = "notifications" if args.all else "unread notifications"
+    say(f"{args.repo}: {len(notifications)} {scope}, backed up to {backup}")
+    say(f"role {args.role}\n")
+
+    subjects = fetch_subjects(notifications)
+    verdicts = [
+        (notification, *classify(notification, args.role, subjects))
+        for notification in notifications
+    ]
+    to_clear = [notification for notification, action, _ in verdicts if action == CLEAR]
+
+    for notification, action, reason in sorted(verdicts, key=lambda row: row[2]):
+        if action == KEEP and not args.verbose:
+            continue
+        mark = "clear" if action == CLEAR else " keep"
+        say(f"  {mark}  {reason:26}  {describe(notification)}")
+    say()
+
+    kept = len(notifications) - len(to_clear)
+    caveat = " (matched, not changed: --all re-counts already-done threads)"
+    suffix = caveat if args.all else ""
+
+    if not args.apply:
+        say(f"dry run: would mark {len(to_clear)} done, keep {kept}{suffix}")
+        say("re-run with --apply to mark them as done")
+        return 0
+
+    failures = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        for notification, error in zip(
+            to_clear, pool.map(lambda n: mark_done(n["id"]), to_clear)
+        ):
+            if error:
+                failures.append((notification, error))
+
+    say(f"marked {len(to_clear) - len(failures)} done, kept {kept}{suffix}")
+    for notification, error in failures:
+        print(f"failed to mark done: {describe(notification)}: {error}", file=sys.stderr)
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except RuntimeError as error:
+        print(f"{error}", file=sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        sys.exit(130)

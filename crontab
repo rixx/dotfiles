@@ -1,10 +1,11 @@
 ### Frequent jobs
 # Run chaos.social auto moderator
 0,15,30,45 * * * * /home/rixx/src/meta/bin/auto-moderator
+# Clean up github notifications
+1,21,41 * * * * /home/rixx/.config/dotfiles/bin/,gh-notif-clear pretix/pretix open-prs --apply --quiet
+2,22,42 * * * * /home/rixx/.config/dotfiles/bin/,gh-notif-clear fossasia/eventyay unresolved --apply --quiet
 
 ### Hourly jobs
-# Update wallpaper
-0 * * * * /home/rixx/.config/dotfiles/bin/wallpaperctl set
 # Move files older than an hour to appropriate subdir in ~/tmp/downloads
 1 * * * * /usr/bin/find /home/rixx/tmp/downloads -maxdepth 1 -type f -mmin +60 -exec /home/rixx/.config/dotfiles/bin/extsort {} \;
 
