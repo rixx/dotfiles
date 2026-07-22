@@ -2,10 +2,7 @@
 
 set -e
 
-# Create crontab with BORG_PASSPHRASE
-# export BORG_PASSPHRASE='XYZl0ngandsecurepa_55_phrasea&&123'
-
-# export BORG_REPO=ssh://username@example.com:2022/~/backup/main
+export BORG_PASSCOMMAND='pass show server/cord/borgbackup'
 export BORG_REPO=/backup/$(hostname)
 
 # some helpers and error handling:
