@@ -17,6 +17,8 @@ set reverse_name = yes               # Answer with an alias in $alternates
 set reverse_realname = yes           # … but add $realname
 set send_charset = "utf-8"
 send-hook . set signature = "~/.config/dotfiles/mutt/signatures/default.txt"
+send-hook . 'unmy_hdr From:'         # Reset From override so it does not leak into other mails
+send-hook '~C uploadmail\.datev\.de' 'my_hdr From: Tobias Kunze <r@rixx.de>'
 send-hook "~f @ccc.de" set signature = "~/.config/dotfiles/mutt/signatures/cccev.txt"
 send-hook "~C @ccc.de" set signature = "~/.config/dotfiles/mutt/signatures/cccev.txt"
 set smtp_pass = "`pass server/tonks`"# Password managers win
