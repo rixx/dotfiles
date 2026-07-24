@@ -1,0 +1,10 @@
+# Overrides the packaged entry to set the XDG_CURRENT_DESKTOP env to gnome,
+# because otherwise the secret store will not be recognised. Sigh.
+[Desktop Entry]
+Type=Application
+Name=Threema Beta
+Icon=ch.threema.threema-desktop
+Exec=env XDG_CURRENT_DESKTOP=GNOME /usr/bin/threema-beta
+StartupWMClass=Threema Beta
+Categories=Network;InstantMessaging;Chat;
+Keywords=encryption;threema;privacy;chat;communications;
