@@ -115,7 +115,6 @@ install-gui:
     conflink waybar
     conflink kanshi
     conflink swaync
-    conflink xdg-desktop-portal
     conflink xdg-desktop-portal-wlr
 
     # Tools
