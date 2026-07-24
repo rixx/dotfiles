@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# peek: run a command (or read stdin), save the full output to a scratch
+# file, and print a bounded excerpt. One step instead of the usual
+# `cmd | tee /tmp/out.log | tail` two-step, so the full output always
+# lands on disk even if you only meant to glance at it.
+#
+# Usage:
+#   peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]
+#   COMMAND | peek [-n LINES] [--head|--tail|--both]
+#
+# Defaults to the last 50 lines (--tail), since build/test output usually
+# puts its summary at the end. Always prints the exit status, line count,
+# and the log file path so you can Read/Grep the rest afterwards.
+set -uo pipefail
+
+lines=50
+mode=tail
+
+while (( $# )); do
+  case "$1" in
+    -n) lines=$2; shift 2 ;;
+    --head) mode=head; shift ;;
+    --tail) mode=tail; shift ;;
+    --both) mode=both; shift ;;
+    --) shift; break ;;
+    *) break ;;
+  esac
+done
+
+logdir="${TMPDIR:-/tmp}"
+logfile=$(mktemp "$logdir/peek.XXXXXX.log")
+
+if (( $# == 0 )); then
+  if [[ -t 0 ]]; then
+    echo "usage: peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]" >&2
+    echo "       COMMAND | peek [-n LINES] [--head|--tail|--both]" >&2
+    rm -f "$logfile"
+    exit 64
+  fi
+  cat > "$logfile"
+  status=0
+else
+  "$@" > "$logfile" 2>&1
+  status=$?
+fi
+
+total=$(wc -l < "$logfile")
+
+case "$mode" in
+  head)
+    head -n "$lines" "$logfile"
+    ;;
+  tail)
+    tail -n "$lines" "$logfile"
+    ;;
+  both)
+    if (( total <= lines * 2 )); then
+      cat "$logfile"
+    else
+      head -n "$lines" "$logfile"
+      echo "... $((total - lines * 2)) lines omitted ..."
+      tail -n "$lines" "$logfile"
+    fi
+    ;;
+esac
+
+echo
+echo "[exit $status, $total lines total, full output: $logfile]"
+exit "$status"
