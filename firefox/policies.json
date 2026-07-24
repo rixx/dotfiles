@@ -62,6 +62,7 @@
         "Perplexity"
       ]
     },
-    "SkipTermsOfUse": true
+    "SkipTermsOfUse": true,
+    "IPProtectionAvailable": true
   }
 }
