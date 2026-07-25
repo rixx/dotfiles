@@ -1,0 +1,267 @@
+#!/usr/bin/env python3
+"""Waybar module showing Claude subscription usage limits."""
+import json
+import math
+import os
+import sys
+import urllib.request
+from datetime import datetime, timezone
+
+CREDENTIALS = os.path.expanduser("~/.claude/.credentials.json")
+CACHE = os.path.expanduser("~/.cache/waybar-claude-usage.json")
+ENDPOINT = "https://api.anthropic.com/api/oauth/usage"
+BAR_WIDTH = 24
+WEEK_DAYS = 7
+ICON = "✹"  # Twelve-pointed star, the shape Claude wears.
+MIN_AGE = 45          # Seconds before a refetch is allowed at all.
+STALE_AFTER = 600     # Seconds before failed refreshes are worth reporting.
+SESSION_ALERT = 75    # Above this the session window earns space in the bar.
+SEP = "•"             # Kelmscott Mono has no middle dot; it draws as a blank.
+BAR_RED = "#990000"   # Bar sits on light background, unlike the tooltip.
+
+# Tooltip palette, matching the colours the clock's calendar overlay uses.
+FONT = "Kelmscott Mono"
+SIZE = "13pt"
+ACCENT = "#D84315"
+TEAL = "#99ffdd"
+BRIGHT = "#ffffff"
+MUTED = "#cccccc"
+EMPTY = "#5a5a5a"
+
+
+def token():
+    with open(CREDENTIALS) as f:
+        data = json.load(f)
+    oauth = data.get("claudeAiOauth") or data
+    return oauth["accessToken"]
+
+
+def fetch():
+    request = urllib.request.Request(
+        ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {token()}",
+            "anthropic-beta": "oauth-2025-04-20",
+            "Content-Type": "application/json",
+            "User-Agent": "waybar-claude-usage",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=10) as response:
+        return json.load(response)
+
+
+def cache_write(payload):
+    with open(CACHE, "w") as f:
+        json.dump({"fetched": now().isoformat(), "payload": payload}, f)
+    return payload
+
+
+def cache_read():
+    """Returns (payload, age in seconds)."""
+    with open(CACHE) as f:
+        data = json.load(f)
+    age = (now() - parse_time(data["fetched"])).total_seconds()
+    return data["payload"], age
+
+
+def now():
+    return datetime.now(timezone.utc)
+
+
+def parse_time(value):
+    if not value:
+        return None
+    if isinstance(value, (int, float)):
+        return datetime.fromtimestamp(value, timezone.utc)
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def label_for(limit):
+    scope = limit.get("scope") or {}
+    model = (scope.get("model") or {}).get("display_name")
+    surface = scope.get("surface")
+    base = "Session" if limit.get("group") == "session" else "Week"
+    detail = " ".join(part for part in (model, surface) if part)
+    return f"{base} ({detail})" if detail else base
+
+
+def colour(text, value, weight=None):
+    attrs = f"color='{value}'"
+    if weight:
+        attrs += f" weight='{weight}'"
+    return f"<span {attrs}>{text}</span>"
+
+
+def meter(value, marker=None):
+    """Unicode meter; marker draws the linear-pace boundary if in range."""
+    filled = max(0, min(BAR_WIDTH, round(value / 100 * BAR_WIDTH)))
+    fill = ACCENT if value >= 75 else TEAL
+    at = None
+    if marker is not None and 0 < marker < 100:
+        at = min(BAR_WIDTH - 1, int(marker / 100 * BAR_WIDTH))
+
+    out = []
+    for index in range(BAR_WIDTH):
+        if index == at:
+            out.append(colour("▌" if index < filled else "▏", BRIGHT, "bold"))
+        else:
+            out.append(colour("█" if index < filled else "─",
+                              fill if index < filled else EMPTY))
+    return "".join(out)
+
+
+def until_text(seconds):
+    seconds = int(seconds)
+    if seconds <= 0:
+        return "now"
+    days, seconds = divmod(seconds, 86400)
+    hours, minutes = divmod(seconds // 60, 60)
+    if days:
+        return f"{days}d {hours}h"
+    if hours:
+        return f"{hours}h {minutes}m"
+    return f"{minutes}m"
+
+
+def until(target):
+    return "?" if target is None else until_text((target - now()).total_seconds())
+
+
+def pace(reset, window_days=WEEK_DAYS):
+    """Share of the window budget that linear use allows by end of today.
+
+    The window is cut into day-sized slices anchored on its reset time; a day
+    that has only just begun already grants its whole slice, because usage
+    happens across a day rather than at its boundary. With a reset at 05:00
+    Saturday, all of Saturday is day one and so permits 1/7 of the budget.
+    """
+    if reset is None:
+        return None
+    start = reset.timestamp() - window_days * 86400
+    elapsed_days = (now().timestamp() - start) / 86400
+    day = min(window_days, max(1, math.ceil(elapsed_days)))
+    return day / window_days * 100
+
+
+def escape(text):
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def limits_of(payload):
+    """Prefer the self-describing list; fall back to the legacy keys."""
+    limits = [item for item in payload.get("limits") or [] if isinstance(item, dict)]
+    if limits:
+        return limits
+    fallback = []
+    for key, group in (("five_hour", "session"), ("seven_day", "weekly")):
+        window = payload.get(key)
+        if isinstance(window, dict):
+            fallback.append({
+                "kind": key,
+                "group": group,
+                "percent": window.get("utilization") or 0,
+                "resets_at": window.get("resets_at"),
+                "is_active": True,
+            })
+    return fallback
+
+
+def block(label, used, reset=None, target=None):
+    """Header reads `used% / linear budget%`; the meter marks the same line."""
+    header = colour(escape(label), ACCENT, "bold") + "  " + colour(
+        f"{used:.0f}%", BRIGHT, "bold")
+    if target is not None:
+        header += colour(" / ", EMPTY) + colour(
+            f"{target:.0f}%", ACCENT if used > target + 0.5 else TEAL)
+    lines = [header, meter(used, target)]
+    if reset is not None:
+        lines.append(colour(
+            f"resets {reset.astimezone().strftime('%a %H:%M')} {SEP} in {until(reset)}",
+            MUTED,
+        ))
+    return "\n".join(lines)
+
+
+def render(payload):
+    limits = limits_of(payload)
+    if not limits:
+        return {"text": f"{ICON} ?", "tooltip": "No usage windows reported",
+                "class": "unknown"}
+
+    session = weekly = weekly_target = None
+    worst_weekly = 0.0
+    blocks = []
+    for limit in limits:
+        used = float(limit.get("percent") or 0)
+        reset = parse_time(limit.get("resets_at"))
+        weekly_window = limit.get("group") == "weekly"
+        target = pace(reset) if weekly_window else None
+
+        if limit.get("group") == "session" and session is None:
+            session = used
+        if weekly_window:
+            worst_weekly = max(worst_weekly, used)
+            if limit.get("kind") == "weekly_all" or weekly is None:
+                weekly, weekly_target = used, target
+
+        blocks.append(block(label_for(limit), used, reset, target))
+
+    if weekly is None:
+        parts = [f"{session:.0f}%"] if session is not None else ["?"]
+    elif weekly_target is None:
+        parts = [f"{weekly:.0f}%"]
+    else:
+        parts = [f"{weekly:.0f}% / {weekly_target:.0f}%"]
+
+    # The session window is usually irrelevant, so it only claims room in the
+    # bar once it is high enough to be worth interrupting for.
+    if session is not None and session >= SESSION_ALERT:
+        parts.insert(0, colour(f"{session:.0f}%", BAR_RED, "bold"))
+
+    over_pace = weekly is not None and weekly_target is not None and weekly > weekly_target
+    state = ("critical" if worst_weekly >= 90
+             else "warning" if worst_weekly >= 75 or over_pace else "ok")
+    return {
+        "text": f"{ICON} " + f" {SEP} ".join(parts),
+        "tooltip": f"<span font='{FONT}' size='{SIZE}'>" + "\n\n".join(blocks) + "</span>",
+        "class": state,
+        "percentage": int(max(worst_weekly, session or 0)),
+    }
+
+
+def main():
+    if "--raw" in sys.argv:
+        print(json.dumps(fetch(), indent=2))
+        return
+
+    # The endpoint rate-limits, so never refetch inside MIN_AGE, and treat a
+    # failed refresh as stale only once the cached numbers are truly old.
+    try:
+        cached, age = cache_read()
+    except Exception:
+        cached, age = None, None
+
+    if cached is not None and age < MIN_AGE:
+        print(json.dumps(render(cached)))
+        return
+
+    try:
+        result = render(cache_write(fetch()))
+    except Exception as error:
+        if cached is None:
+            result = {
+                "text": f"{ICON} ?",
+                "tooltip": f"Claude usage unavailable: {escape(str(error))}",
+                "class": "error",
+            }
+        else:
+            result = render(cached)
+            if age > STALE_AFTER:
+                result["tooltip"] += "\n\n" + colour(
+                    escape(f"stale ({until_text(age)} old): {error}"), ACCENT)
+                result["class"] = "stale"
+    print(json.dumps(result))
+
+
+if __name__ == "__main__":
+    main()

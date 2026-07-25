@@ -67,3 +67,13 @@ button {
 #custom-notification {
   font-family: "NotoSansMono Nerd Font";
 }
+
+#custom-claude.warning {
+  color: @clr-orange;
+}
+#custom-claude.critical {
+  color: @clr-red;
+}
+#custom-claude.stale, #custom-claude.error {
+  color: @clr-turquoise;
+}
