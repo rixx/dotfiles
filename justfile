@@ -115,6 +115,7 @@ install-gui:
     conflink waybar
     conflink kanshi
     conflink swaync
+    conflink xdg-desktop-portal
     conflink xdg-desktop-portal-wlr
 
     # Tools
@@ -135,7 +136,6 @@ install-gui:
     link kde/kdeglobals .config/kdeglobals
     conflink mimeapps.list
     link mimeapps.list .local/share/applications/mimeapps.list
-    link applications/ch.threema.threema-desktop.desktop .local/share/applications/ch.threema.threema-desktop.desktop
     link user-dirs.dirs .config/user-dirs.dirs
 
     # Systemd user services (desktop-related)
