@@ -1,0 +1,9 @@
+[Unit]
+Description=pretalx support autodraft run
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rixx/src/claude
+ExecStart=/home/rixx/src/claude/tools/zammad_autodraft.py --limit 5 --model claude:opus
+Environment=PATH=/home/rixx/.local/bin:/usr/local/bin:/usr/bin
+TimeoutStartSec=3600
