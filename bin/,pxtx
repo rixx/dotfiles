@@ -1,10 +1,10 @@
 #!/usr/bin/env fish
 
-argparse -n ',pxtx' h/help 'p/prompt=' -- $argv
+argparse -n ',pxtx' h/help 'p/prompt=' 'm/model=' -- $argv
 or exit 1
 
 if set -q _flag_help; or test (count $argv) -lt 1; or test (count $argv) -gt 2
-    echo "usage: ,pxtx [--prompt <extra>] <number> [branch-name]"
+    echo "usage: ,pxtx [--prompt <extra>] [--model <model>] <number> [branch-name]"
     if set -q _flag_help
         exit 0
     end
@@ -14,6 +14,11 @@ end
 if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
     cd ~/src/pretalx/main
     or exit 1
+end
+
+set -l model opus
+if set -q _flag_model
+    set model $_flag_model
 end
 
 set -l number $argv[1]
@@ -35,4 +40,4 @@ or exit 1
 
 just install-all
 and just run compilemessages
-and claude --chrome $prompt
+and claude --chrome --model $model $prompt
