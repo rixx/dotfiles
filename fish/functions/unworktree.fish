@@ -14,6 +14,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     end
 
     set -l branchname $argv[1]
+    set -l original_dir $PWD
 
     # Locate the worktree for the branch and the main worktree to return to.
     set -l worktree_path
@@ -53,6 +54,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
             set_color red
             echo "Failed to remove worktree $worktree_path"
             set_color normal
+            _unworktree_restore_dir $original_dir
             return 1
         end
         set_color green
@@ -68,6 +70,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
         set_color red
         echo "Failed to delete branch $branchname"
         set_color normal
+        _unworktree_restore_dir $original_dir
         return 1
     end
 
@@ -83,5 +86,15 @@ function unworktree --description "Remove a git worktree, delete its branch, and
             echo "Unable to close pxtx issue $issue"
             set_color normal
         end
+    end
+
+    _unworktree_restore_dir $original_dir
+end
+
+function _unworktree_restore_dir --description "Return to the directory unworktree was called from, if it still exists"
+    # The starting directory is gone when it was inside the removed worktree;
+    # in that case we stay in the main worktree.
+    if test -d "$argv[1]"
+        cd $argv[1]
     end
 end
