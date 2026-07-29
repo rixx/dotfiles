@@ -1,7 +1,6 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 set quiet
 set fallback
-set default-list
 
 dotfiles := env_var("HOME") / ".config/dotfiles"
 movesuffix := "moved-by-dotfiles-install"
@@ -44,6 +43,12 @@ conflink() {
     link "$1" ".config/$1"
 }
 '''
+
+# Stands in for `set default-list`, which older just (1.46 on the servers)
+# rejects: a bare `just` runs the first recipe, so list them here instead.
+[private]
+default:
+    just --list
 
 # Install all dotfiles (server + GUI)
 install-all: install-server install-gui
