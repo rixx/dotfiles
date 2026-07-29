@@ -40,6 +40,22 @@ if (( $# == 0 )); then
   cat > "$logfile"
   status=0
 else
+  # peek takes a COMMAND, not a file. Catch the common slip early, so the
+  # failure names the mistake instead of surfacing as a bare
+  # "line NN: <filename>: command not found" from inside this script.
+  if ! command -v "$1" >/dev/null 2>&1; then
+    if [[ -e "$1" ]]; then
+      printf 'peek: %s\n' "$1 is a file, but peek expects a command to run." >&2
+      printf '      %s\n' "To peek at a file's contents, pipe or redirect it instead:" >&2
+      printf '        peek -n %s --%s -- cat %q\n' "$lines" "$mode" "$1" >&2
+      printf '        peek -n %s --%s < %q\n' "$lines" "$mode" "$1" >&2
+    else
+      printf 'peek: %s\n' "$1: command not found." >&2
+      printf '      %s\n' "Usage: peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]" >&2
+    fi
+    rm -f "$logfile"
+    exit 127
+  fi
   "$@" > "$logfile" 2>&1
   status=$?
 fi
