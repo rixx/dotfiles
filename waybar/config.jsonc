@@ -117,15 +117,14 @@
     },
     "network": {
         "format-wifi": "",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}\nClick to copy the IP",
         "format-ethernet": "",
-        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr}\nClick to copy the IP",
         "format-linked": "",
         "tooltip-format-linked": "{ifname} (No IP)",
         "format-disconnected": "",
         "tooltip-format-disconnected": "Disconnected",
-        "tooltip-format": "Left-click to copy",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "on-click": "addr=$(ip -j -4 route get 1.1.1.1 2>/dev/null | jq -re '.[0].prefsrc') && printf %s \"$addr\" | wl-copy"
     },
     "pulseaudio": {
         "format": "{icon} {volume}%",
