@@ -17,8 +17,7 @@ brightnessctl
 brother-mfc-l2700dw
 btop
 calibre
-claude-cowork-service
-claude-desktop-bin
+claude-desktop
 cronie
 cups
 cups-pdf
@@ -41,7 +40,6 @@ ffsclient-bin
 filelight
 firefox
 fish
-flameshot
 fontforge
 fuse2fs
 fwupd
@@ -97,7 +95,6 @@ neomutt
 neovim
 neovim-plug
 nerd-fonts-noto-sans-mono
-netbird-bin
 netctl
 nmap
 noto-fonts-emoji
@@ -120,6 +117,7 @@ pavucontrol
 perl-image-exiftool
 pipewire-alsa
 pipewire-pulse
+pkgfile
 plocate
 poedit
 postgis
@@ -136,18 +134,17 @@ python-llfuse
 python-standard-aifc
 python-standard-sunau
 python-uv
-python315
 qtpass
 r-quick-share-bin
 rarcrack
 reflector
-riff-client
 rofi
 rofi-pass-wayland-git
 rofimoji
 rsync
 ruby-bundler
 rustup
+satty
 seahorse
 signal-desktop
 simple-scan
