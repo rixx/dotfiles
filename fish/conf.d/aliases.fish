@@ -65,8 +65,8 @@ abbr --add dotdot --regex '^\.\.+$' --function multicd
 
 # Hashed directories (zsh ~p equivalent)
 # Type ~p<space> anywhere and it expands to the full path
-abbr --position anywhere --add '~p' '/home/rixx/src/pretalx'
-abbr --position anywhere --add '~com' '/home/rixx/src/pretalx/src/local/pretalx-com'
+abbr --position anywhere --add '~p' '/home/rixx/src/pretalx/main'
+abbr --position anywhere --add '~com' '/home/rixx/src/pretalx/main/src/local/pretalx-com'
 abbr --position anywhere --add '~dotf' "$HOME/.config/dotfiles"
 abbr --position anywhere --add '~tix' '/home/rixx/src/pretix/src/local'
 
