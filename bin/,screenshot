@@ -17,14 +17,23 @@ done
 
 SCREENSHOT_PATH=/home/rixx/tmp/screenshots/$(date --iso-8601=seconds).png
 
-slurp | grim -g - - | tee "$SCREENSHOT_PATH" | wl-copy
+# slurp exits non-zero when the selection is cancelled
+REGION=$(slurp) || exit 0
 
-if [ -f "$SCREENSHOT_PATH" ] && [ ! -s "$SCREENSHOT_PATH" ]; then
-    rm "$SCREENSHOT_PATH"
+# enter saves, copies and closes; escape discards without writing a file
+grim -g "$REGION" -t ppm - | satty --filename - \
+    --output-filename "$SCREENSHOT_PATH" \
+    --copy-command wl-copy \
+    --actions-on-enter save-to-file,save-to-clipboard,exit \
+    --actions-on-escape exit \
+    --early-exit save
+
+if [ ! -s "$SCREENSHOT_PATH" ]; then
+    rm -f "$SCREENSHOT_PATH"
     exit 0
 fi
 
-if [ -f "$SCREENSHOT_PATH" ] && [ "$UPLOAD" = true ]; then
+if [ "$UPLOAD" = true ]; then
     url=$(fb "$SCREENSHOT_PATH")
     notify-send "Uploaded $SCREENSHOT_PATH to $url" -i "$SCREENSHOT_PATH" -a filebin
 fi
