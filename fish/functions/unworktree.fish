@@ -46,6 +46,12 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     end
 
     if test -n "$worktree_path"
+        # temp-results only holds throwaway screenshots, and its presence makes
+        # git worktree remove complain about untracked files.
+        if test -d "$worktree_path/temp-results"
+            rm -rf "$worktree_path/temp-results"
+        end
+
         set -l remove_args
         if set -q _flag_force
             set remove_args --force
