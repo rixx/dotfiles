@@ -40,6 +40,7 @@ if git diff --cached --quiet; then
 else
     git commit -m "$COMMIT_MESSAGE"
 fi
+git pull --rebase
 git push
 
 log "Generating reports..."
@@ -54,7 +55,9 @@ if git diff --cached --quiet; then
 else
     git commit -m "$COMMIT_MESSAGE"
 fi
+git pull --rebase
 git push
+bundle install
 ./bin/update.sh
 
 xdg-open https://meta.chaos.social/money
