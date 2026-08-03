@@ -30,13 +30,18 @@ else
     set branchname "px-$number"
 end
 
+worktree $branchname
+or exit 1
+
 set -l prompt "Use the pxtx-dev skill to work on PX-$number end to end, from implementation through review."
+
+if pxtx spec pull $number
+    set prompt "$prompt A spec for this issue exists in openspec/changes/pxtx-$number/. Instruct the implementation agent to apply it with the opsx:apply skill."
+end
+
 if set -q _flag_prompt
     set prompt "$prompt Additional context: $_flag_prompt"
 end
-
-worktree $branchname
-or exit 1
 
 just install-all
 and just run compilemessages
