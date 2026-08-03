@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# peek: run a command (or read stdin), save the full output to a scratch
-# file, and print a bounded excerpt. One step instead of the usual
-# `cmd | tee /tmp/out.log | tail` two-step, so the full output always
+# peek: run a command (or read stdin, or read files), save the full output
+# to a scratch file, and print a bounded excerpt. One step instead of the
+# usual `cmd | tee /tmp/out.log | tail` two-step, so the full output always
 # lands on disk even if you only meant to glance at it.
 #
 # Usage:
 #   peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]
+#   peek [-n LINES] [--head|--tail|--both] [--] FILE [FILE...]
 #   COMMAND | peek [-n LINES] [--head|--tail|--both]
 #
 # Defaults to the last 50 lines (--tail), since build/test output usually
@@ -33,31 +34,42 @@ logfile=$(mktemp "$logdir/peek.XXXXXX.log")
 if (( $# == 0 )); then
   if [[ -t 0 ]]; then
     echo "usage: peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]" >&2
+    echo "       peek [-n LINES] [--head|--tail|--both] [--] FILE [FILE...]" >&2
     echo "       COMMAND | peek [-n LINES] [--head|--tail|--both]" >&2
     rm -f "$logfile"
     exit 64
   fi
   cat > "$logfile"
   status=0
+elif command -v "$1" >/dev/null 2>&1; then
+  "$@" > "$logfile" 2>&1
+  status=$?
 else
-  # peek takes a COMMAND, not a file. Catch the common slip early, so the
-  # failure names the mistake instead of surfacing as a bare
-  # "line NN: <filename>: command not found" from inside this script.
-  if ! command -v "$1" >/dev/null 2>&1; then
-    if [[ -e "$1" ]]; then
-      printf 'peek: %s\n' "$1 is a file, but peek expects a command to run." >&2
-      printf '      %s\n' "To peek at a file's contents, pipe or redirect it instead:" >&2
-      printf '        peek -n %s --%s -- cat %q\n' "$lines" "$mode" "$1" >&2
-      printf '        peek -n %s --%s < %q\n' "$lines" "$mode" "$1" >&2
-    else
-      printf 'peek: %s\n' "$1: command not found." >&2
-      printf '      %s\n' "Usage: peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]" >&2
-    fi
+  # Not a command. If every argument is a readable file, peek at the files
+  # themselves: `peek -n 60 --head /tmp/x.log` is the obvious thing to type,
+  # and refusing it just costs a round-trip.
+  all_files=1
+  for arg in "$@"; do
+    [[ -f $arg && -r $arg ]] || { all_files=0; break; }
+  done
+
+  if (( ! all_files )); then
+    printf 'peek: %s\n' "$1: not a command, and not a readable file." >&2
+    printf '      %s\n' "Usage: peek [-n LINES] [--head|--tail|--both] [--] COMMAND [ARGS...]" >&2
+    printf '      %s\n' "       peek [-n LINES] [--head|--tail|--both] [--] FILE [FILE...]" >&2
     rm -f "$logfile"
     exit 127
   fi
-  "$@" > "$logfile" 2>&1
-  status=$?
+
+  if (( $# == 1 )); then
+    # Single file is already its own log; don't copy it.
+    rm -f "$logfile"
+    logfile=$1
+    status=0
+  else
+    cat -- "$@" > "$logfile"
+    status=$?
+  fi
 fi
 
 total=$(wc -l < "$logfile")
