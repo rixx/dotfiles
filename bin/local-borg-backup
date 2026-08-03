@@ -2,6 +2,8 @@
 
 set -e
 
+# pass is not in the crontab's environment, so point it at the store explicitly
+export PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-$HOME/.local/share/password-store}"
 export BORG_PASSCOMMAND='pass show server/cord/borgbackup'
 export BORG_REPO=/backup/$(hostname)
 
