@@ -12,6 +12,12 @@
 # Defaults to the last 50 lines (--tail), since build/test output usually
 # puts its summary at the end. Always prints the exit status, line count,
 # and the log file path so you can Read/Grep the rest afterwards.
+#
+# In `peek -- COMMAND` form, peek runs the command itself and exits with
+# the command's status, so `$?`/`$status` after peek is the real one. In
+# pipe form (`COMMAND | peek`) the upstream status is not visible to peek
+# at all, so it reports `exit ?` rather than claiming success; use
+# `peek -- COMMAND` (or fish's `$pipestatus[1]`) when you need the status.
 set -uo pipefail
 
 lines=50
@@ -40,7 +46,9 @@ if (( $# == 0 )); then
     exit 64
   fi
   cat > "$logfile"
-  status=0
+  # Reading stdin: the producer's exit status never reaches us. Say so
+  # instead of printing a fake 0 that reads like the command succeeded.
+  status=unknown
 elif command -v "$1" >/dev/null 2>&1; then
   "$@" > "$logfile" 2>&1
   status=$?
@@ -93,5 +101,9 @@ case "$mode" in
 esac
 
 echo
+if [[ $status == unknown ]]; then
+  echo "[exit ? (piped; use 'peek -- CMD' to forward it), $total lines total, full output: $logfile]"
+  exit 0
+fi
 echo "[exit $status, $total lines total, full output: $logfile]"
 exit "$status"
