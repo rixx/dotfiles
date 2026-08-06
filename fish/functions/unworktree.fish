@@ -15,6 +15,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
 
     set -l branchname $argv[1]
     set -l original_dir $PWD
+    set -l failed 0
 
     # Locate the worktree for the branch and the main worktree to return to.
     set -l worktree_path
@@ -60,12 +61,12 @@ function unworktree --description "Remove a git worktree, delete its branch, and
             set_color red
             echo "Failed to remove worktree $worktree_path"
             set_color normal
-            _unworktree_restore_dir $original_dir
-            return 1
+            set failed 1
+        else
+            set_color green
+            echo "Removed worktree $worktree_path"
+            set_color normal
         end
-        set_color green
-        echo "Removed worktree $worktree_path"
-        set_color normal
     else
         set_color yellow
         echo "No worktree found for $branchname"
@@ -76,8 +77,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
         set_color red
         echo "Failed to delete branch $branchname"
         set_color normal
-        _unworktree_restore_dir $original_dir
-        return 1
+        set failed 1
     end
 
     # Branches named px-<number>-something track a pxtx issue; close it.
@@ -95,6 +95,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     end
 
     _unworktree_restore_dir $original_dir
+    return $failed
 end
 
 function _unworktree_restore_dir --description "Return to the directory unworktree was called from, if it still exists"
