@@ -129,6 +129,7 @@ postgresql
 postgresql-old-upgrade
 powertop
 prettier
+prusa-slicer
 puddletag
 pyright
 python-discogs-client
