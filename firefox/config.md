@@ -88,6 +88,7 @@ reader.content_width 4
 security.dialog_enable_delay 100  # Remove most of the delay on showing download prompts
 sidebar.position_start false  # sidebar on right side
 dom.text_fragments.create_text_fragment.enabled  # allow copying links to text
+widget.non-native-theme.gtk.scrollbar.thumb-size 1  # larger scrollbar width
 ```
 
 
