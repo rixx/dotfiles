@@ -16,8 +16,14 @@ ICON = "✹"  # Twelve-pointed star, the shape Claude wears.
 MIN_AGE = 45          # Seconds before a refetch is allowed at all.
 STALE_AFTER = 600     # Seconds before failed refreshes are worth reporting.
 SESSION_ALERT = 75    # Above this the session window earns space in the bar.
+NEAR_LIMIT = 90       # Absolute weekly use that is worth alarm at any pace.
+PACE_LEAD = 2.0       # Points below budget where the warning already starts.
 SEP = "•"             # Kelmscott Mono has no middle dot; it draws as a blank.
-BAR_RED = "#990000"   # Bar sits on light background, unlike the tooltip.
+
+# Bar palette, mirroring style.css: the bar sits on light background, unlike
+# the tooltip. Each number carries its own state; the icon carries the worst.
+BAR = {"ok": "#333333", "warning": "#c18401", "critical": "#990000"}
+RANK = ("ok", "warning", "critical")
 
 # Tooltip palette, matching the colours the clock's calendar overlay uses.
 FONT = "Kelmscott Mono"
@@ -92,10 +98,35 @@ def colour(text, value, weight=None):
     return f"<span {attrs}>{text}</span>"
 
 
+def over_pace(used, target):
+    """True once use outruns its budget; absolute levels alone mislead.
+
+    A weekly window is judged against the linear budget for the day, so 60%
+    on day six is unremarkable, while 85% against a budget of 86% is close
+    enough to warn. Windows without a budget (the session) use a fixed level.
+    """
+    if target is None:
+        return used >= SESSION_ALERT
+    return used > target - PACE_LEAD
+
+
+def state_for(used, target):
+    """Severity of one window: near its ceiling, or ahead of its budget."""
+    if used >= NEAR_LIMIT:
+        return "critical"
+    return "warning" if over_pace(used, target) else "ok"
+
+
+def tint(text, state):
+    """Bar text keeps the regular weight every other module uses;
+    only the tooltip sets weight."""
+    return colour(text, BAR[state])
+
+
 def meter(value, marker=None):
     """Unicode meter; marker draws the linear-pace boundary if in range."""
     filled = max(0, min(BAR_WIDTH, round(value / 100 * BAR_WIDTH)))
-    fill = ACCENT if value >= 75 else TEAL
+    fill = ACCENT if over_pace(value, marker) else TEAL
     at = None
     if marker is not None and 0 < marker < 100:
         at = min(BAR_WIDTH - 1, int(marker / 100 * BAR_WIDTH))
@@ -172,7 +203,7 @@ def block(label, used, reset=None, target=None):
         f"{used:.0f}%", BRIGHT, "bold")
     if target is not None:
         header += colour(" / ", EMPTY) + colour(
-            f"{target:.0f}%", ACCENT if used > target + 0.5 else TEAL)
+            f"{target:.0f}%", ACCENT if over_pace(used, target) else TEAL)
     lines = [header, meter(used, target)]
     if reset is not None:
         lines.append(colour(
@@ -190,6 +221,7 @@ def render(payload):
 
     session = weekly = weekly_target = None
     worst_weekly = 0.0
+    worst = "ok"
     blocks = []
     for limit in limits:
         used = float(limit.get("percent") or 0)
@@ -204,27 +236,32 @@ def render(payload):
             if limit.get("kind") == "weekly_all" or weekly is None:
                 weekly, weekly_target = used, target
 
+        # Every window feeds the icon, including those the bar never
+        # prints; carrying them is what the icon is for.
+        worst = max(worst, state_for(used, target), key=RANK.index)
+
         blocks.append(block(label_for(limit), used, reset, target))
 
+    # Each printed number is coloured by its own state, so none of them
+    # looks alarmed on another window's behalf. Pango spans override the
+    # module's CSS colour, which is left to the bare icon.
     if weekly is None:
-        parts = [f"{session:.0f}%"] if session is not None else ["?"]
-    elif weekly_target is None:
-        parts = [f"{weekly:.0f}%"]
+        parts = [tint(f"{session:.0f}%", state_for(session, None))
+                 if session is not None else tint("?", "ok")]
     else:
-        parts = [f"{weekly:.0f}% / {weekly_target:.0f}%"]
+        text = (f"{weekly:.0f}%" if weekly_target is None
+                else f"{weekly:.0f}% / {weekly_target:.0f}%")
+        parts = [tint(text, state_for(weekly, weekly_target))]
 
     # The session window is usually irrelevant, so it only claims room in the
     # bar once it is high enough to be worth interrupting for.
     if session is not None and session >= SESSION_ALERT:
-        parts.insert(0, colour(f"{session:.0f}%", BAR_RED, "bold"))
+        parts.insert(0, tint(f"{session:.0f}%", state_for(session, None)))
 
-    over_pace = weekly is not None and weekly_target is not None and weekly > weekly_target
-    state = ("critical" if worst_weekly >= 90
-             else "warning" if worst_weekly >= 75 or over_pace else "ok")
     return {
-        "text": f"{ICON} " + f" {SEP} ".join(parts),
+        "text": f"{ICON} " + tint(f" {SEP} ", "ok").join(parts),
         "tooltip": f"<span font='{FONT}' size='{SIZE}'>" + "\n\n".join(blocks) + "</span>",
-        "class": state,
+        "class": worst,
         "percentage": int(max(worst_weekly, session or 0)),
     }
 
