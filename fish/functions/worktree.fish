@@ -1,5 +1,5 @@
 function worktree --description "Create a git worktree and copy/symlink untracked config files"
-    argparse -n worktree h/help v/verbose -- $argv
+    argparse -n worktree h/help v/verbose n/no-pull r/ref= -- $argv
     or return
 
     # ── File patterns to copy to new worktrees ──────────────────────
@@ -17,14 +17,21 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l symlink_patterns \
         'CLAUDE.md' \
         'local' \
+        'src/data/media' \
         '.claude' \
         '.beads'
 
     if set -q _flag_help; or test (count $argv) -eq 0
-        echo "worktree [-v] <branch name>"
+        echo "worktree [-v] [-n] [-r <ref>] <branch name>"
         echo
         echo "Create a git worktree with <branch name>. Will create a worktree"
         echo "if one isn't found that matches the given name."
+        echo
+        echo "  -r/--ref <ref>  branch off <ref> (any commit-ish, e.g. a"
+        echo "                  merge-base) instead of the checked-out branch;"
+        echo "                  implies --no-pull"
+        echo "  -n/--no-pull    skip the git pull"
+        echo "  -v/--verbose    list every copied and symlinked file"
         echo
         echo "Copies and symlinks untracked config files to the new worktree."
         echo "  Copied:    "(string join ', ' $copy_patterns)
@@ -36,7 +43,9 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l dirname (string replace -a / _ $branchname)
 
     # Pull the most recent version of the remote
-    if not command git pull
+    if set -q _flag_ref; or set -q _flag_no_pull
+        # Nothing to pull for: the ref is already local.
+    else if not command git pull
         set_color yellow
         echo "Unable to run git pull, there may not be an upstream"
         set_color normal
@@ -46,7 +55,14 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l local_branches (command git for-each-ref --format='%(refname:lstrip=2)' refs/heads)
     set -l remote_branches (command git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin)
 
-    if contains $branchname $local_branches; or contains $branchname $remote_branches
+    if set -q _flag_ref
+        if not command git worktree add -b $branchname ../$dirname $_flag_ref
+            set_color red
+            echo "Failed to create git worktree $branchname at $_flag_ref"
+            set_color normal
+            return 1
+        end
+    else if contains $branchname $local_branches; or contains $branchname $remote_branches
         if not command git worktree add ../$dirname $branchname
             set_color red
             echo "Failed to create git worktree $branchname"
