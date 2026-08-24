@@ -43,7 +43,6 @@ PLUGIN_PATHS = [
     "src/local/pretalx-media-ccc-de",
     "src/local/pretalx-pages",
     "src/local/pretalx-public-voting",
-    "src/local/pretalx-salesforce",
     "src/local/pretalx-venueless",
     "src/local/pretalx-vimeo",
     "src/local/pretalx-youtube",
