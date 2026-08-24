@@ -13,10 +13,12 @@ subcommands:
   list             print each maintained plugin and its location
   go <plugin>      print a named plugin's dir to cd into (the fish wrapper cds)
   all <cmd...>     run a command in every plugin repo, report success per repo
+                   (-q: print output only for the repos that failed)
   status           git status for every plugin: clean/dirty, push state, HEAD
   next             print the next plugin dir to cd into; if not currently in a
                    plugin, print the first one (the fish wrapper does the cd)
   install          install every plugin into pretalx via `just install-plugin`
+                   (-q as for `all`)
   release [plugin] interactive per-plugin PyPI release loop (via ,pydist),
                    keeping pretalx-com's plugin_versions.py in sync
 
@@ -160,9 +162,30 @@ def clean_env():
     }
 
 
+def report_run(name, returncode, output, quiet=False):
+    ok = returncode == 0
+    mark = "{G}✓{R}" if ok else "{r}✗{R}"
+    suffix = "" if ok else out(f"  {{D}}(exit {returncode}){{R}}")
+    print(out(f"{mark} {{B}}{name}{{R}}") + suffix)
+    if quiet and ok:
+        return ok
+    for line in (output or "").rstrip().splitlines():
+        print(f"    {line}")
+    return ok
+
+
+def take_quiet(argv):
+    quiet = False
+    while argv and argv[0] in ("-q", "--quiet"):
+        quiet = True
+        argv = argv[1:]
+    return quiet, argv
+
+
 def cmd_all(argv, cookiecutter=False):
+    quiet, argv = take_quiet(argv)
     if not argv:
-        die("usage: ,pplugin all <command...>")
+        die("usage: ,pplugin all [-q] <command...>")
     env = clean_env()
     repos = plugin_repos(cookiecutter)
     failures = []
@@ -171,15 +194,7 @@ def cmd_all(argv, cookiecutter=False):
             argv, cwd=repo, env=env, text=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         )
-        ok = proc.returncode == 0
-        mark = "{G}✓{R}" if ok else "{r}✗{R}"
-        suffix = "" if ok else out(f"  {{D}}(exit {proc.returncode}){{R}}")
-        print(out(f"{mark} {{B}}{repo.name}{{R}}") + suffix)
-        body = proc.stdout.rstrip()
-        if body:
-            for line in body.splitlines():
-                print(f"    {line}")
-        if not ok:
+        if not report_run(repo.name, proc.returncode, proc.stdout, quiet):
             failures.append(repo.name)
     total = len(repos)
     if failures:
@@ -189,6 +204,7 @@ def cmd_all(argv, cookiecutter=False):
 
 
 def cmd_install(argv, cookiecutter=False):
+    quiet, argv = take_quiet(argv)
     env = clean_env()
     rels = plugin_paths(cookiecutter=False)
     failures = []
@@ -204,15 +220,7 @@ def cmd_install(argv, cookiecutter=False):
             cwd=PRETALX, env=env, text=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         )
-        ok = proc.returncode == 0
-        mark = "{G}✓{R}" if ok else "{r}✗{R}"
-        suffix = "" if ok else out(f"  {{D}}(exit {proc.returncode}){{R}}")
-        print(out(f"{mark} {{B}}{name}{{R}}") + suffix)
-        body = proc.stdout.rstrip()
-        if body:
-            for line in body.splitlines():
-                print(f"    {line}")
-        if not ok:
+        if not report_run(name, proc.returncode, proc.stdout, quiet):
             failures.append(name)
     total = len(rels)
     if failures:
@@ -467,7 +475,7 @@ def main():
     while args and args[0] in ("-c", "--cookiecutter"):
         cookiecutter = True
         args = args[1:]
-    usage = "usage: ,pplugin [-c] {list|go <plugin>|all <cmd...>|status|next|install|release [plugin]}"
+    usage = "usage: ,pplugin [-c] {list|go <plugin>|all [-q] <cmd...>|status|next|install [-q]|release [plugin]}"
     if not args:
         die(usage)
     cmd, rest = args[0], args[1:]
