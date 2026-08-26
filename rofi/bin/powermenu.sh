@@ -21,7 +21,7 @@ mesg="Uptime : $(uptime -p | sed -e 's/up //g')"
 option_1="shutdownpoweroff"
 option_2="reboot"
 option_3="logoutexit"
-option_4="suspendsleephibernate"
+option_4="suspendsleep"
 option_5="lock"
 yes='yes'
 no='no'
@@ -29,7 +29,7 @@ no='no'
 icon_1="\0icon\x1fsystem-shutdown"
 icon_2="\0icon\x1fsystem-reboot"
 icon_3="\0icon\x1fgnome-logout"
-icon_4="\0icon\x1fgnome-session-hibernate"
+icon_4="\0icon\x1fsystem-suspend"
 icon_5="\0icon\x1flock"
 icon_yes="\0icon\x1fdialog-ok"
 icon_no="\0icon\x1fdialog-cancel"
@@ -73,7 +73,7 @@ case ${chosen} in
         confirm_run 'swaymsg exit'
         ;;
     "$option_4")
-        confirm_run 'systemctl hibernate'
+        confirm_run 'systemctl suspend'
         ;;
     "$option_5")
         /home/rixx/.config/dotfiles/bin/lock
