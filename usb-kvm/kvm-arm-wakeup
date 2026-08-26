@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Arm USB remote wakeup along the path from the docking hub up to the host
+# controller, so a keypress resumes the laptop after the KVM switch hands the
+# shared hub back. Remote wakeup only propagates if every hub in between
+# allows it, and the kernel leaves the intermediate hubs disabled.
+set -euo pipefail
+
+# VIA Labs hubs in the dock: USB2 and USB3 side of the same physical device.
+DOCK_HUBS=("2109:2817" "2109:0817")
+
+usb_path () {
+    local id="$1" dev
+    for dev in /sys/bus/usb/devices/*/; do
+        [[ "$(cat "$dev/idVendor" 2>/dev/null)" == "${id%:*}" ]] || continue
+        if [[ "$(cat "$dev/idProduct" 2>/dev/null)" == "${id#*:}" ]]; then
+            readlink -f "$dev"
+            return 0
+        fi
+    done
+    return 1
+}
+
+arm_chain () {
+    local dev="$1"
+    while [[ "$dev" == /sys/devices/* ]]; do
+        # idVendor marks a USB device; skip the PCI ancestors above the root hub.
+        if [[ -f "$dev/idVendor" && -f "$dev/power/wakeup" ]]; then
+            echo enabled > "$dev/power/wakeup" 2>/dev/null || true
+        fi
+        dev="$(dirname "$dev")"
+    done
+}
+
+for hub in "${DOCK_HUBS[@]}"; do
+    if path="$(usb_path "$hub")"; then
+        arm_chain "$path"
+    fi
+done

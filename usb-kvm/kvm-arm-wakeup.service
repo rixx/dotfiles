@@ -1,0 +1,6 @@
+[Unit]
+Description=Arm USB remote wakeup along the dock hub chain
+
+[Service]
+Type=oneshot
+ExecStart=/home/rixx/.config/dotfiles/usb-kvm/kvm-arm-wakeup

@@ -146,6 +146,24 @@ install-gui:
     # Systemd user services (desktop-related)
     conflink systemd
 
+    # USB KVM switch: suspend when the shared hub is handed to the desktop.
+    # These live outside $HOME, so only reach for sudo when they actually differ.
+    kvm_dirty=0
+    if ! cmp -s usb-kvm/95-kvm-suspend.rules /etc/udev/rules.d/95-kvm-suspend.rules; then
+        doit sudo cp usb-kvm/95-kvm-suspend.rules /etc/udev/rules.d/95-kvm-suspend.rules
+        doit sudo udevadm control --reload-rules
+        kvm_dirty=1
+    fi
+    for unit in kvm-suspend.service kvm-arm-wakeup.service; do
+        if ! cmp -s "usb-kvm/$unit" "/etc/systemd/system/$unit"; then
+            doit sudo cp "usb-kvm/$unit" "/etc/systemd/system/$unit"
+            kvm_dirty=1
+        fi
+    done
+    if [[ "$kvm_dirty" == 1 ]]; then
+        doit sudo systemctl daemon-reload
+    fi
+
     # Firefox
     if [[ -d "$HOME/.mozilla" ]]; then
         for profile in "$HOME"/.mozilla/firefox/*default*; do

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Suspend this laptop when the USB KVM switch hands the shared hub to the desktop.
+# Triggered by udev (usb-kvm/95-kvm-suspend.rules) via kvm-suspend.service.
+set -euo pipefail
+
+HERE="$(dirname "$(readlink -f "$0")")"
+
+KVM_HUB="05e3:0610"     # shared hub behind the switch
+DOCK_HUB="2109:2817"    # dock hub, stays with the laptop
+LID=/proc/acpi/button/lid/LID0/state
+
+DEBOUNCE=2
+UNDOCK_GRACE=10
+
+usb_present () {
+    local id="$1" dev
+    for dev in /sys/bus/usb/devices/*/; do
+        [[ "$(cat "$dev/idVendor" 2>/dev/null)" == "${id%:*}" ]] || continue
+        [[ "$(cat "$dev/idProduct" 2>/dev/null)" == "${id#*:}" ]] && return 0
+    done
+    return 1
+}
+
+lid_closed () {
+    grep -q closed "$LID" 2>/dev/null
+}
+
+# Shutdown and reboot tear down USB too; don't fight them for the sleep target.
+if [[ "$(systemctl is-system-running || true)" == "stopping" ]]; then
+    exit 0
+fi
+
+# Ignore momentary dropouts: only act if the hub is still gone afterwards.
+sleep "$DEBOUNCE"
+if usb_present "$KVM_HUB"; then
+    exit 0
+fi
+
+# Hub gone, dock still here: the switch handed the desk over, sleep at once.
+# Dock gone too: the laptop was unplugged, and is often opened again right
+# away to keep working elsewhere. Sleep only if it stays shut.
+if ! usb_present "$DOCK_HUB"; then
+    for _ in $(seq "$UNDOCK_GRACE"); do
+        lid_closed || exit 0
+        usb_present "$KVM_HUB" && exit 0
+        sleep 1
+    done
+fi
+
+# Without this a keypress after switching back cannot reach the host controller.
+"$HERE/kvm-arm-wakeup" || true
+exec systemctl suspend

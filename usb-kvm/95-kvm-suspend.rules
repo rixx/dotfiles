@@ -1,0 +1,9 @@
+# The shared USB hub (Genesys Logic 05e3:0610) sits behind a KVM switch that
+# hands it to the desktop. Losing it means the desk is no longer ours: suspend.
+# Matches the USB2 hub only; its USB3 twin (05e3:0612) disappears at the same
+# time and would fire a second, redundant trigger.
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="5e3/610/*", RUN+="/usr/bin/systemctl --no-block start kvm-suspend.service"
+
+# Arm remote wakeup up the dock hub chain as soon as the dock appears, so that
+# suspending while docked behaves the same however it was triggered.
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="2109/2817/*", RUN+="/usr/bin/systemctl --no-block start kvm-arm-wakeup.service"
