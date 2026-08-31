@@ -1,0 +1,172 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["packaging"]
+# ///
+"""
+inspect and bump the direct dependencies of a uv project.
+
+works on any PEP 621 project with a uv lockfile: reads pyproject.toml from the
+current directory or the nearest parent, covering project.dependencies,
+project.optional-dependencies and dependency-groups.
+
+subcommands:
+  outdated              list direct dependencies with a newer release
+  bump <pkg> [version]  rewrite the pin in pyproject.toml and update the lock;
+                        without a version, take the latest release
+
+package names are matched PEP 503-normalized, so "css-inline" finds the
+"css_inline" requirement.
+"""
+
+import json
+import os
+import re
+import subprocess
+import sys
+import tomllib
+from pathlib import Path
+
+from packaging.requirements import Requirement
+
+
+def die(message):
+    sys.exit(f"✗ {message}")
+
+
+def uv(*args, directory, **kwargs):
+    # This script runs in uv's own ephemeral environment, which is exported as
+    # VIRTUAL_ENV and would otherwise be the environment uv inspects.
+    env = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"}
+    cmd = ("uv", "--directory", str(directory), *args)
+    print(f"$ {' '.join(cmd)}")
+    return subprocess.run(cmd, env=env, **kwargs)
+
+
+def canonical(name):
+    return re.sub(r"[-_.]+", "-", name).lower()
+
+
+def find_pyproject():
+    for directory in (Path.cwd(), *Path.cwd().parents):
+        path = directory / "pyproject.toml"
+        if path.exists():
+            return path
+    die("no pyproject.toml here or in any parent directory.")
+
+
+def direct_requirements(path):
+    """Map every direct requirement to the group it is declared in."""
+    try:
+        data = tomllib.loads(path.read_text())
+    except tomllib.TOMLDecodeError as error:
+        die(f"{path} is not valid TOML: {error}")
+    project = data.get("project", {})
+    groups = {"project.dependencies": project.get("dependencies", [])}
+    for name, deps in project.get("optional-dependencies", {}).items():
+        groups[f"extra:{name}"] = deps
+    for name, deps in data.get("dependency-groups", {}).items():
+        groups[f"group:{name}"] = deps
+
+    requirements = {}
+    for group, deps in groups.items():
+        # PEP 735 groups may contain {include-group = ...} tables, not just strings.
+        for dep in (d for d in deps if isinstance(d, str)):
+            requirements[canonical(Requirement(dep).name)] = (dep, group)
+    return requirements
+
+
+def outdated_packages(directory):
+    result = uv(
+        "pip", "list", "--outdated", "--format=json",
+        directory=directory, capture_output=True, text=True,
+    )
+    if result.returncode:
+        die(f"uv could not list packages:\n{result.stderr.strip()}")
+    return {canonical(p["name"]): p for p in json.loads(result.stdout)}
+
+
+def new_requirement(old, version):
+    """Rebuild a requirement string with a new version, keeping everything else."""
+    req = Requirement(old)
+    extras = f"[{','.join(sorted(req.extras))}]" if req.extras else ""
+    operators = {s.operator for s in req.specifier}
+    operator = operators.pop() if len(operators) == 1 else "~="
+    # Carry the marker over verbatim: rendering it back normalizes its quotes to
+    # double quotes, which would end the TOML string this goes into.
+    marker = f";{old.split(';', 1)[1]}" if ";" in old else ""
+    return f"{req.name}{extras}{operator}{version}{marker}"
+
+
+def cmd_outdated(args):
+    if args:
+        die("usage: ,pydeps outdated")
+    path = find_pyproject()
+    requirements = direct_requirements(path)
+    outdated = outdated_packages(path.parent)
+    hits = sorted(outdated.keys() & requirements.keys())
+    if not hits:
+        print("✓ every direct dependency is at its latest release.")
+        return
+    width = max(len(outdated[name]["name"]) for name in hits)
+    for name in hits:
+        package = outdated[name]
+        group = requirements[name][1]
+        suffix = "" if group == "project.dependencies" else f"  ({group})"
+        print(
+            f"{package['name']:<{width}}  {package['version']} → "
+            f"{package['latest_version']}{suffix}"
+        )
+
+
+def cmd_bump(args):
+    if not 1 <= len(args) <= 2:
+        die("usage: ,pydeps bump <package> [version]")
+    package, version = args[0], args[1] if len(args) == 2 else None
+    path = find_pyproject()
+    match = direct_requirements(path).get(canonical(package))
+
+    if version is None:
+        outdated = outdated_packages(path.parent).get(canonical(package))
+        if not outdated:
+            die(f"{package} is already at its latest release, or is not installed.")
+        version = outdated["latest_version"]
+
+    content = None
+    if not match:
+        print(f"{package} is not a direct dependency; updating the lock only.")
+    else:
+        old, group = match
+        new = new_requirement(old, version)
+        content = path.read_text()
+        if f'"{old}"' not in content:
+            die(f'cannot find the "{old}" requirement in {path}.')
+        path.write_text(content.replace(f'"{old}"', f'"{new}"'))
+        print(f"{old} → {new}  ({group})")
+
+    result = uv("lock", "--upgrade-package", package, directory=path.parent)
+    if result.returncode:
+        if content is not None:
+            path.write_text(content)
+            print("reverted the pin.")
+        die("uv could not update the lockfile.")
+    print(f"✓ {package} bumped to {version}.")
+
+
+def main():
+    args = sys.argv[1:]
+    usage = "usage: ,pydeps {outdated|bump <package> [version]}"
+    if not args:
+        die(usage)
+    command, rest = args[0], args[1:]
+    if command in ("-h", "--help", "help"):
+        print(__doc__.strip())
+        return
+    handler = {"outdated": cmd_outdated, "bump": cmd_bump}.get(command)
+    if handler is None:
+        die(f"unknown subcommand: {command}\n{usage}")
+    handler(rest)
+
+
+if __name__ == "__main__":
+    main()
