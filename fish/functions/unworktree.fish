@@ -2,11 +2,14 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     argparse -n unworktree h/help f/force k/keep-issue -- $argv
     or return
 
-    if set -q _flag_help; or test (count $argv) -eq 0
-        echo "unworktree [-f] [-k] <branch name>"
+    if set -q _flag_help
+        echo "unworktree [-f] [-k] [<branch name>]"
         echo
         echo "Remove the worktree for <branch name>, delete the branch, and"
         echo "close the matching pxtx issue if the branch is named px-<number>."
+        echo
+        echo "Without a branch name, use the current branch, unless that is"
+        echo "main or master."
         echo
         echo "  -f/--force       pass --force to git worktree remove"
         echo "  -k/--keep-issue  do not close the pxtx issue"
@@ -14,6 +17,22 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     end
 
     set -l branchname $argv[1]
+    if test -z "$branchname"
+        set branchname (command git rev-parse --abbrev-ref HEAD 2>/dev/null)
+        if test -z "$branchname"
+            set_color red
+            echo "Not in a git repository"
+            set_color normal
+            return 1
+        end
+        if test "$branchname" = main; or test "$branchname" = master; or test "$branchname" = HEAD
+            set_color red
+            echo "Refusing to unworktree $branchname; pass a branch name"
+            set_color normal
+            return 1
+        end
+        echo "Using current branch $branchname"
+    end
     set -l original_dir $PWD
     set -l failed 0
 
