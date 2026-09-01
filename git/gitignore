@@ -35,3 +35,5 @@ todo
 kubeconfig-*
 
 .jj
+
+temp-results
