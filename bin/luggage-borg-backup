@@ -1,0 +1,74 @@
+#!/bin/sh
+# Laptop backup to the luggage storage box (append-only sub-account).
+# Same source set as local-borg-backup; retention mirrors it (7d/4w/6m).
+# No compact here: the sub-account key forbids it, the daily
+# luggage-compact timer frees space via the main account instead.
+# No network retry either — a failed run is fine, tomorrow's fires anyway.
+
+set -e
+
+export PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-$HOME/.local/share/password-store}"
+export BORG_PASSCOMMAND='sh -c "pass show server/luggage/cord | sed -n 1p"'
+export BORG_RSH="ssh -i $HOME/.ssh/luggage-backup_ed25519 -o BatchMode=yes -o ConnectTimeout=20"
+export BORG_REPO=ssh://u660368-sub8@luggage.rixx.de:23/./cord
+
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+info "Starting backup"
+
+/usr/bin/borg create                \
+    --verbose                       \
+    --filter AME                    \
+    --stats                         \
+    --list                          \
+    --compression zstd,3            \
+    --exclude-caches                \
+    --exclude '*/node_modules'      \
+    --exclude '*/static.dist'       \
+    --exclude '*/vendor/bundle'     \
+    ::'{hostname}-{now}'        \
+    ~/.gnupg                                    \
+    ~/.local/share/applications/mimeapps.list   \
+    ~/.local/share/fonts                        \
+    ~/.local/share/mail/cutebit                 \
+    ~/.local/share/mutt                         \
+    ~/.local/share/password-store               \
+    ~/.local/share/zsh                          \
+    ~/.local/share/fish                         \
+    ~/.mozilla                                  \
+    ~/.nom                                      \
+    ~/.ssh                                      \
+    ~/data                                      \
+    ~/doc                                       \
+    ~/lib                                       \
+    ~/eustace                                   \
+    ~/tmp                                       \
+    ~/src
+
+backup_exit=$?
+
+info "Pruning repository"
+
+# Append-only serve: this only marks; luggage-compact makes it real.
+/usr/bin/borg prune                 \
+    --list                          \
+    -a 'sh:{hostname}-*'            \
+    --show-rc                       \
+    --keep-daily    7               \
+    --keep-weekly   4               \
+    --keep-monthly  6
+
+prune_exit=$?
+
+global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+
+if [ ${global_exit} -eq 0 ]; then
+    info "Backup and Prune finished successfully"
+elif [ ${global_exit} -eq 1 ]; then
+    info "Backup and/or Prune finished with warnings"
+else
+    info "Backup and/or Prune finished with errors"
+fi
+
+exit ${global_exit}

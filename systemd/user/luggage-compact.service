@@ -1,0 +1,10 @@
+[Unit]
+Description=Compact the luggage borg repos
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rixx/src/ansible
+ExecStart=/usr/bin/just luggage-compact
+Environment=PATH=/home/rixx/.local/bin:/usr/local/bin:/usr/bin
+Environment=SSH_AUTH_SOCK=%t/gcr/ssh
+TimeoutStartSec=7200

@@ -1,0 +1,8 @@
+[Unit]
+Description=Laptop borg backup to the luggage storage box
+
+[Service]
+Type=oneshot
+ExecStart=/home/rixx/.config/dotfiles/bin/luggage-borg-backup
+Environment=PATH=/home/rixx/.local/bin:/usr/local/bin:/usr/bin
+TimeoutStartSec=21600

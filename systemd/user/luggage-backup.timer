@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily laptop backup to luggage
+
+[Timer]
+OnCalendar=*-*-* 20:35:00
+Persistent=true
+RandomizedDelaySec=5m
+
+[Install]
+WantedBy=timers.target
