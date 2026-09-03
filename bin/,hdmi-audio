@@ -1,0 +1,24 @@
+#!/bin/sh
+# Route audio to an HDMI/DP output. Called from kanshi profiles.
+# Usage: ,hdmi-audio [profile]
+#   profile: hdmi-stereo (first port), hdmi-stereo-extra2 (third port), ...
+#   no argument: first port with a display attached.
+# Waits for the port to become available: the ALSA jack lags the DRM hotplug.
+card=alsa_card.pci-0000_c1_00.1
+want=$1
+for _ in $(seq 20); do
+    avail=$(pactl list cards \
+        | sed -n "/Name: $card/,/Active Profile/p" \
+        | grep -E '^\s+output:hdmi-stereo(-extra[0-9])?: .*available: yes' \
+        | sed 's/^\s*output:\([^:]*\):.*/\1/')
+    if [ -n "$1" ]; then
+        echo "$avail" | grep -qx "$want" && break
+    else
+        want=$(echo "$avail" | sed -n 1p)
+        [ -n "$want" ] && break
+    fi
+    sleep 0.5
+done
+[ -n "$want" ] || exit 1
+pactl set-card-profile "$card" "output:$want"
+pactl set-default-sink "alsa_output.pci-0000_c1_00.1.$want"

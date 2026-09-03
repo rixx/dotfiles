@@ -21,10 +21,12 @@ profile desk {
     exec swaymsg "workspace 5:im, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
     exec swaymsg "workspace 6:rand, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
     exec swaymsg "workspace 1:term, move workspace to output 'Ancor Communications Inc BE249 K8LMQS150300'"
+    exec ,hdmi-audio hdmi-stereo
 }
 
 profile fernseher {
     output $fernseher-home mode 1920x1080 position 0,0
     output eDP-1 enable position 1920,0
     exec swaymsg "workspace 3:dev, move workspace to output 'Panasonic Industry Company Panasonic-TV 0x01010101'"
+    exec ,hdmi-audio
 }
