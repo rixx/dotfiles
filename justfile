@@ -97,7 +97,6 @@ install-server:
 
     # Email
     conflink mutt/muttrc
-    link mutt/notmuch-mutt .local/bin/notmuch-mutt
     link mutt/offlineimaprc .config/offlineimap/config
 
     # File manager (works in CLI too)

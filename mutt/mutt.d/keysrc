@@ -42,23 +42,3 @@ macro index,pager gi "<change-folder>=cutebit/INBOX<enter><enter>" "Go to inbox"
 macro index,pager ga "<pipe-message>~/.config/dotfiles/mutt/agent-reply save<enter><reply>" "Reply with agent draft"
 macro index,pager , "<view-attachments><search>html<enter><view-mailcap><exit>" "Open html email in browser"
 set wait_key = false  # Do not wait for key input to continue
-
-macro index <F8> \
-    "<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-    <shell-escape>notmuch-mutt -r --prompt search<enter>\
-    <change-folder-readonly>`echo ${XDG_CACHE_HOME:-$HOME/.cache}/notmuch/mutt/results`<enter>\
-    <enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-          "notmuch: search mail"
-
-macro index <F9> \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<pipe-message>notmuch-mutt -r thread<enter>\
-<change-folder-readonly>`echo ${XDG_CACHE_HOME:-$HOME/.cache}/notmuch/mutt/results`<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-      "notmuch: reconstruct thread"
-
-macro index <F6> \
-"<enter-command>set my_old_pipe_decode=\$pipe_decode my_old_wait_key=\$wait_key nopipe_decode nowait_key<enter>\
-<pipe-message>notmuch-mutt tag -- -inbox<enter>\
-<enter-command>set pipe_decode=\$my_old_pipe_decode wait_key=\$my_old_wait_key<enter>" \
-      "notmuch: remove message from inbox"
