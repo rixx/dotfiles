@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+# Two halves of one mutt macro: `save` stashes the piped message,
+# `edit` wraps $EDITOR and, if the compose file replies to a stashed
+# message, lets an agent draft the body before the editor opens.
+import email
+import email.policy
+import hashlib
+import os
+import pathlib
+import subprocess
+import sys
+from datetime import date
+
+HERE = pathlib.Path(__file__).resolve().parent
+PROMPT = HERE / "agent-reply-prompt.md"
+STYLE_REF = "agents:profile:email voice"
+CACHE = pathlib.Path(os.environ.get("XDG_CACHE_HOME", pathlib.Path.home() / ".cache")) / "mutt-agent-reply/style.md"
+CLAUDE = pathlib.Path.home() / ".local/bin/claude"
+MAIL = pathlib.Path.home() / ".local/share/mail/cutebit"
+STASH = pathlib.Path(os.environ.get("XDG_RUNTIME_DIR", "/tmp")) / "mutt-agent-reply"
+TIMEOUT = 300
+
+
+def key(message_id):
+    return hashlib.sha1(message_id.strip().encode()).hexdigest()
+
+
+def save():
+    raw = sys.stdin.buffer.read()
+    msg = email.message_from_bytes(raw, policy=email.policy.default)
+    message_id = msg.get("Message-ID")
+    if not message_id:
+        sys.exit("no Message-ID, cannot stash")
+    STASH.mkdir(parents=True, exist_ok=True)
+    path = STASH / f"{key(message_id)}.eml"
+    path.write_bytes(raw)
+    print(f"stashed {path}")
+
+
+def style():
+    # wiki is the source of truth; the cache covers offline drafting
+    try:
+        proc = subprocess.run(["wiki", "read", STYLE_REF], capture_output=True, text=True, timeout=30)
+        if proc.returncode == 0 and proc.stdout.strip():
+            CACHE.parent.mkdir(parents=True, exist_ok=True)
+            CACHE.write_text(proc.stdout)
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+    if not CACHE.is_file():
+        raise RuntimeError(f"style guide unavailable: wiki read '{STYLE_REF}' failed, no cache")
+    return CACHE
+
+
+def draft(compose, original):
+    prompt = PROMPT.read_text().format(
+        today=date.today().isoformat(),
+        compose=compose,
+        original=original,
+        style=style(),
+        mail=MAIL,
+    )
+    cmd = [str(CLAUDE), "-p", prompt, "--output-format", "text", "--allowedTools", "Read,Grep,Glob"]
+    # neutral cwd keeps ~/CLAUDE.md and project instructions out of the draft
+    proc = subprocess.run(cmd, capture_output=True, text=True, cwd=STASH, timeout=TIMEOUT)
+    if proc.returncode != 0:
+        raise RuntimeError(f"claude exited {proc.returncode}: {proc.stderr[-500:]}")
+    return proc.stdout.strip()
+
+
+def edit(path):
+    compose = pathlib.Path(path)
+    text = compose.read_text()
+    headers, sep, body = text.partition("\n\n")
+    reply_to = email.message_from_string(headers + "\n", policy=email.policy.default).get("In-Reply-To")
+    original = STASH / f"{key(reply_to)}.eml" if reply_to else None
+    if original and original.is_file():
+        print("drafting reply …", file=sys.stderr, flush=True)
+        try:
+            body = draft(compose, original).rstrip("\n") + "\n"
+        except Exception as exc:  # noqa: BLE001
+            body = f"agent draft failed: {exc}\n\n{body}"
+        compose.write_text(headers + "\n\n" + body)
+        original.unlink()
+    os.execvp(os.environ.get("EDITOR", "vi"), [os.environ.get("EDITOR", "vi"), path])
+
+
+if __name__ == "__main__":
+    if sys.argv[1:2] == ["save"]:
+        save()
+    elif sys.argv[1:2] == ["edit"] and len(sys.argv) == 3:
+        edit(sys.argv[2])
+    else:
+        sys.exit("usage: agent-reply save < message | agent-reply edit FILE")

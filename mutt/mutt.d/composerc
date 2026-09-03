@@ -7,7 +7,7 @@ set attribution = "On %d, %n wrote:" # Uses date_format for %d
                                      # %l 	approximate size (in bytes) of the current message
                                      # %v 	Mutt version string
 set edit_headers = yes               # Put headers in editor when composing
-set editor = `echo \$EDITOR`         # Obviously
+set editor = "~/.config/dotfiles/mutt/agent-reply edit"  # wraps $EDITOR, see keysrc ga
 set fast_reply = yes                 # Don't ask for Subject/recipient when replying, or Subject when forwarding
 set forward_edit = yes               # Always allow to edit before forwarding
 set forward_format = "Fwd: %s"       # Jesus, mutt
