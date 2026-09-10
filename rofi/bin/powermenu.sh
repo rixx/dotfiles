@@ -73,7 +73,7 @@ case ${chosen} in
         confirm_run 'swaymsg exit'
         ;;
     "$option_4")
-        confirm_run 'systemctl suspend'
+        confirm_run 'systemctl suspend-then-hibernate'
         ;;
     "$option_5")
         /home/rixx/.config/dotfiles/bin/lock

@@ -49,4 +49,4 @@ fi
 
 # Without this a keypress after switching back cannot reach the host controller.
 "$HERE/kvm-arm-wakeup" || true
-exec systemctl suspend
+exec systemctl suspend-then-hibernate

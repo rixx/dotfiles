@@ -169,6 +169,14 @@ install-gui:
         doit sudo systemctl reload systemd-logind
     fi
 
+    if ! cmp -s hibernate/sleep.conf /etc/systemd/sleep.conf.d/hibernate.conf; then
+        doit sudo install -Dm644 hibernate/sleep.conf /etc/systemd/sleep.conf.d/hibernate.conf
+    fi
+    if ! cmp -s hibernate/sysctl.conf /etc/sysctl.d/90-swappiness.conf; then
+        doit sudo install -Dm644 hibernate/sysctl.conf /etc/sysctl.d/90-swappiness.conf
+        doit sudo sysctl -q -p /etc/sysctl.d/90-swappiness.conf
+    fi
+
     # Firefox
     if [[ -d "$HOME/.mozilla" ]]; then
         for profile in "$HOME"/.mozilla/firefox/*default*; do

@@ -35,7 +35,7 @@ case "$1" in
             lid_closed || exit 0
             docked && exit 0
         done
-        systemctl suspend
+        systemctl suspend-then-hibernate
         ;;
     *)
         echo "usage: ,lid open|close" >&2
