@@ -118,10 +118,10 @@ function fish_prompt
             set -g _prompt_git_indicators "$_prompt_git_indicators "
         end
         if test -n "$ahead_count"
-            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 2)"⬆$ahead_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 2)"⇡$ahead_count"
         end
         if test -n "$behind_count"
-            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 1)"⬇$behind_count"
+            set -g _prompt_git_indicators "$_prompt_git_indicators"(_fg 1)"⇣$behind_count"
         end
 
         # Current subdirectory within repo (always show / even at root)
