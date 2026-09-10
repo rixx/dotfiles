@@ -18,8 +18,8 @@ profile desk {
     exec swaymsg "workspace 2:web, move workspace to output 'Ancor Communications Inc BE249 K8LMQS150300'"
     exec swaymsg "workspace 3:dev, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
     exec swaymsg "workspace 4:mail, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
-    exec swaymsg "workspace 5:im, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
     exec swaymsg "workspace 6:rand, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
+    exec swaymsg "workspace 5:im, move workspace to output 'Lenovo Group Limited T24i-2L VNA7WF21'"
     exec swaymsg "workspace 1:term, move workspace to output 'Ancor Communications Inc BE249 K8LMQS150300'"
     exec ,hdmi-audio hdmi-stereo
 }
