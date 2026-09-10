@@ -1,5 +1,0 @@
-#!/bin/sh
-# Lid opened: enable the laptop panel only when no external output is connected.
-# Docked, the panel stays off until the externals are unplugged; kanshi handles that.
-swaymsg -t get_outputs | jq -e 'any(.[]; .name != "eDP-1")' >/dev/null && exit 0
-swaymsg output eDP-1 enable

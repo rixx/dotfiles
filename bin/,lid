@@ -1,0 +1,44 @@
+#!/bin/sh
+# Lid switch handler for sway (bindswitch lid:on / lid:off).
+# Opening the lid re-enables it except for at my desk, where it stays off.
+# Closing the lid while not attached to external displays suspends the laptop
+# after a 10s grace period, unless it gets re-opened or a display is attached
+# during that time.
+# Not using logind's lid handling (disabled via sway/logind-lid.conf)
+# Note that unplugging while lid closed is handled via usbkvm.
+PANEL=eDP-1
+LID=/proc/acpi/button/lid/LID0/state
+GRACE=10
+
+docked () {
+    swaymsg -t get_outputs | jq -e --arg p "$PANEL" 'any(.[]; .name != $p)' >/dev/null
+}
+
+at_desk () {
+    [ "$(kanshictl status 2>/dev/null)" = "Current profile: desk" ]
+}
+
+lid_closed () {
+    grep -q closed "$LID" 2>/dev/null
+}
+
+case "$1" in
+    open)
+        at_desk && exit 0
+        swaymsg output "$PANEL" enable >/dev/null
+        ;;
+    close)
+        swaymsg output "$PANEL" disable >/dev/null
+        docked && exit 0
+        for _ in $(seq "$GRACE"); do
+            sleep 1
+            lid_closed || exit 0
+            docked && exit 0
+        done
+        systemctl suspend
+        ;;
+    *)
+        echo "usage: ,lid open|close" >&2
+        exit 2
+        ;;
+esac

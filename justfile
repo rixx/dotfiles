@@ -163,6 +163,12 @@ install-gui:
         doit sudo systemctl daemon-reload
     fi
 
+    # Lid switch: sway decides (bin/,lid), logind stays out of it.
+    if ! cmp -s sway/logind-lid.conf /etc/systemd/logind.conf.d/lid.conf; then
+        doit sudo install -Dm644 sway/logind-lid.conf /etc/systemd/logind.conf.d/lid.conf
+        doit sudo systemctl reload systemd-logind
+    fi
+
     # Firefox
     if [[ -d "$HOME/.mozilla" ]]; then
         for profile in "$HOME"/.mozilla/firefox/*default*; do
