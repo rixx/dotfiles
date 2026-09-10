@@ -18,7 +18,7 @@ STALE_AFTER = 600     # Seconds before failed refreshes are worth reporting.
 SESSION_ALERT = 75    # Above this the session window earns space in the bar.
 NEAR_LIMIT = 90       # Absolute weekly use that is worth alarm at any pace.
 PACE_LEAD = 2.0       # Points below budget where the warning already starts.
-SEP = "•"             # Kelmscott Mono has no middle dot; it draws as a blank.
+SEP = "·"
 
 # Bar palette, mirroring style.css: the bar sits on light background, unlike
 # the tooltip. Each number carries its own state; the icon carries the worst.
@@ -26,7 +26,7 @@ BAR = {"ok": "#333333", "warning": "#c18401", "critical": "#990000"}
 RANK = ("ok", "warning", "critical")
 
 # Tooltip palette, matching the colours the clock's calendar overlay uses.
-FONT = "Kelmscott Mono"
+FONT = "Iosevka"
 SIZE = "13pt"
 ACCENT = "#D84315"
 TEAL = "#99ffdd"

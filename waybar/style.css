@@ -7,7 +7,7 @@
 @define-color clr-turquoise-transparent rgba(0, 113, 113, 0.1);
 
 * {
-    font-family: FontAwesome, Kelmscott Mono, Iosevka, sans-serif;
+    font-family: FontAwesome, Iosevka, sans-serif;
     font-size: 18px;
 }
 

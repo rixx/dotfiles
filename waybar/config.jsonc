@@ -80,11 +80,11 @@
             "weeks-pos"     : "left",
                     "on-scroll"     : 1,
                     "format": {
-                              "months":     "<span color='#D84315' font='Kelmscott Mono' size='13pt' line_height='2'><b>{}</b></span>",
-                              "days":       "<span color='#ffffff'font='Kelmscott Mono' size='13pt' line_height='1.5'><b>{}</b></span>",
-                              "weeks":      "<span color='#99ffdd' font='Kelmscott Mono' size='13pt'><b>W{}</b></span>",
-                              "weekdays":     "<span color='#cccccc' font='Kelmscott Mono' size='13pt'><b>{}</b></span>",
-                              "today":      "<span color='#D84315' font='Kelmscott Mono' size='13pt'><b><u>{}</u></b></span>"
+                              "months":     "<span color='#D84315' font='Iosevka' size='13pt' line_height='2'><b>{}</b></span>",
+                              "days":       "<span color='#ffffff'font='Iosevka' size='13pt' line_height='1.5'><b>{}</b></span>",
+                              "weeks":      "<span color='#99ffdd' font='Iosevka' size='13pt'><b>W{}</b></span>",
+                              "weekdays":     "<span color='#cccccc' font='Iosevka' size='13pt'><b>{}</b></span>",
+                              "today":      "<span color='#D84315' font='Iosevka' size='13pt'><b><u>{}</u></b></span>"
                         }
                     },
         "actions":  {

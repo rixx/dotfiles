@@ -30,7 +30,7 @@
 
 .control-center {
   border-radius: 0;
-  font-family: FontAwesome, Kelmscott Mono, Iosevka, sans-serif;
+  font-family: FontAwesome, Iosevka, sans-serif;
   font-size: 18px;
   background: transparent;
   color: var(--clr-text);
@@ -60,7 +60,7 @@
   border: none;
   padding: var(--padding) calc(var(--padding) * 1.5);
   border-radius: var(--border-radius);
-  font-family: FontAwesome, Kelmscott Mono, Iosevka, sans-serif;
+  font-family: FontAwesome, Iosevka, sans-serif;
   font-size: 18px;
 }
 .notification.low {
