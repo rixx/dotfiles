@@ -11,6 +11,7 @@ base-devel
 beets
 biber
 bind
+biome
 blueman
 bluez-utils
 borg
@@ -92,7 +93,6 @@ moreutils
 mosh
 mplayer
 mumble
-musescore
 namcap
 neomutt
 neovim
@@ -106,8 +106,6 @@ nuspell
 nwg-displays
 obsidian
 offlineimap
-opencode
-openscad
 otf-font-awesome
 otf-raleway
 pacman-contrib
