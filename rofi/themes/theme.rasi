@@ -2,8 +2,8 @@
     background: #F5F5F5FF;
     background-alt: #E4E4E4FF;
     foreground: #404040FF;
-    selected: #078787ff; 
-    urgent: #C30771FF;
+    selected: #007171ff;
+    urgent: #990000ff;
     white: #ffffffff;
 }
 
@@ -14,19 +14,17 @@ window {
     anchor: north;
     y-offset: -15%;
     x-offset: 0px;
-    border: 0px;
+    border: 3px;
+    border-color: @selected;
     border-radius: 10px;
     text-color: @foreground;
     background-color: @background;
-    //background-image: url("/path/to/image.png", none);
-    //background-image: linear-gradient(red, orange, pink, purple);
-    //background-image: linear-gradient(to bottom, pink, yellow, magenta);
-    //background-image: linear-gradient(45, cyan, purple, indigo);
 }
 
 mainbox {
     background-color: transparent;
     border-radius: 0px;
+    padding: 8px;
 }
 
 inputbar {

@@ -6,10 +6,14 @@
   --clr-orange: #c18401;
   --clr-turquoise: #007171;
   --clr-transparent: transparent;
-  --clr-notification-alpha: 0.95;
+  --clr-notification-alpha: 0.85;
   --clr-border: color-mix(in srgb, var(--clr-turquoise), transparent 10%);
 
-  --border-radius: 4px;
+  --border-radius: 8px;
+  --clr-notification-text: #ffffff;
+  --clr-notification-low: rgba(102, 102, 102, var(--clr-notification-alpha));
+  --clr-notification-normal: rgba(0, 113, 113, var(--clr-notification-alpha));
+  --clr-notification-critical: rgba(153, 0, 0, var(--clr-notification-alpha));
   --border: 1.5px solid var(--clr-border);
 
   --padding: 20px;
@@ -51,19 +55,22 @@
 }
 
 .notification {
-  box-shadow: var(--notification-shadow);
-  background: var(--clr-background);
-  border: var(--border);
-  padding: var(--half-padding);
+  box-shadow: none;
+  background: var(--clr-notification-normal);
+  border: none;
+  padding: var(--padding) calc(var(--padding) * 1.5);
   border-radius: var(--border-radius);
   font-family: FontAwesome, Kelmscott Mono, Iosevka, sans-serif;
   font-size: 18px;
 }
+.notification.low {
+  background: var(--clr-notification-low);
+}
 .notification.critical {
-  border-color: var(--clr-red);
+  background: var(--clr-notification-critical);
 }
 .notification * {
-  color: var(--clr-text);
+  color: var(--clr-notification-text);
   font-weight: normal;
   text-shadow: none;
   padding: 0;
@@ -87,6 +94,7 @@
 .notification .notification-default-action .notification-content .text-box .summary {
   margin-top: 3px;
   font-size: 18px;
+  font-weight: bold;
 }
 
 .notification .notification-default-action .notification-content .text-box .time {
@@ -139,7 +147,7 @@
 }
 
 .notification:hover > * {
-  background: var(--clr-background);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .notification .notification-alt-actions {

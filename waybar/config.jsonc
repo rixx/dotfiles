@@ -13,9 +13,9 @@
 
     "spacing": 4,
     "modules-left": [
+        "sway/workspaces"
     ],
     "modules-center": [
-        "sway/workspaces"
     ],
     "modules-right": [
         "sway/mode",
