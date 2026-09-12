@@ -17,9 +17,12 @@ function worktree --description "Create a git worktree and copy/symlink untracke
     set -l symlink_patterns \
         'CLAUDE.md' \
         'local' \
-        'src/data/media' \
         '.claude' \
         '.beads'
+
+    # ── Paths to symlink, relative to the main worktree ─────────────
+    set -l symlink_paths \
+        'src/data/media'
 
     if set -q _flag_help; or test (count $argv) -eq 0
         echo "worktree [-v] [-n] [-r <ref>] <branch name>"
@@ -35,7 +38,7 @@ function worktree --description "Create a git worktree and copy/symlink untracke
         echo
         echo "Copies and symlinks untracked config files to the new worktree."
         echo "  Copied:    "(string join ', ' $copy_patterns)
-        echo "  Symlinked: "(string join ', ' $symlink_patterns)
+        echo "  Symlinked: "(string join ', ' $symlink_patterns $symlink_paths)
         return 0
     end
 
@@ -134,6 +137,25 @@ function worktree --description "Create a git worktree and copy/symlink untracke
         set -l target ../$dirname/$f
         mkdir -p (dirname $target)
         # Remove existing file/directory so ln doesn't symlink *into* it
+        if test -e $target; or test -L $target
+            rm -rf $target
+        end
+        ln -s $main_worktree/$f $target
+        or begin
+            set_color yellow
+            echo "Unable to symlink $f"
+            set_color normal
+        end
+        if set -q _flag_verbose
+            echo "Symlinked $f"
+        end
+    end
+
+    for f in $symlink_paths
+        test -e $main_worktree/$f
+        or continue
+        set -l target ../$dirname/$f
+        mkdir -p (dirname $target)
         if test -e $target; or test -L $target
             rm -rf $target
         end
