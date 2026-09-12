@@ -40,5 +40,7 @@ bind index,pager M resend-message
 macro index,pager 0 "<save-message>=cutebit/Junk<enter>" "Move to Junk"
 macro index,pager gi "<change-folder>=cutebit/INBOX<enter><enter>" "Go to inbox"
 macro index,pager ga "<pipe-message>~/.config/dotfiles/mutt/agent-reply save<enter><reply>" "Reply with agent draft"
+macro index,pager gc "<enter-command>set from='rixx <rixx@ccc.de>'; set hostname=ccc.de<enter><mail>" "New mail as rixx@ccc.de"
+macro compose \ec "<edit-from>\Curixx <rixx@ccc.de><enter>" "Switch to rixx@ccc.de (signature stays)"
 macro index,pager , "<view-attachments><search>html<enter><view-mailcap><exit>" "Open html email in browser"
 set wait_key = false  # Do not wait for key input to continue

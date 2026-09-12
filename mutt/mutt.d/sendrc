@@ -1,6 +1,6 @@
 # SMTP vars, sending
 
-alternates .*@cutebit.de|.*@rixx.de
+alternates .*@cutebit.de|.*@rixx.de|rixx@ccc.de
 subscribe .*@lists.*.de|.*@lists.*.com|.*@lists.*.space|(mitglieder|key|vorstand|public)@shackspace.de|.*@googlegroups.com
 my_hdr X-Clacks-Overhead: GNU Terry Pratchett
 
@@ -21,7 +21,15 @@ send-hook . 'unmy_hdr From:'         # Reset From override so it does not leak i
 send-hook '~C uploadmail\.datev\.de' 'my_hdr From: Tobias Kunze <r@rixx.de>'
 send-hook "~f @ccc.de" set signature = "~/.config/dotfiles/mutt/signatures/cccev.txt"
 send-hook "~C @ccc.de" set signature = "~/.config/dotfiles/mutt/signatures/cccev.txt"
-set smtp_pass = "`pass server/tonks`"# Password managers win
-set smtp_url=smtps://rixx@mail.rixx.de
+# Sending options: my mail server and ccc.de, swapping via hooks
+set my_smtp_pass_rixx = "`pass server/tonks`"
+set my_smtp_pass_ccc = "`pass web/mail.ccc.de`"
+set smtp_url = "smtps://rixx@mail.rixx.de"
+set smtp_pass = $my_smtp_pass_rixx
+
+# send2-hook re-runs after the From header changes (send-hook doesn't)
+send2-hook '~A' 'set from = r@rixx.de; set hostname = rixx.de'
+send2-hook '~A' 'set smtp_url = "smtps://rixx@mail.rixx.de"; set smtp_pass = $my_smtp_pass_rixx'
+send2-hook '~f rixx@ccc\.de' 'set smtp_url = "smtp://rixx@mail.ccc.de:587"; set smtp_pass = $my_smtp_pass_ccc'
 set ssl_force_tls = yes              # There is no life without TLS
 set use_from = yes                   # Use the value in $from
