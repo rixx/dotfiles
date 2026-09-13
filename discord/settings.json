@@ -14,9 +14,9 @@
   "DESKTOP_TTI_UPDATE_BACKOFF_MAX_MS": 20000,
   "DESKTOP_TTI_SPLASH_USE_WEBP": true,
   "WINDOW_BOUNDS": {
-    "x": 16,
+    "x": 10,
     "y": 10,
-    "width": 1810,
-    "height": 962
+    "width": 1920,
+    "height": 1179
   }
 }
