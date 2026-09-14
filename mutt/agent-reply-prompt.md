@@ -10,6 +10,8 @@ Files:
 
 Read the style file, the compose file and the original first. Then check Sent/ for earlier mail to this correspondent; that overrides the general style for greeting, sign-off and du/Sie. Write in the language of the original.
 
+His direction for this reply, binding over anything you would infer: {direction}
+
 Wrap claims you cannot verify from the mail or his earlier replies in "[?: ...]".
 Leave the signature block untouched at the end.
 Plain text, no markdown.

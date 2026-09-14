@@ -7,6 +7,7 @@ import email.policy
 import hashlib
 import os
 import pathlib
+import readline  # noqa: F401  line editing for input()
 import subprocess
 import sys
 from datetime import date
@@ -51,13 +52,23 @@ def style():
     return CACHE
 
 
-def draft(compose, original):
+def ask_direction():
+    # empty: draft without direction. ^C / ^D: no draft at all.
+    try:
+        return input("direction for the agent (empty: none, ^C: no draft): ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print(file=sys.stderr)
+        return None
+
+
+def draft(compose, original, direction):
     prompt = PROMPT.read_text().format(
         today=date.today().isoformat(),
         compose=compose,
         original=original,
         style=style(),
         mail=MAIL,
+        direction=direction or "none given.",
     )
     cmd = [str(CLAUDE), "-p", prompt, "--output-format", "text", "--allowedTools", "Read,Grep,Glob"]
     # neutral cwd keeps ~/CLAUDE.md and project instructions out of the draft
@@ -74,12 +85,14 @@ def edit(path):
     reply_to = email.message_from_string(headers + "\n", policy=email.policy.default).get("In-Reply-To")
     original = STASH / f"{key(reply_to)}.eml" if reply_to else None
     if original and original.is_file():
-        print("drafting reply …", file=sys.stderr, flush=True)
-        try:
-            body = draft(compose, original).rstrip("\n") + "\n"
-        except Exception as exc:  # noqa: BLE001
-            body = f"agent draft failed: {exc}\n\n{body}"
-        compose.write_text(headers + "\n\n" + body)
+        direction = ask_direction()
+        if direction is not None:
+            print("drafting reply …", file=sys.stderr, flush=True)
+            try:
+                body = draft(compose, original, direction).rstrip("\n") + "\n"
+            except Exception as exc:  # noqa: BLE001
+                body = f"agent draft failed: {exc}\n\n{body}"
+            compose.write_text(headers + "\n\n" + body)
         original.unlink()
     os.execvp(os.environ.get("EDITOR", "vi"), [os.environ.get("EDITOR", "vi"), path])
 
