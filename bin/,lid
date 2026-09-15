@@ -6,9 +6,18 @@
 # during that time.
 # Not using logind's lid handling (disabled via sway/logind-lid.conf)
 # Note that unplugging while lid closed is handled via usbkvm.
+# Decisions are logged to the journal under the "lid" tag.
 PANEL=eDP-1
 LID=/proc/acpi/button/lid/LID0/state
 GRACE=10
+
+log () {
+    logger -t lid -- "$*"
+}
+
+outputs () {
+    swaymsg -t get_outputs | jq -r '[.[] | "\(.name)=\(.active)"] | join(" ")'
+}
 
 docked () {
     swaymsg -t get_outputs | jq -e --arg p "$PANEL" 'any(.[]; .name != $p)' >/dev/null
@@ -24,20 +33,26 @@ lid_closed () {
 
 case "$1" in
     open)
-        at_desk && exit 0
+        log "open: outputs=$(outputs)"
+        at_desk && { log "open: at desk, panel stays off"; exit 0; }
         swaymsg output "$PANEL" enable >/dev/null
+        log "open: panel enabled"
         ;;
     close)
+        log "close: outputs=$(outputs)"
         swaymsg output "$PANEL" disable >/dev/null
-        docked && exit 0
+        log "close: after disable outputs=$(outputs)"
+        docked && { log "close: docked, no suspend"; exit 0; }
         for _ in $(seq "$GRACE"); do
             sleep 1
-            lid_closed || exit 0
-            docked && exit 0
+            lid_closed || { log "close: reopened during grace"; exit 0; }
+            docked && { log "close: docked during grace"; exit 0; }
         done
+        log "close: suspending"
         systemctl suspend-then-hibernate
         ;;
     *)
+        log "bad argument: ${1:-<none>}"
         echo "usage: ,lid open|close" >&2
         exit 2
         ;;
