@@ -76,6 +76,7 @@ kitty
 kitty-terminfo
 kubectl
 less
+libfido2
 libreoffice-fresh
 libvoikko
 linux
@@ -224,5 +225,6 @@ yay-bin
 yazi
 ydotool
 yt-dlp
+yubikey-manager
 zsa-keymapp-bin
 zsh
