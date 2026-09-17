@@ -1,0 +1,41 @@
+#!/bin/sh
+# Post-mortem for a sleep/hibernate attempt. Takes a boot offset (0 = current,
+# -1 = previous, the one a wedged hibernate left behind); default shows both.
+BOOTS=${1:-"0 -1"}
+
+echo "### boots"
+journalctl --list-boots | tail -n 4
+
+echo
+echo "### /var/log/sleep-debug.log (last two transitions)"
+awk '/^=== /{n++} n > c-2' c=$(grep -c '^=== ' /var/log/sleep-debug.log 2>/dev/null) \
+    /var/log/sleep-debug.log 2>/dev/null || echo "  (no log; is the system-sleep hook installed?)"
+
+for b in $BOOTS; do
+    echo
+    echo "### boot $b: systemd-sleep decisions"
+    journalctl -b "$b" -u systemd-suspend-then-hibernate -u systemd-hibernate -u systemd-suspend \
+        --no-pager -o short-precise 2>/dev/null \
+        | grep -vE "Bus n/a|Sent message|Got message|sd-bus:|state (UNSET|OPENING|AUTHENTICATING|HELLO|RUNNING)" \
+        | grep -vE "USB type-C port is in power (sink|source) mode"
+
+    echo
+    echo "### boot $b: kernel PM"
+    journalctl -b "$b" -k --no-pager -o short-precise 2>/dev/null \
+        | grep -iE "PM: |hibernation:|Timekeeping suspended|Triggering wakeup|ACPI: PM:|active wakeup|rolling back" \
+        | grep -viE "Registered nosave|Marking nosave"
+
+    echo
+    echo "### boot $b: kernel faults since last resume"
+    journalctl -b "$b" -k --no-pager -o short-precise 2>/dev/null | awk '
+        /hibernation exit|PM: suspend exit/ { buf = ""; n = 0; next }
+        /cut here|Oops|BUG:|WARNING:|rcu:.*stall|watchdog:|hung task|exited with|returns -[0-9]|RIP: 0010/ {
+            buf = buf $0 "\n"; n++
+        }
+        END { if (n) printf "%s", buf; else print "  none" }'
+
+    echo
+    echo "### boot $b: amdgpu faults"
+    journalctl -b "$b" -k --no-pager 2>/dev/null \
+        | grep -iE "amdgpu.*(ERROR|reset|timeout|fail)" || echo "  none"
+done

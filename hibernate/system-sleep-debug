@@ -1,0 +1,20 @@
+#!/bin/sh
+# systemd-sleep hook: records power state around every sleep transition.
+# Runs as root, "$1" is pre|post and "$2" the sleep operation. Writes to
+# LOG and syncs, so the record survives a hibernate that wedges the machine
+# before journald can flush.
+LOG=/var/log/sleep-debug.log
+
+[ "$1" = pre ] && echo 1 > /sys/power/pm_debug_messages 2>/dev/null
+
+{
+    echo "=== $(date -Is) $1 $2"
+    echo "uptime=$(cut -d' ' -f1 /proc/uptime) rtc_since_epoch=$(cat /sys/class/rtc/rtc0/since_epoch 2>/dev/null)"
+    echo "rtc_wakealarm=$(cat /sys/class/rtc/rtc0/wakealarm 2>/dev/null)"
+    echo "battery=$(cat /sys/class/power_supply/BAT1/capacity 2>/dev/null) ac=$(cat /sys/class/power_supply/ACAD/online 2>/dev/null)"
+    echo "wakeup_count=$(cat /sys/power/wakeup_count 2>/dev/null)"
+    echo "wakeup_sources (nonzero event_count):"
+    awk 'NR == 1 { next } $3 != 0 { printf "  %-28s active=%s events=%s wakeups=%s expires=%s\n", $1, $2, $3, $4, $5 }' \
+        /sys/kernel/debug/wakeup_sources 2>/dev/null
+} >> "$LOG" 2>&1
+sync
