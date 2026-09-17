@@ -172,6 +172,14 @@ install-gui:
     if ! cmp -s hibernate/sleep.conf /etc/systemd/sleep.conf.d/hibernate.conf; then
         doit sudo install -Dm644 hibernate/sleep.conf /etc/systemd/sleep.conf.d/hibernate.conf
     fi
+    # systemd only scans /usr/lib/systemd/system-sleep, not /etc.
+    if ! cmp -s hibernate/system-sleep-debug /usr/lib/systemd/system-sleep/debug; then
+        doit sudo install -Dm755 hibernate/system-sleep-debug /usr/lib/systemd/system-sleep/debug
+    fi
+    if ! cmp -s hibernate/sleep-debug.conf /etc/systemd/system/systemd-suspend-then-hibernate.service.d/debug.conf; then
+        doit sudo install -Dm644 hibernate/sleep-debug.conf /etc/systemd/system/systemd-suspend-then-hibernate.service.d/debug.conf
+        doit sudo systemctl daemon-reload
+    fi
     if ! cmp -s hibernate/sysctl.conf /etc/sysctl.d/90-swappiness.conf; then
         doit sudo install -Dm644 hibernate/sysctl.conf /etc/sysctl.d/90-swappiness.conf
         doit sudo sysctl -q -p /etc/sysctl.d/90-swappiness.conf
