@@ -22,12 +22,12 @@
       "Chatbot": false,
       "LinkPreviews": false,
       "TabGroups": false,
-      "Locked": true
+      "Locked": false
     },
     "AIControls": {
       "Default": {
         "Value": "blocked",
-        "Locked": true
+        "Locked": false
       },
       "Translations": {
         "Value": "available",
@@ -39,19 +39,19 @@
       },
       "SmartTabGroups": {
         "Value": "blocked",
-        "Locked": true
+        "Locked": false
       },
       "LinkPreviewKeyPoints": {
         "Value": "blocked",
-        "Locked": true
+        "Locked": false
       },
       "SidebarChatbot": {
         "Value": "blocked",
-        "Locked": true
+        "Locked": false
       },
       "SmartWindow": {
         "Value": "blocked",
-        "Locked": true
+        "Locked": false
       }
     },
     "OfferToSaveLoginsDefault": false,
@@ -63,6 +63,10 @@
       ]
     },
     "SkipTermsOfUse": true,
-    "IPProtectionAvailable": true
+    "IPProtectionAvailable": true,
+    "FirefoxSuggest": {
+      "SponsoredSuggestions": false
+    },
+    "VisualSearchEnabled": false
   }
 }
