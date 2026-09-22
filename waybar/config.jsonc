@@ -18,13 +18,14 @@
     "modules-center": [
     ],
     "modules-right": [
+        "custom/prusa",
+        "custom/claude",
         "sway/mode",
         "network",
         "backlight",
         "battery",
         "pulseaudio",
         "pulseaudio#source",
-        "custom/claude",
         "clock",
         "tray",
         "custom/notification"
@@ -152,6 +153,17 @@
         "on-click": "pamixer --default-source -t",
         "on-click-right": "pavucontrol",
     },
+  "custom/prusa": {
+    "tooltip": true,
+    "return-type": "json",
+    "interval": 60,
+    "signal": 9,  // pkill -RTMIN+9 waybar  forces a refresh
+    "exec": "$HOME/.config/waybar/modules/prusa-connect",
+    "exec-if": "test -r $HOME/.local/state/prusa-connect/tokens.json",
+    "on-click": "xdg-open https://connect.prusa3d.com/",
+    "on-click-right": "vlc rtsp://192.168.4.133/live",
+    "escape": false
+  },
   "custom/claude": {
     "tooltip": true,
     "return-type": "json",

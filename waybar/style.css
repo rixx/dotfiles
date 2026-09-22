@@ -77,3 +77,10 @@ button {
 #custom-claude.stale, #custom-claude.error {
   color: @clr-turquoise;
 }
+
+#custom-prusa.paused, #custom-prusa.attention, #custom-prusa.warning {
+  color: @clr-orange;
+}
+#custom-prusa.critical, #custom-prusa.error {
+  color: @clr-red;
+}
