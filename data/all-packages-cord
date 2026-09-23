@@ -8,6 +8,7 @@ aspell-en
 ausweisapp
 base
 base-devel
+bc
 beets
 biber
 bind
@@ -30,6 +31,7 @@ discord
 docker
 docker-compose
 dolphin
+dosfstools
 earlyoom
 evince
 expac
