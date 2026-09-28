@@ -9,6 +9,21 @@ tab-item:last-of-type {
   border-top: 2px solid #00000011 !important;
 }
 
+/* new tab button: keep + icon, drop "New Tab" label, show tab count instead */
+#tabbar {
+  counter-reset: tabs;
+}
+tab-item {
+  counter-increment: tabs;
+}
+.newtab-button .label-text {
+  display: none;
+}
+.newtab-button::after {
+  content: counter(tabs) " tabs";
+  pointer-events: none;
+}
+
 /* different colours */
 tab-item {
   border: solid 1px #00000010;

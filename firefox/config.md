@@ -39,6 +39,7 @@
   https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/
 - Tree Style Tab: makes firefox usable.
   Config in configs-treestyletab@piro.sakura.ne.jp.json And add styling from treestyletabs.css
+  The json embeds the css as base64 in chunkedUserStyleRules0; after editing the css, re-encode it there (6 KiB chunks) so import stays in sync.
   Allow in anonymous.
   https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
 - TST Lock Tree Collapsed: don't auto-expand trees when dropping tabs in them
