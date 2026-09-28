@@ -19,6 +19,10 @@ subcommands:
                    plugin, print the first one (the fish wrapper does the cd)
   install          install every plugin into pretalx via `just install-plugin`
                    (-q as for `all`)
+  sync             reinstall pretalx main into every plugin's own venv via
+                   `just install-pretalx-local`; run after a dependency bump in
+                   pretalx (stale editable installs fail with an ImportError)
+                   (-q as for `all`)
   release [plugin] interactive per-plugin PyPI release loop (via ,pydist),
                    keeping pretalx-com's plugin_versions.py in sync
 
@@ -201,6 +205,13 @@ def cmd_all(argv, cookiecutter=False):
         print(out(f"\n{{r}}{len(failures)}/{total} failed:{{R}} {', '.join(failures)}"))
         sys.exit(1)
     print(out(f"\n{{G}}all {total} ok{{R}}"))
+
+
+def cmd_sync(argv, cookiecutter=False):
+    quiet, argv = take_quiet(argv)
+    if argv:
+        die("usage: ,pplugin sync [-q]")
+    cmd_all((["-q"] if quiet else []) + ["just", "install-pretalx-local", str(PRETALX)], cookiecutter=False)
 
 
 def cmd_install(argv, cookiecutter=False):
@@ -475,7 +486,7 @@ def main():
     while args and args[0] in ("-c", "--cookiecutter"):
         cookiecutter = True
         args = args[1:]
-    usage = "usage: ,pplugin [-c] {list|go <plugin>|all [-q] <cmd...>|status|next|install [-q]|release [plugin]}"
+    usage = "usage: ,pplugin [-c] {list|go <plugin>|all [-q] <cmd...>|status|next|install [-q]|sync [-q]|release [plugin]}"
     if not args:
         die(usage)
     cmd, rest = args[0], args[1:]
@@ -485,6 +496,7 @@ def main():
     handlers = {
         "list": cmd_list, "go": cmd_go, "all": cmd_all,
         "status": cmd_status, "next": cmd_next, "install": cmd_install,
+        "sync": cmd_sync,
         "release": cmd_release,
     }
     handler = handlers.get(cmd)
