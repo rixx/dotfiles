@@ -66,6 +66,11 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     end
 
     if test -n "$worktree_path"
+        # Devservers left running in the worktree keep their Postgres
+        # backends open until they die; the directory going away does not
+        # kill them.
+        _unworktree_kill_processes $worktree_path
+
         # temp-results only holds throwaway screenshots, and its presence makes
         # git worktree remove complain about untracked files.
         if test -d "$worktree_path/temp-results"
@@ -115,6 +120,44 @@ function unworktree --description "Remove a git worktree, delete its branch, and
 
     _unworktree_restore_dir $original_dir
     return $failed
+end
+
+function _unworktree_kill_processes --description "Kill the caller's processes whose cwd or binary lives inside the given directory"
+    set -l root $argv[1]
+    set -l ancestors %self
+    while true
+        set -l parent (command ps -o ppid= -p $ancestors[-1] 2>/dev/null | string trim)
+        if test -z "$parent"; or test "$parent" -le 1
+            break
+        end
+        set -a ancestors $parent
+    end
+
+    set -l pids
+    for pid in (command pgrep -u (id -u))
+        if contains -- $pid $ancestors
+            continue
+        end
+        set -l cwd (readlink /proc/$pid/cwd 2>/dev/null)
+        set -l exe (readlink /proc/$pid/exe 2>/dev/null)
+        if test "$cwd" = "$root"; or string match -q -- "$root/*" $cwd $exe
+            set -a pids $pid
+        end
+    end
+    if test -z "$pids"
+        return 0
+    end
+
+    echo "Stopping processes still running in $root:"
+    command ps -o pid=,args= -p $pids
+    command kill $pids 2>/dev/null
+    for i in (seq 20)
+        if not command kill -0 $pids 2>/dev/null
+            return 0
+        end
+        sleep 0.25
+    end
+    command kill -9 $pids 2>/dev/null
 end
 
 function _unworktree_restore_dir --description "Return to the directory unworktree was called from, if it still exists"
