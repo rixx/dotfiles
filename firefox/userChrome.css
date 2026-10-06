@@ -49,7 +49,7 @@ toolbaritem:not(#urlbar-container), toolbarbutton,
     pointer-events: none;
     background-color: white;
 }
-#sidebar-header, #sidebar-panel-header, #sidebar-main {
+#sidebar-header, #sidebar-panel-header, #sidebar-main, #sidebar-container {
   display: none;
 }
 #sidebar-box {

@@ -38,6 +38,9 @@ tab-item:hover tab-item-substance {
 tab-item.active tab-item-substance {
   background-color: #99c6e490 !important;
 }
+tab-item-substance:not(.active):not(.bundled-active):not(.highlighted).faviconized {
+  --tab-surface: transparent
+}
 
 /* add gap between favicon and text */
 tab-item .label-content {
