@@ -49,6 +49,7 @@ freecad
 fuse2fs
 fwupd
 fzf
+gamescope
 gdu
 gimp
 git
@@ -159,6 +160,7 @@ signal-desktop
 simple-scan
 slack-desktop
 smartgit
+soundfont-fluid
 spotdl
 spotify-launcher
 sshfs
@@ -213,6 +215,7 @@ waybar
 wdisplays
 wf-recorder
 wget
+wine
 wl-clipboard
 woff2-font-awesome
 wpa_supplicant
