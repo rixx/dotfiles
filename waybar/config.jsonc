@@ -161,7 +161,7 @@
     "exec": "$HOME/.config/waybar/modules/prusa-connect",
     "exec-if": "test -r $HOME/.local/state/prusa-connect/tokens.json",
     "on-click": "xdg-open https://connect.prusa3d.com/",
-    "on-click-right": "vlc rtsp://192.168.4.133/live",
+    "on-click-right": "setsid -f vlc rtsp://192.168.4.133/live >/dev/null 2>&1",
     "escape": false
   },
   "custom/claude": {
