@@ -124,18 +124,19 @@ end
 
 function _unworktree_kill_processes --description "Kill the caller's processes whose cwd or binary lives inside the given directory"
     set -l root $argv[1]
-    set -l ancestors %self
-    while true
-        set -l parent (command ps -o ppid= -p $ancestors[-1] 2>/dev/null | string trim)
-        if test -z "$parent"; or test "$parent" -le 1
-            break
+    # Keep shell process and claude sessions
+    set -l protected
+    for start in %self (command pgrep -u (id -u) -x claude)
+        set -l pid $start
+        while test -n "$pid"; and test "$pid" -gt 1
+            set -a protected $pid
+            set pid (command ps -o ppid= -p $pid 2>/dev/null | string trim)
         end
-        set -a ancestors $parent
     end
 
     set -l pids
     for pid in (command pgrep -u (id -u))
-        if contains -- $pid $ancestors
+        if contains -- $pid $protected
             continue
         end
         set -l cwd (readlink /proc/$pid/cwd 2>/dev/null)
