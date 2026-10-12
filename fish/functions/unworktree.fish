@@ -6,7 +6,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
         echo "unworktree [-f] [-k] [<branch name>]"
         echo
         echo "Remove the worktree for <branch name>, delete the branch, and"
-        echo "close the matching pxtx issue if the branch is named px-<number>."
+        echo "close the matching pxtx issue if the branch is named px-<number>-<topic>."
         echo
         echo "Without a branch name, use the current branch, unless that is"
         echo "main or master."
@@ -104,8 +104,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
         set failed 1
     end
 
-    # Branches named px-<number>-something track a pxtx issue; close it.
-    set -l issue (string match -rg '^px-(\d+)' -- $branchname)
+    set -l issue (string match -rg '^px(?:tx)?-(\d+)' -- $branchname)
     if test -n "$issue"; and not set -q _flag_keep_issue
         if command pxtx issue close $issue
             set_color green
