@@ -36,6 +36,17 @@ function unworktree --description "Remove a git worktree, delete its branch, and
     set -l original_dir $PWD
     set -l failed 0
 
+    if not command git rev-parse --git-dir >/dev/null 2>&1
+        if test -d main; and command git -C main rev-parse --git-dir >/dev/null 2>&1
+            cd main
+        else
+            set_color red
+            echo "Not in a git repository"
+            set_color normal
+            return 1
+        end
+    end
+
     # Locate the worktree for the branch and the main worktree to return to.
     set -l worktree_path
     set -l main_worktree
@@ -132,10 +143,22 @@ function _unworktree_kill_processes --description "Kill the caller's processes w
             set pid (command ps -o ppid= -p $pid 2>/dev/null | string trim)
         end
     end
+    # Pipeline siblings (`unworktree | less`) are not ancestors, but they share
+    # a pipe with us; killing them takes the caller's output and exit status.
+    set -l own_pipes
+    for fd in 0 1 2
+        set -l target (readlink /proc/$fish_pid/fd/$fd 2>/dev/null)
+        if string match -q 'pipe:*' -- $target
+            set -a own_pipes $target
+        end
+    end
 
     set -l pids
     for pid in (command pgrep -u (id -u))
         if contains -- $pid $protected
+            continue
+        end
+        if test -n "$own_pipes"; and _unworktree_shares_pipe $pid $own_pipes
             continue
         end
         set -l cwd (readlink /proc/$pid/cwd 2>/dev/null)
@@ -158,6 +181,15 @@ function _unworktree_kill_processes --description "Kill the caller's processes w
         sleep 0.25
     end
     command kill -9 $pids 2>/dev/null
+end
+
+function _unworktree_shares_pipe --description "Whether a process holds one of the given pipes on stdin, stdout or stderr"
+    for fd in 0 1 2
+        if contains -- (readlink /proc/$argv[1]/fd/$fd 2>/dev/null) $argv[2..]
+            return 0
+        end
+    end
+    return 1
 end
 
 function _unworktree_restore_dir --description "Return to the directory unworktree was called from, if it still exists"
