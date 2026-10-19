@@ -11,7 +11,8 @@ current directory or the nearest parent, covering project.dependencies,
 project.optional-dependencies and dependency-groups.
 
 subcommands:
-  outdated              list direct dependencies with a newer release
+  outdated [--all]      list direct dependencies with a newer release;
+                        --all adds transitive ones, which dependabot never sees
   bump <pkg> [version]  rewrite the pin in pyproject.toml and update the lock;
                         without a version, take the latest release
 
@@ -99,19 +100,19 @@ def new_requirement(old, version):
 
 
 def cmd_outdated(args):
-    if args:
-        die("usage: ,pydeps outdated")
+    if args not in ([], ["--all"]):
+        die("usage: ,pydeps outdated [--all]")
     path = find_pyproject()
     requirements = direct_requirements(path)
     outdated = outdated_packages(path.parent)
-    hits = sorted(outdated.keys() & requirements.keys())
+    hits = sorted(outdated.keys() if args else outdated.keys() & requirements.keys())
     if not hits:
         print("✓ every direct dependency is at its latest release.")
         return
     width = max(len(outdated[name]["name"]) for name in hits)
     for name in hits:
         package = outdated[name]
-        group = requirements[name][1]
+        group = requirements[name][1] if name in requirements else "transitive"
         suffix = "" if group == "project.dependencies" else f"  ({group})"
         print(
             f"{package['name']:<{width}}  {package['version']} → "
@@ -155,7 +156,7 @@ def cmd_bump(args):
 
 def main():
     args = sys.argv[1:]
-    usage = "usage: ,pydeps {outdated|bump <package> [version]}"
+    usage = "usage: ,pydeps {outdated [--all]|bump <package> [version]}"
     if not args:
         die(usage)
     command, rest = args[0], args[1:]
