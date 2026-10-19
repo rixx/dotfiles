@@ -8,12 +8,16 @@ Selectively mark one repo's github notifications as done.
 Available roles:
   open-prs    clear pull requests that are still open (or draft)
   unresolved  clear that isn't a merged PR or a completed issue
+  merged-bot-prs  clear merged bot PRs, keep everything else
 
-Regardless of role, PRs opened by bots in the ignore bot list are always
-cleared.
+Regardless of role (except merged-bot-prs), PRs opened by bots in the ignore
+bot list, or from a dependabot branch, are always cleared.
+
+Pass "all" instead of owner/name to act on notifications from every repo.
 
 usage:
   ,gh-notif-clear pretix/pretix open-prs [--apply] [--quiet] [--all]
+  ,gh-notif-clear all merged-bot-prs --apply
 
 Pass --apply to do the thing, otherwise it's just a dry-run. Additionally,
 notifications are dumped to a timestamped backup file before anything is marked
@@ -30,6 +34,7 @@ from pathlib import Path
 
 BACKUP_DIR = Path.home() / ".cache" / "gh-notif-clear"
 MAX_WORKERS = 8
+ALL_REPOS = "all"
 
 KEEP = "keep"
 CLEAR = "clear"
@@ -57,7 +62,8 @@ def gh_api(*args):
 
 def fetch_notifications(repo, include_read=False):
     query = "all=true&per_page=100" if include_read else "per_page=100"
-    pages = gh_api("--paginate", "--slurp", f"/repos/{repo}/notifications?{query}") or []
+    endpoint = "/notifications" if repo == ALL_REPOS else f"/repos/{repo}/notifications"
+    pages = gh_api("--paginate", "--slurp", f"{endpoint}?{query}") or []
     return [notification for page in pages for notification in page]
 
 
@@ -84,6 +90,16 @@ def open_pr_state(subject):
     return "draft PR" if subject.get("draft") else "open PR"
 
 
+def is_merged(subject):
+    return bool(subject.get("merged") or subject.get("merged_at"))
+
+
+def is_bot_pr(subject):
+    author = (subject.get("user") or {}).get("login")
+    branch = (subject.get("head") or {}).get("ref") or ""
+    return author in IGNORED_BOT_LOGINS or "dependabot" in branch
+
+
 def role_open_prs(kind, subject):
     if kind != "PullRequest":
         return KEEP, f"{kind.lower()}, not a pull request"
@@ -102,15 +118,24 @@ def role_unresolved(kind, subject):
     if kind == "PullRequest":
         if subject["state"] == "open":
             return CLEAR, f"{open_pr_state(subject)}"
-        if subject.get("merged") or subject.get("merged_at"):
+        if is_merged(subject):
             return KEEP, "merged PR"
         return CLEAR, "PR closed unmerged"
     return KEEP, f"{kind.lower()}, neither issue nor PR"
 
 
+def role_merged_bot_prs(kind, subject):
+    if kind != "PullRequest" or not is_bot_pr(subject):
+        return KEEP, "not a bot PR"
+    if is_merged(subject):
+        return CLEAR, "merged bot PR"
+    return KEEP, "unmerged bot PR"
+
+
 ROLES = {
     "open-prs": role_open_prs,
     "unresolved": role_unresolved,
+    "merged-bot-prs": role_merged_bot_prs,
 }
 
 
@@ -126,9 +151,8 @@ def classify(notification, role, subjects):
     if "state" not in subject:
         return KEEP, "subject has no state field, leaving it alone"
 
-    author = (subject.get("user") or {}).get("login")
-    if kind == "PullRequest" and author in IGNORED_BOT_LOGINS:
-        return CLEAR, f"{author} PR"
+    if role != "merged-bot-prs" and kind == "PullRequest" and is_bot_pr(subject):
+        return CLEAR, "bot PR"
 
     return ROLES[role](kind, subject)
 
@@ -153,14 +177,14 @@ def describe(notification):
     subject = notification["subject"]
     url = subject.get("url") or ""
     number = url.rsplit("/", 1)[-1] if url else "?"
-    return f"#{number} {subject['title']}"
+    return f"{notification['repository']['full_name']}#{number} {subject['title']}"
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="mark a repo's resolved-enough github notifications as done",
     )
-    parser.add_argument("repo", help="repository as owner/name")
+    parser.add_argument("repo", help=f"repository as owner/name, or {ALL_REPOS!r}")
     parser.add_argument(
         "role",
         choices=sorted(ROLES),
@@ -191,7 +215,7 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.repo.count("/") != 1:
+    if args.repo != ALL_REPOS and args.repo.count("/") != 1:
         parser.error(f"repo must look like owner/name, got {args.repo!r}")
     if args.quiet and args.verbose:
         parser.error("--quiet and --verbose contradict each other")
