@@ -1,0 +1,98 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""
+Print the failed steps of a PR's failed CI jobs, without log noise.
+
+Strips the job/step/timestamp prefix GitHub puts on every line and drops
+package-install chatter (uv, pip, npm), so what remains is the tool output.
+
+usage:
+  ,gh-failed-log 48 -R pretalx/pretalx-halfnarp
+  ,gh-failed-log https://github.com/pretalx/pretalx-halfnarp/pull/48
+  ,gh-failed-log --raw 48 -R owner/repo   # keep install noise
+"""
+
+import argparse
+import json
+import re
+import subprocess
+import sys
+
+PR_URL = re.compile(r"github\.com/([^/]+/[^/]+)/pull/(\d+)")
+RUN_URL = re.compile(r"/actions/runs/(\d+)")
+TIMESTAMP = re.compile(r"^\d{4}-\d\d-\d\dT[\d:.]+Z ?")
+NOISE = re.compile(
+    r"^(  [A-Za-z]\w*: |shell: |env:$|\s*([+-~] \S+==|Download|Resolved |Prepared |"
+    r"Installed |Uninstalled |"
+    r"Audited |Built |Building |Using CPython|Creating virtual environment|"
+    r"Activate with|##\[(group|endgroup)\]|added \d+ packages|npm (warn|notice)))"
+)
+
+
+def gh(*args):
+    result = subprocess.run(
+        ["gh", *args], capture_output=True, text=True, stdin=subprocess.DEVNULL
+    )
+    if result.returncode not in (0, 1, 8):  # pr checks exits 1/8 on failure/pending
+        sys.exit(result.stderr.strip())
+    return result.stdout
+
+
+def failing_blocks(log):
+    # the step column reads "UNKNOWN STEP", so split at each "##[group]Run"
+    # header and keep the blocks that contain an error
+    job, block = None, []
+    for line in log.splitlines():
+        parts = line.split("\t", 2)
+        text = TIMESTAMP.sub("", parts[-1].lstrip("\ufeff"))
+        # post-job cleanup follows the last step without a "Run" header
+        if (
+            parts[0] != job
+            or text.startswith("##[group]Run ")
+            or text.startswith("Post job cleanup.")
+        ):
+            if any(t.startswith("##[error]") for t in block):
+                yield job, block
+            job, block = parts[0], []
+        block.append(text)
+    if any(t.startswith("##[error]") for t in block):
+        yield job, block
+
+
+def main():
+    parser = argparse.ArgumentParser(usage=__doc__)
+    parser.add_argument("pr")
+    parser.add_argument("-R", "--repo")
+    parser.add_argument("--raw", action="store_true")
+    args = parser.parse_args()
+
+    repo, pr = args.repo, args.pr
+    if match := PR_URL.search(pr):
+        repo, pr = match.groups()
+    if not repo:
+        sys.exit("need -R owner/repo or a PR URL")
+
+    checks = json.loads(gh("pr", "checks", pr, "-R", repo, "--json", "name,state,link"))
+    failed = [check for check in checks if check["state"] == "FAILURE"]
+    if not failed:
+        print("no failed checks")
+        return
+    # per-job logs lack step names, so fetch each failed run once instead
+    runs = {}
+    for check in failed:
+        print(f"=== {check['name']}  {check['link']}")
+        if match := RUN_URL.search(check["link"]):
+            runs.setdefault(match.group(1), None)
+    for run in runs:
+        log = gh("run", "view", run, "-R", repo, "--log-failed")
+        for job, block in failing_blocks(log):
+            print(f"--- {job}")
+            for text in block:
+                if args.raw or not NOISE.match(text):
+                    print(text)
+
+
+if __name__ == "__main__":
+    main()
