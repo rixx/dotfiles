@@ -17,7 +17,7 @@ Things you might want to look at:
 
 1. Install the packages you want – see data/ for inspiration.
 2. Run ``just install-all``, ``just install-server`` or ``just install-gui``.
-3. Install user crontabs from ``./crontab``, and start and enable cronie.
+3. Run ``just crontab`` to install user crontabs from ``./crontab``, and start and enable cronie.
 4. Install sudoers from ``./sudoers``
 5. systemctl enable --start:
    1. cronie

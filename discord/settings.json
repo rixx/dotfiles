@@ -17,6 +17,8 @@
     "x": 10,
     "y": 10,
     "width": 1920,
-    "height": 999
-  }
+    "height": 979
+  },
+  "DESKTOP_TTI_HTTP_CDT": true,
+  "DESKTOP_TTI_UPDATE_BACKOFF_ALGO": 1
 }

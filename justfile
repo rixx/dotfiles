@@ -53,6 +53,24 @@ default:
 # Install all dotfiles (server + GUI)
 install-all: install-server install-gui
 
+# Install ./crontab, refusing if the installed crontab has edits not in the repo
+[script('bash')]
+crontab force="":
+    set -euo pipefail
+    installed=$(mktemp)
+    trap 'rm -f "$installed"' EXIT
+    crontab -l > "$installed" 2>/dev/null || true
+    if cmp -s "$installed" crontab; then
+        echo "crontab already up to date"
+        exit 0
+    fi
+    diff -u --label installed --label repo "$installed" crontab || true
+    if [[ "{{ force }}" != "force" ]]; then
+        echo "installed crontab differs; copy wanted lines into ./crontab, or run 'just crontab force'" >&2
+        exit 1
+    fi
+    crontab crontab
+
 # Install vim-plug and neovim plugins
 [script('bash')]
 nvim-setup:
