@@ -1,0 +1,14 @@
+#!/bin/sh
+# borg against the laptop's repo on luggage; all arguments pass through.
+# Append-only sub-account: prune only marks, `just luggage-compact` frees space.
+# Lesson: the repo URL must match luggage-borg-backup's byte for byte, else borg
+# prompts about a relocated repository and the backup timer hangs.
+
+set -e
+
+export PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-$HOME/.local/share/password-store}"
+export BORG_PASSCOMMAND='sh -c "pass show server/luggage/cord | sed -n 1p"'
+export BORG_RSH="ssh -i $HOME/.ssh/luggage-backup_ed25519 -o BatchMode=yes -o ConnectTimeout=20"
+export BORG_REPO=ssh://u660368-sub8@luggage.rixx.de:23/./cord
+
+exec /usr/bin/borg "$@"
