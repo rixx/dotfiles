@@ -70,7 +70,7 @@ function unworktree --description "Remove a git worktree, delete its branch, and
 
     cd $main_worktree
 
-    if not command git pull
+    if not command git pull --rebase
         set_color yellow
         echo "Unable to run git pull, there may not be an upstream"
         set_color normal
