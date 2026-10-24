@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""Waybar module: number of tickets in an RT saved search.
+
+Credentials come from ~/src/tools/rt/auth.json (written by `rttools.py auth`).
+"""
+import base64
+import html
+import json
+import os
+import sys
+import time
+import urllib.parse
+import urllib.request
+
+AUTH = os.path.expanduser("~/src/tools/rt/auth.json")
+CACHE = os.path.expanduser("~/.cache/waybar-rt-tickets.json")
+SEARCH_ID = 6838
+WEB = f"https://rt.cccv.de/Search/Results.html?SavedSearchId={SEARCH_ID}&SearchType=Ticket"
+ICON = "\uf145"  # fa-ticket, FontAwesome is the bar's first font
+STALE_AFTER = 900  # Seconds before failed refreshes are worth reporting.
+WARNING = 5
+CRITICAL = 15
+FONT = "Iosevka"
+SIZE = "13pt"
+ACCENT = "#D84315"
+
+
+def auth():
+    with open(AUTH) as f:
+        data = json.load(f)
+    return data["url"], data["username"], data["password"]
+
+
+def fetch():
+    url, user, password = auth()
+    query = urllib.parse.urlencode(
+        {"search": SEARCH_ID, "per_page": 1, "fields": "id"}
+    )
+    credentials = base64.b64encode(f"{user}:{password}".encode()).decode()
+    request = urllib.request.Request(
+        f"{url}tickets?{query}",
+        headers={
+            "Authorization": f"Basic {credentials}",
+            "User-Agent": "waybar-rt-tickets",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=15) as response:
+        payload = json.load(response)
+    name = search_name(url, credentials)
+    return {"total": payload["total"], "name": name, "at": time.time()}
+
+
+def search_name(url, credentials):
+    request = urllib.request.Request(
+        f"{url}search/{SEARCH_ID}",
+        headers={"Authorization": f"Basic {credentials}", "User-Agent": "waybar-rt-tickets"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            return json.load(response).get("Name") or str(SEARCH_ID)
+    except Exception:
+        return str(SEARCH_ID)
+
+
+def cache_write(payload):
+    os.makedirs(os.path.dirname(CACHE), exist_ok=True)
+    with open(CACHE, "w") as f:
+        json.dump(payload, f)
+    return payload
+
+
+def cache_read():
+    with open(CACHE) as f:
+        return json.load(f)
+
+
+def render(data):
+    total = data["total"]
+    state = "ok"
+    if total >= CRITICAL:
+        state = "critical"
+    elif total >= WARNING:
+        state = "warning"
+    tooltip = (
+        f"<span font='{FONT}' size='{SIZE}'>"
+        f"RT <b>{html.escape(data['name'])}</b>: {total} ticket{'s' if total != 1 else ''}"
+        "</span>"
+    )
+    return {"text": f"{ICON} {total}" if total else "", "tooltip": tooltip, "class": state}
+
+
+def main():
+    if "--raw" in sys.argv:
+        print(json.dumps(fetch(), indent=2))
+        return
+    try:
+        cached = cache_read()
+    except Exception:
+        cached = None
+    try:
+        result = render(cache_write(fetch()))
+    except Exception as error:
+        if cached is None:
+            result = {
+                "text": f"{ICON} ?",
+                "tooltip": f"RT unavailable: {html.escape(str(error))}",
+                "class": "error",
+            }
+        else:
+            result = render(cached)
+            age = time.time() - cached.get("at", 0)
+            if age > STALE_AFTER:
+                result["tooltip"] += (
+                    f"\n\n<span color='{ACCENT}'>"
+                    + html.escape(f"stale ({int(age // 60)} min old): {error}")
+                    + "</span>"
+                )
+                result["class"] = "stale"
+    print(json.dumps(result))
+
+
+if __name__ == "__main__":
+    main()

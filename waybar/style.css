@@ -78,6 +78,16 @@ button {
   color: @clr-turquoise;
 }
 
+#custom-rt.warning {
+  color: @clr-orange;
+}
+#custom-rt.critical {
+  color: @clr-red;
+}
+#custom-rt.stale, #custom-rt.error {
+  color: @clr-turquoise;
+}
+
 #custom-prusa.paused, #custom-prusa.attention, #custom-prusa.warning {
   color: @clr-orange;
 }

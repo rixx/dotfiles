@@ -18,6 +18,7 @@
     "modules-center": [
     ],
     "modules-right": [
+        "custom/rt",
         "custom/prusa",
         "custom/claude",
         "sway/mode",
@@ -162,6 +163,16 @@
     "exec-if": "test -r $HOME/.local/state/prusa-connect/tokens.json",
     "on-click": "xdg-open https://connect.prusa3d.com/",
     "on-click-right": "setsid -f vlc rtsp://192.168.4.133/live >/dev/null 2>&1",
+    "escape": false
+  },
+  "custom/rt": {
+    "tooltip": true,
+    "return-type": "json",
+    "interval": 300,
+    "signal": 7,  // pkill -RTMIN+7 waybar  forces a refresh
+    "exec": "$HOME/.config/waybar/modules/rt-tickets",
+    "exec-if": "test -r $HOME/src/tools/rt/auth.json",
+    "on-click": "xdg-open 'https://rt.cccv.de/Search/Results.html?SavedSearchId=6838&SearchType=Ticket'",
     "escape": false
   },
   "custom/claude": {
