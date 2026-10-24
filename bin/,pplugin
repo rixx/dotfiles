@@ -17,8 +17,8 @@ subcommands:
   status           git status for every plugin: clean/dirty, push state, HEAD
   next             print the next plugin dir to cd into; if not currently in a
                    plugin, print the first one (the fish wrapper does the cd)
-  install          install every plugin into pretalx via `just install-plugin`
-                   (-q as for `all`)
+  install          install every plugin via `just install-plugin` into the venv
+                   of the pretalx worktree you are in (main otherwise; -q as for `all`)
   sync             reinstall pretalx main into every plugin's own venv via
                    `just install-pretalx-local`; run after a dependency bump in
                    pretalx (stale editable installs fail with an ImportError)
@@ -38,6 +38,14 @@ import tomllib
 from pathlib import Path
 
 PRETALX = Path.home() / "src" / "pretalx" / "main"
+
+
+def current_tree():
+    root = PRETALX.parent
+    for p in [Path.cwd(), *Path.cwd().parents]:
+        if p.parent == root and (p / "justfile").is_file():
+            return p
+    return PRETALX
 
 PLUGIN_PATHS = [
     "src/local/pretalx-com",
@@ -218,6 +226,8 @@ def cmd_install(argv, cookiecutter=False):
     quiet, argv = take_quiet(argv)
     env = clean_env()
     rels = plugin_paths(cookiecutter=False)
+    tree = current_tree()
+    print(out(f"installing into {tree}/.venv"))
     failures = []
     for rel in rels:
         path = PRETALX / rel
@@ -228,7 +238,7 @@ def cmd_install(argv, cookiecutter=False):
             continue
         proc = subprocess.run(
             ["just", "install-plugin", str(path)],
-            cwd=PRETALX, env=env, text=True,
+            cwd=tree, env=env, text=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         )
         if not report_run(name, proc.returncode, proc.stdout, quiet):
