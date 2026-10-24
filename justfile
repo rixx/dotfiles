@@ -209,3 +209,17 @@ install-gui:
             link firefox/userChrome.css "$profile/chrome/userChrome.css"
         done
     fi
+
+# Parse waybar/config.jsonc (comments and trailing commas allowed) and report the first syntax error
+[script('python3')]
+waybar-check:
+    import json, re, sys
+    path = "{{ dotfiles }}/waybar/config.jsonc"
+    text = open(path).read()
+    text = re.sub(r'("(?:\\.|[^"\\])*")|/\*.*?\*/|//[^\n]*', lambda m: m.group(1) or "", text, flags=re.S)
+    text = re.sub(r",(\s*[}\]])", r"\1", text)
+    try:
+        json.loads(text)
+    except json.JSONDecodeError as error:
+        sys.exit(f"{path}: {error}")
+    print(f"{path}: ok")
