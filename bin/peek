@@ -100,10 +100,10 @@ case "$mode" in
     ;;
 esac
 
-echo
+echo >&2
 if [[ $status == unknown ]]; then
-  echo "[exit ? (piped; use 'peek -- CMD' to forward it), $total lines total, full output: $logfile]"
+  echo "[exit ? (piped; use 'peek -- CMD' to forward it), $total lines total, full output: $logfile]" >&2
   exit 0
 fi
-echo "[exit $status, $total lines total, full output: $logfile]"
+echo "[exit $status, $total lines total, full output: $logfile]" >&2
 exit "$status"
