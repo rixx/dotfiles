@@ -92,6 +92,7 @@ logrotate
 lostfiles
 lsd
 lsof
+luacheck
 lxappearance
 maim
 man-db
@@ -168,6 +169,7 @@ spotify-launcher
 sshfs
 sshuttle
 steam
+stylua
 sway
 sway-contrib
 swaybg
