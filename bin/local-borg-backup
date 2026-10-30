@@ -26,6 +26,8 @@ info "Starting backup"
     --exclude '*/static.dist'       \
     --exclude '*/vendor/bundle'     \
     ::'{hostname}-{now}'        \
+    ~/.claude                                   \
+    ~/.claude.json                              \
     ~/.gnupg                                    \
     ~/.local/share/applications/mimeapps.list   \
     ~/.local/share/fonts                        \

@@ -63,5 +63,6 @@ if set -q _flag_prompt
 end
 
 just install-all
+and ,pplugin install -q
 and just run compilemessages
 and claude --chrome --model $model $prompt
