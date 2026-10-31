@@ -1,0 +1,20 @@
+#!/bin/sh
+# Waybar backlight module that hides itself while the laptop panel is disabled.
+# Re-renders on sway output events and on kernel backlight uevents.
+PANEL=eDP-1
+DEV=$(ls -d /sys/class/backlight/* 2>/dev/null | sed 1q)
+
+emit () {
+    if [ -n "$DEV" ] && swaymsg -t get_outputs | jq -e --arg p "$PANEL" 'any(.[]; .name == $p and .active)' >/dev/null; then
+        pct=$(( $(cat "$DEV/brightness") * 100 / $(cat "$DEV/max_brightness") ))
+        printf '{"text": "%s", "percentage": %s, "tooltip": "%s%%"}\n' "$pct" "$pct" "$pct"
+    else
+        echo '{"text": ""}'
+    fi
+}
+
+{
+    echo
+    swaymsg -r -m -t subscribe '["output"]' &
+    udevadm monitor --kernel --subsystem-match=backlight
+} | while read -r _; do emit; done

@@ -23,7 +23,7 @@
         "custom/claude",
         "sway/mode",
         "network",
-        "backlight",
+        "custom/backlight",
         "battery",
         "pulseaudio",
         "pulseaudio#source",
@@ -95,9 +95,13 @@
             "on-scroll-down": "shift_down"
         }
     },
-    "backlight": {
+    "custom/backlight": {
+        "exec": "$HOME/.config/waybar/modules/backlight",
+        "return-type": "json",
+        "hide-empty-text": true,
         "format": "{icon}",
-        "tooltip-format": "{percent}%",
+        "on-scroll-up": "brightnessctl -q set +5%",
+        "on-scroll-down": "brightnessctl -q set 5%-",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
