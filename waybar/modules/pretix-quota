@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""Waybar module: tickets left in a named pretix quota.
+
+Token and instance come from ~/.config/dotfiles/py3status/secrets/pretix_{token,url}.
+The event defaults to the newest NNc3 event of the organizer; override with
+PRETIX_EVENT. `--raw` prints the fetched data, `--open` opens the event backend.
+"""
+import html
+import json
+import os
+import re
+import sys
+import time
+import urllib.parse
+import urllib.request
+
+SECRETS = os.path.expanduser("~/.config/dotfiles/py3status/secrets")
+CACHE = os.path.expanduser("~/.cache/waybar-pretix-quota.json")
+ORGANIZER = "cccv"
+QUOTA_NAME = "Hauptkontingent"
+ICON = "\U000f0518"  # md-ticket_confirmation from Symbols Nerd Font, distinct from the RT module's fa-ticket
+STALE_AFTER = 600  # Seconds before failed refreshes are worth reporting.
+WARNING = 100  # Orange below this many tickets left.
+FONT = "Iosevka"
+SIZE = "13pt"
+ACCENT = "#D84315"
+
+
+def secret(name):
+    with open(os.path.join(SECRETS, name)) as f:
+        return f.read().strip()
+
+
+def instance():
+    # The file has held both a bare host and a full API URL in the past.
+    url = secret("pretix_url")
+    url = re.sub(r"^https?://", "", url)
+    return url.split("/")[0]
+
+
+def get(path, token, params=None):
+    url = f"https://{instance()}/api/v1/{path}"
+    if params:
+        url += "?" + urllib.parse.urlencode(params)
+    request = urllib.request.Request(
+        url,
+        headers={"Authorization": f"Token {token}", "User-Agent": "waybar-pretix-quota"},
+    )
+    with urllib.request.urlopen(request, timeout=15) as response:
+        return json.load(response)
+
+
+def get_all(path, token, params=None):
+    params = dict(params or {})
+    page = 1
+    while True:
+        params["page"] = page
+        data = get(path, token, params)
+        yield from data["results"]
+        if not data.get("next"):
+            return
+        page += 1
+
+
+def current_event(token):
+    if os.environ.get("PRETIX_EVENT"):
+        return os.environ["PRETIX_EVENT"]
+    slugs = [
+        event["slug"]
+        for event in get_all(f"organizers/{ORGANIZER}/events/", token)
+        if re.fullmatch(r"\d+c3", event["slug"])
+    ]
+    return max(slugs, key=lambda slug: int(slug[:-2]))
+
+
+def fetch():
+    token = secret("pretix_token")
+    event = current_event(token)
+    base = f"organizers/{ORGANIZER}/events/{event}/quotas/"
+    quota = next(
+        (q for q in get_all(base, token) if q["name"].strip() == QUOTA_NAME), None
+    )
+    if quota is None:
+        raise LookupError(f"no quota named {QUOTA_NAME!r} in {event}")
+    availability = get(f"{base}{quota['id']}/availability/", token)
+    return {
+        "event": event,
+        "quota": quota["id"],
+        "size": availability.get("total_size") or quota.get("size"),
+        "available": availability.get("available_number"),
+        "pending": availability.get("pending_orders"),
+        "paid": availability.get("paid_orders"),
+        "at": time.time(),
+    }
+
+
+def cache_write(payload):
+    os.makedirs(os.path.dirname(CACHE), exist_ok=True)
+    with open(CACHE, "w") as f:
+        json.dump(payload, f)
+    return payload
+
+
+def cache_read():
+    with open(CACHE) as f:
+        return json.load(f)
+
+
+def render(data):
+    left = data["available"]
+    # None means unlimited quota.
+    shown = "∞" if left is None else str(max(0, left))
+    state = "ok"
+    if left is not None and left <= 0:
+        state = "critical"
+    elif left is not None and left < WARNING:
+        state = "warning"
+    lines = [
+        f"<b>{html.escape(data['event'])}</b> {html.escape(QUOTA_NAME)}: {shown} left",
+        f"size {data['size']}, paid {data['paid']}, pending {data['pending']}",
+    ]
+    tooltip = f"<span font='{FONT}' size='{SIZE}'>" + "\n".join(lines) + "</span>"
+    return {"text": f"{ICON} {shown}", "tooltip": tooltip, "class": state}
+
+
+def main():
+    if "--open" in sys.argv:
+        event = cache_read()["event"]
+        url = f"https://{instance()}/control/event/{ORGANIZER}/{event}/"
+        os.execvp("xdg-open", ["xdg-open", url])
+    if "--raw" in sys.argv:
+        print(json.dumps(fetch(), indent=2))
+        return
+    try:
+        cached = cache_read()
+    except Exception:
+        cached = None
+    try:
+        result = render(cache_write(fetch()))
+    except Exception as error:
+        if cached is None:
+            result = {
+                "text": f"{ICON} ?",
+                "tooltip": f"pretix unavailable: {html.escape(str(error))}",
+                "class": "error",
+            }
+        else:
+            result = render(cached)
+            age = time.time() - cached.get("at", 0)
+            if age > STALE_AFTER:
+                result["tooltip"] += (
+                    f"\n\n<span color='{ACCENT}'>"
+                    + html.escape(f"stale ({int(age // 60)} min old): {error}")
+                    + "</span>"
+                )
+                result["class"] = "stale"
+    print(json.dumps(result))
+
+
+if __name__ == "__main__":
+    main()

@@ -18,6 +18,7 @@
     "modules-center": [
     ],
     "modules-right": [
+        "custom/pretix",
         "custom/rt",
         "custom/prusa",
         "custom/claude",
@@ -167,6 +168,16 @@
     "exec-if": "test -r $HOME/.local/state/prusa-connect/tokens.json",
     "on-click": "xdg-open https://connect.prusa3d.com/",
     "on-click-right": "setsid -f vlc rtsp://192.168.4.133/live >/dev/null 2>&1",
+    "escape": false
+  },
+  "custom/pretix": {
+    "tooltip": true,
+    "return-type": "json",
+    "interval": 60,
+    "signal": 10,  // pkill -RTMIN+10 waybar  forces a refresh
+    "exec": "$HOME/.config/waybar/modules/pretix-quota",
+    "exec-if": "test -r $HOME/.config/dotfiles/py3status/secrets/pretix_token",
+    "on-click": "$HOME/.config/waybar/modules/pretix-quota --open",
     "escape": false
   },
   "custom/rt": {
