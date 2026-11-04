@@ -31,6 +31,7 @@ dialog
 diff-so-fancy
 discord
 docker
+docker-buildx
 docker-compose
 dolphin
 dosfstools
