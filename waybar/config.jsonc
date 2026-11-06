@@ -18,7 +18,7 @@
     "modules-center": [
     ],
     "modules-right": [
-        "custom/pretix",
+        // "custom/pretix",
         "custom/rt",
         "custom/prusa",
         "custom/claude",
