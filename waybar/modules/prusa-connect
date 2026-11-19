@@ -252,7 +252,7 @@ def render(printers):
     parts, blocks, worst = [], [], "idle"
     for printer in printers:
         state = printer.get("printer_state") or "UNKNOWN"
-        if state not in ACTIVE:
+        if state not in ACTIVE or printer.get("connect_state") == "OFFLINE":
             continue
         job = job_of(printer)
         remaining = job.get("time_remaining")
