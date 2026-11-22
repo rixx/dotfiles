@@ -1,0 +1,13 @@
+#!/bin/sh
+# systemd-sleep hook: mt7925e comes back from a hibernate restore with the
+# link dropped ("Driver requested disconnection from AP 00:00:00:00:00:00")
+# and netctl-auto never reconnects. Plain suspend resumes are fine, so only
+# act after hibernation. SYSTEMD_SLEEP_ACTION tells the phases of
+# suspend-then-hibernate apart; if it is missing, restart anyway.
+[ "$1" = post ] || exit 0
+case "${SYSTEMD_SLEEP_ACTION:-unknown}" in
+    suspend) exit 0 ;;
+esac
+logger -t sleep-wifi "restarting netctl-auto after $2 (action=${SYSTEMD_SLEEP_ACTION:-unset})"
+# --no-block: we run inside systemd-sleep, don't wait on a job from here.
+systemctl --no-block try-restart 'netctl-auto@*.service'

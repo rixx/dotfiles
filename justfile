@@ -190,6 +190,16 @@ install-gui:
     if ! cmp -s hibernate/system-sleep-debug /usr/lib/systemd/system-sleep/debug; then
         doit sudo install -Dm755 hibernate/system-sleep-debug /usr/lib/systemd/system-sleep/debug
     fi
+    if ! cmp -s hibernate/system-sleep-wifi /usr/lib/systemd/system-sleep/wifi; then
+        doit sudo install -Dm755 hibernate/system-sleep-wifi /usr/lib/systemd/system-sleep/wifi
+    fi
+    if ! cmp -s hibernate/system-sleep-lid /usr/lib/systemd/system-sleep/lid; then
+        doit sudo install -Dm755 hibernate/system-sleep-lid /usr/lib/systemd/system-sleep/lid
+    fi
+    if ! cmp -s hibernate/upower.conf /etc/UPower/UPower.conf.d/90-hibernate.conf; then
+        doit sudo install -Dm644 hibernate/upower.conf /etc/UPower/UPower.conf.d/90-hibernate.conf
+        doit sudo systemctl restart upower
+    fi
     if ! cmp -s hibernate/sleep-debug.conf /etc/systemd/system/systemd-suspend-then-hibernate.service.d/debug.conf; then
         doit sudo install -Dm644 hibernate/sleep-debug.conf /etc/systemd/system/systemd-suspend-then-hibernate.service.d/debug.conf
         doit sudo systemctl daemon-reload

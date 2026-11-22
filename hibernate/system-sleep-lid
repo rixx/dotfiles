@@ -1,0 +1,23 @@
+#!/bin/sh
+# systemd-sleep hook: hibernate when the machine comes back from suspend
+# with the lid still closed and no AC power.
+# suspend-then-hibernate checks its own timer after the RTC wake. The RTC
+# sometimes fires up to a second early, the timer has not elapsed yet,
+# systemd treats it as a user wake and stays up; sway's lid handler sees no
+# new lid event, so the laptop drains in the bag (2026-11-16).
+# logind refuses a new sleep request while this one is still finishing, so
+# queue it with a short delay and check lid and AC again when it fires;
+# opening the lid or plugging in during that delay cancels it.
+[ "$1" = post ] || exit 0
+case "${SYSTEMD_SLEEP_ACTION:-suspend}" in
+    hibernate) exit 0 ;;
+esac
+
+LID=/proc/acpi/button/lid/LID0/state
+AC=/sys/class/power_supply/ACAD/online
+check="grep -q closed $LID && [ \"\$(cat $AC)\" = 0 ]"
+
+eval "$check" || exit 0
+logger -t sleep-lid "lid closed on battery after $2 (action=${SYSTEMD_SLEEP_ACTION:-unset}), hibernating in 15s"
+systemd-run --no-block --quiet --collect --unit=sleep-lid-hibernate --on-active=15 \
+    /bin/sh -c "if $check; then systemctl hibernate; else logger -t sleep-lid 'lid opened or AC back, not hibernating'; fi"
