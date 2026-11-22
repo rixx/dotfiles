@@ -37,3 +37,5 @@ kubeconfig-*
 .jj
 
 temp-results
+
+**/.claude/settings.local.json
