@@ -19,6 +19,7 @@ autorefresh = 2.5
 localrepository = cutebit-local
 quick = 10
 remoterepository = cutebit-de
+postsynchook = notmuch new --quiet
 
 [Repository cutebit-local]
 type = Maildir

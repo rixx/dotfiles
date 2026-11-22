@@ -1,0 +1,18 @@
+# notmuch indexes the offlineimap maildir for search only.
+# Folders stay the source of truth: no tags on new mail, no flag sync back to the maildir.
+# offlineimap's postsynchook runs `notmuch new` after every sync.
+
+[database]
+mail_root=/home/rixx/.local/share/mail/cutebit
+# Index lives outside the maildir so offlineimap never sees it as a folder.
+path=/home/rixx/.local/share/notmuch/cutebit
+
+[new]
+tags=
+ignore=
+
+[search]
+exclude_tags=
+
+[maildir]
+synchronize_flags=false

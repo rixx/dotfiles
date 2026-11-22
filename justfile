@@ -111,6 +111,7 @@ install-server:
     # Email
     conflink mutt/muttrc
     link mutt/offlineimaprc .config/offlineimap/config
+    link mutt/notmuch-config .config/notmuch/default/config
 
     # File manager (works in CLI too)
     conflink yazi
