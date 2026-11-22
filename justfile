@@ -209,6 +209,24 @@ install-gui:
         doit sudo sysctl -q -p /etc/sysctl.d/90-swappiness.conf
     fi
 
+    # systemd-boot config, per host: boot/<hostname>/ mirrors /boot/loader/.
+    # cp, not install -m: the ESP is vfat and rejects mode changes. Applies on the next boot.
+    boot="boot/$(hostname)"
+    if [[ -d "$boot" ]]; then
+        for file in loader.conf entries/arch.conf; do
+            if ! cmp -s "$boot/$file" "/boot/loader/$file"; then
+                doit sudo cp "$boot/$file" "/boot/loader/$file"
+            fi
+        done
+    fi
+
+    # Docker address pools off 172.18/16 (DB train wifi), see docker/README.md.
+    # No restart here: it would stop running containers.
+    if ! cmp -s docker/daemon.json /etc/docker/daemon.json; then
+        doit sudo install -Dm644 docker/daemon.json /etc/docker/daemon.json
+        echo "docker/daemon.json changed: restart docker and recreate existing networks"
+    fi
+
     # Firefox
     if [[ -d "$HOME/.mozilla" ]]; then
         for profile in "$HOME"/.mozilla/firefox/*default*; do
