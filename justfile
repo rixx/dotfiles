@@ -1,3 +1,4 @@
+set default-list
 set shell := ["bash", "-euo", "pipefail", "-c"]
 set quiet
 set fallback
@@ -43,12 +44,6 @@ conflink() {
     link "$1" ".config/$1"
 }
 '''
-
-# Stands in for `set default-list`, which older just (1.46 on the servers)
-# rejects: a bare `just` runs the first recipe, so list them here instead.
-[private]
-default:
-    just --list
 
 # Install all dotfiles (server + GUI)
 install-all: install-server install-gui
