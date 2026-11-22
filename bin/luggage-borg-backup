@@ -17,6 +17,7 @@ trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
 info "Starting backup"
 
+backup_exit=0
 /usr/bin/borg create                \
     --verbose                       \
     --filter AME                    \
@@ -27,8 +28,11 @@ info "Starting backup"
     --exclude '*/node_modules'      \
     --exclude '*/static.dist'       \
     --exclude '*/vendor/bundle'     \
+    --exclude '*/edgeportal-backend/volumes' \
+    --exclude '*/Anki2/addons21'    \
     ::'{hostname}-{now}'        \
     ~/.claude                                   \
+    ~/.local/share/Anki2                        \
     ~/.claude.json                              \
     ~/.gnupg                                    \
     ~/.local/share/applications/mimeapps.list   \
@@ -39,29 +43,27 @@ info "Starting backup"
     ~/.local/share/zsh                          \
     ~/.local/share/fish                         \
     ~/.mozilla                                  \
-    ~/.nom                                      \
     ~/.ssh                                      \
     ~/data                                      \
     ~/doc                                       \
     ~/lib                                       \
     ~/eustace                                   \
     ~/tmp                                       \
-    ~/src
-
-backup_exit=$?
+    ~/src \
+    || backup_exit=$?
 
 info "Pruning repository"
 
 # Append-only serve: this only marks; luggage-compact makes it real.
+prune_exit=0
 /usr/bin/borg prune                 \
     --list                          \
     -a 'sh:{hostname}-*'            \
     --show-rc                       \
     --keep-daily    7               \
     --keep-weekly   4               \
-    --keep-monthly  6
-
-prune_exit=$?
+    --keep-monthly  6               \
+    || prune_exit=$?
 
 global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
 
