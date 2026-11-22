@@ -1,0 +1,237 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""
+Add two-sided notes to Anki via AnkiConnect (Anki must be running).
+
+Uses the note type "Einfach (und die umgekehrte Richtung)", so every note
+produces a card in each direction. A note is refused when its front or back
+is already a question in the deck (or earlier in the same batch): each
+direction must have exactly one answer. The rest of a batch is still added.
+
+usage:
+  ,anki-add "sok-sok példával" "mit vielen Beispielen"
+  ,anki-add - < cards.tsv          # one note per line: front<TAB>back
+  ,anki-add --deck Other --tag lesson3 front back
+  ,anki-add --search tanul         # notes containing "tanul", accents optional
+  ,anki-add --search ""            # every note in the deck
+  ,anki-add --weak                 # notes with Again/Hard in the last 3 days
+  ,anki-add --weak 7               # ... in the last 7 days
+
+Search before adding: a word may appear both alone and inside a phrase,
+but the existing notes show what is already covered.
+"""
+
+import argparse
+import html
+import json
+import re
+import sys
+import time
+import unicodedata
+import urllib.error
+import urllib.request
+
+URL = "http://localhost:8765"
+MODEL = "Einfach (und die umgekehrte Richtung)"
+
+
+def invoke(action, **params):
+    body = json.dumps({"action": action, "version": 6, "params": params}).encode()
+    try:
+        with urllib.request.urlopen(URL, body) as response:
+            data = json.load(response)
+    except urllib.error.URLError as e:
+        sys.exit(f"AnkiConnect not reachable at {URL} (is Anki open?): {e.reason}")
+    except json.JSONDecodeError:
+        sys.exit("AnkiConnect sent no answer; close open Anki dialogs and retry")
+    if data["error"] and action != "addNotes":
+        sys.exit(f"AnkiConnect error: {data['error']}")
+    return data
+
+
+def normalize(value):
+    # Anki stores fields as HTML; compare the visible text. Case stays
+    # significant: "leben" and "Leben" are different questions.
+    # An image counts as its file name, so image-only sides stay distinct.
+    value = re.sub(r'<img[^>]*\bsrc="([^"]*)"[^>]*>', r"[\1]", value)
+    text = html.unescape(re.sub(r"<[^>]+>", "", value))
+    return " ".join(unicodedata.normalize("NFC", text).split())
+
+
+def existing_questions(deck):
+    # Maps every side the deck asks as a question to its note. The second
+    # field only counts when the note has a card for the reverse direction.
+    ids = invoke("findNotes", query=f'"deck:{deck}"')["result"]
+    notes = invoke("notesInfo", notes=ids)["result"] if ids else []
+    questions = {}
+    for note in notes:
+        fields = sorted(note["fields"].values(), key=lambda field: field["order"])
+        sides = [field["value"] for field in fields]
+        asked = sides[:2] if len(note["cards"]) > 1 else sides[:1]
+        for side in asked:
+            questions.setdefault(normalize(side), " | ".join(sides))
+    return questions
+
+
+def search(deck, term):
+    query = f'"deck:{deck}"'
+    if term:
+        # nc: makes Anki ignore accents; plain terms match substrings.
+        escaped = term.replace('"', '\\"')
+        query += f' "nc:{escaped}"'
+    ids = invoke("findNotes", query=query)["result"]
+    notes = invoke("notesInfo", notes=ids)["result"] if ids else []
+    rows = sorted(
+        (n["fields"]["Vorderseite"]["value"], n["fields"]["Rückseite"]["value"])
+        for n in notes
+    )
+    for front, back in rows:
+        print(f"{front} | {back}")
+    print(f"{len(rows)} note(s)", file=sys.stderr)
+
+
+def weak(deck, days):
+    # Counts Again/Hard answers per note (both directions) in the last DAYS
+    # days. Again includes failed learning steps, so this is a rough ranking.
+    cards = invoke("findCards", query=f'"deck:{deck}" rated:{days}')["result"]
+    if not cards:
+        print(f"no reviews in the last {days} day(s)", file=sys.stderr)
+        return
+    info = invoke("cardsInfo", cards=cards)["result"]
+    reviews = invoke("getReviewsOfCards", cards=[str(c) for c in cards])["result"]
+    since_ms = (time.time() - days * 86400) * 1000
+    notes = {}
+    for card in info:
+        recent = [r for r in reviews.get(str(card["cardId"]), []) if r["id"] >= since_ms]
+        entry = notes.setdefault(
+            card["note"],
+            {
+                "front": card["fields"]["Vorderseite"]["value"],
+                "back": card["fields"]["Rückseite"]["value"],
+                "again": [0, 0],
+                "hard": 0,
+            },
+        )
+        entry["again"][card["ord"]] += sum(r["ease"] == 1 for r in recent)
+        entry["hard"] += sum(r["ease"] == 2 for r in recent)
+    rows = sorted(
+        (n for n in notes.values() if sum(n["again"]) or n["hard"]),
+        key=lambda n: (sum(n["again"]), n["hard"]),
+        reverse=True,
+    )
+    print("again (hu→de/de→hu)  hard  note")
+    for n in rows:
+        again = f"{sum(n['again'])} ({n['again'][0]}/{n['again'][1]})"
+        print(f"{again:<20} {n['hard']:<5} {n['front']} | {n['back']}")
+    print(f"{len(rows)} of {len(notes)} reviewed note(s) had Again/Hard", file=sys.stderr)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "front", nargs="?", help="front side, or - to read TSV from stdin"
+    )
+    parser.add_argument("back", nargs="?")
+    parser.add_argument("--deck", default="Ungarisch")
+    parser.add_argument("--tag", action="append", default=[])
+    parser.add_argument(
+        "--search",
+        metavar="TERM",
+        help="list notes in the deck whose fields contain TERM, ignoring accents",
+    )
+    parser.add_argument(
+        "--weak",
+        metavar="DAYS",
+        type=int,
+        nargs="?",
+        const=3,
+        help="rank notes by Again/Hard answers in the last DAYS days (default 3)",
+    )
+    argv = sys.argv[1:]
+    # argparse rejects a value with a leading dash (suffix cards such as
+    # "-ul") unless it is glued to the option with "=".
+    for i, arg in enumerate(argv[:-1]):
+        if arg == "--search":
+            argv[i : i + 2] = [f"--search={argv[i + 1]}"]
+            break
+    args = parser.parse_args(argv)
+
+    if args.weak is not None:
+        weak(args.deck, args.weak)
+        return
+    if args.search is not None:
+        search(args.deck, args.search)
+        return
+    if args.front is None:
+        parser.error("front side missing")
+
+    if args.front == "-":
+        pairs = []
+        for lineno, line in enumerate(sys.stdin, 1):
+            if not line.strip():
+                continue
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) != 2:
+                sys.exit(f"line {lineno}: expected front<TAB>back, got {line!r}")
+            pairs.append((parts[0].strip(), parts[1].strip()))
+    elif args.back is None:
+        parser.error("back side missing")
+    else:
+        pairs = [(args.front, args.back)]
+
+    # Anki's own duplicate check only compares the front, so both sides are
+    # checked here against every question in the deck and in this batch.
+    questions = existing_questions(args.deck)
+    accepted = []
+    failed = 0
+    for front, back in pairs:
+        clashes = [
+            (name, questions[normalize(side)])
+            for name, side in (("front", front), ("back", back))
+            if normalize(side) in questions
+        ]
+        if clashes:
+            failed += 1
+            for name, other in clashes:
+                print(
+                    f"refused: {front} | {back} ({name} already asked by: {other})",
+                    file=sys.stderr,
+                )
+            continue
+        accepted.append((front, back))
+        for side in (front, back):
+            questions[normalize(side)] = f"{front} | {back} (this batch)"
+    if not accepted:
+        sys.exit(1)
+
+    notes = [
+        {
+            "deckName": args.deck,
+            "modelName": MODEL,
+            "fields": {"Vorderseite": front, "Rückseite": back},
+            "options": {"allowDuplicate": False, "duplicateScope": "deck"},
+            "tags": args.tag,
+        }
+        for front, back in accepted
+    ]
+    # addNotes reports per-note failures (e.g. duplicates) in "error" and
+    # None in the matching "result" slot, while adding the rest.
+    data = invoke("addNotes", notes=notes)
+    results = data["result"] or [None] * len(accepted)
+    for (front, back), note_id in zip(accepted, results):
+        if note_id:
+            print(f"+ {front} | {back}")
+        else:
+            failed += 1
+            print(f"skipped (duplicate?): {front} | {back}", file=sys.stderr)
+    if data["error"]:
+        print(f"AnkiConnect: {data['error']}", file=sys.stderr)
+    sys.exit(1 if failed else 0)
+
+
+if __name__ == "__main__":
+    main()
